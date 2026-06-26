@@ -37,6 +37,20 @@ public enum SimulationTuning {
     /// Idle wander uses this fraction of chase speed when the player is outside sense radius.
     public static let predatorWanderSpeedFraction: Double = 0.35
 
+    /// Minimum distance a newly spawned predator must keep from the player's position.
+    /// Chosen larger than the primordial sense radius (~90) plus a reaction margin so no
+    /// predator can begin a run already homing on (or sitting on top of) the fixed center
+    /// spawn. Without this, random spawns place predators as close as ~2px to the player.
+    public static let predatorSpawnMinDistanceFromPlayer: Double = 200
+
+    /// Early-game grace window (primordial era only). For the first `primordialGraceTicks`
+    /// predators chase at reduced effectiveness, ramping linearly to full strength. This gives
+    /// the player time to learn movement, eating, and reproduction before the first real threat.
+    public static let primordialGraceTicks: Int = 240
+    /// Multiplier applied to predator chase speed and damage at tick 0 of the grace window
+    /// (ramps up to 1.0 by `primordialGraceTicks`). Wander speed is unaffected.
+    public static let primordialGraceMinAggressionFraction: Double = 0.35
+
     // Per-era predator difficulty multipliers (applied to baseline constants above).
     public static let predatorSpeedMultiplierPrimordial: Double = 0.45
     public static let predatorSpeedMultiplierReef: Double = 0.60

@@ -385,11 +385,185 @@ final class PredatorDifficultyTests: XCTestCase {
         XCTAssertNotEqual(expectedSpeed, SimulationTuning.predatorSpeed * SimulationTuning.massExtinctionSpeedMultiplier)
     }
 
+    // MARK: - Early-game balance helpers
+
+    /// Representative fixed seeds for early-game balance assertions.
+    private static let balanceSeeds: [UInt64] = [42, 77, 123, 999, 7, 2024]
+
+    /// Smart play: flee when a predator is within the player's sense radius, otherwise seek food.
+    private func scriptedSmartInput(_ state: SimulationState) -> PlayerInput {
+        guard let player = state.playerOrganism else { return PlayerInput() }
+        if let (predator, dist) = PredatorSystem.nearestPredator(to: player.position, predators: state.predators),
+           dist <= player.traits.effectiveSenseRadius {
+            return PlayerInput(movementDirection: (player.position - predator.position).normalized)
+        }
+        if let food = state.food.min(by: {
+            player.position.distance(to: $0.position) < player.position.distance(to: $1.position)
+        }) {
+            return PlayerInput(movementDirection: (food.position - player.position).normalized)
+        }
+        return PlayerInput()
+    }
+
+    /// Naive learner: only seeks food, never flees (models a new player learning to eat).
+    private func scriptedNaiveInput(_ state: SimulationState) -> PlayerInput {
+        guard let player = state.playerOrganism else { return PlayerInput() }
+        if let food = state.food.min(by: {
+            player.position.distance(to: $0.position) < player.position.distance(to: $1.position)
+        }) {
+            return PlayerInput(movementDirection: (food.position - player.position).normalized)
+        }
+        return PlayerInput()
+    }
+
+    /// Steps a controller, auto-accepting any pending mutation offer so play is uninterrupted.
+    private func stepAutoMutation(_ controller: SimulationController, input: PlayerInput) {
+        controller.step(input: input)
+        if controller.state.phase == .awaitingMutationChoice,
+           let offer = controller.state.pendingMutationOffers.first {
+            controller.selectMutation(offer)
+        }
+    }
+
     func testPrimordialPlayerSurvivesEarlyGame() {
-        let controller = SimulationController(config: SimulationConfig(seed: 42))
-        for _ in 0..<120 {
+        // Passive survival across representative seeds for the full grace window. The spawn buffer
+        // keeps predators out of immediate chase range so a stationary player is not killed before
+        // it can learn the controls.
+        for seed in Self.balanceSeeds {
+            let controller = SimulationController(config: SimulationConfig(seed: seed))
+            for _ in 0..<SimulationTuning.primordialGraceTicks {
+                controller.step()
+            }
+            XCTAssertTrue(
+                controller.state.playerOrganism?.isAlive ?? false,
+                "Passive player died during grace window for seed \(seed)"
+            )
+        }
+    }
+
+    func testPrimordialActivePlayerEatsAndReproduces() {
+        // Realistic skilled play: the player should reliably eat and reproduce at least once and
+        // keep its lineage alive across representative seeds.
+        for seed in Self.balanceSeeds {
+            let controller = SimulationController(config: SimulationConfig(seed: seed))
+            for _ in 0..<300 {
+                stepAutoMutation(controller, input: scriptedSmartInput(controller.state))
+                if controller.state.phase == .extinct { break }
+            }
+            XCTAssertNotEqual(controller.state.phase, .extinct, "Lineage went extinct for seed \(seed)")
+            XCTAssertGreaterThan(controller.state.fitness.foodConsumed, 0, "No food eaten for seed \(seed)")
+            XCTAssertGreaterThanOrEqual(
+                controller.state.fitness.totalOffspring, 1,
+                "Player never reproduced for seed \(seed)"
+            )
+        }
+    }
+
+    func testPrimordialNaiveLearnerSurvivesGraceAndReproduces() {
+        // A new player who only chases food and never flees must still survive the learning window
+        // and reproduce at least once before any death — the core early-game teaching guarantee.
+        for seed in Self.balanceSeeds {
+            let controller = SimulationController(config: SimulationConfig(seed: seed))
+            for tick in 0..<300 {
+                stepAutoMutation(controller, input: scriptedNaiveInput(controller.state))
+                if tick < SimulationTuning.primordialGraceTicks {
+                    XCTAssertNotEqual(
+                        controller.state.phase, .extinct,
+                        "Naive learner went extinct during grace window (tick \(tick)) for seed \(seed)"
+                    )
+                }
+            }
+            XCTAssertGreaterThanOrEqual(
+                controller.state.fitness.totalOffspring, 1,
+                "Naive learner never reproduced for seed \(seed)"
+            )
+        }
+    }
+
+    func testBootstrapPredatorsRespectSpawnBuffer() {
+        for seed in Self.balanceSeeds {
+            let controller = SimulationController(config: SimulationConfig(seed: seed))
+            let start = controller.state.config.bounds.center
+            for predator in controller.state.predators {
+                XCTAssertGreaterThanOrEqual(
+                    predator.position.distance(to: start),
+                    SimulationTuning.predatorSpawnMinDistanceFromPlayer - 0.001,
+                    "Predator spawned inside the buffer for seed \(seed)"
+                )
+            }
+        }
+    }
+
+    func testPrimordialGraceRampReducesEarlyAggression() {
+        // Aggression ramps from the configured floor at tick 0 to full strength by the grace end,
+        // and is always full outside the primordial era.
+        var graceState = SimulationState(config: SimulationConfig(seed: 42, era: .primordialPool))
+        graceState.tick = 0
+        let early = SimulationController(state: graceState)
+        XCTAssertEqual(
+            early.currentPredatorAggression(),
+            SimulationTuning.primordialGraceMinAggressionFraction,
+            accuracy: 0.001
+        )
+
+        graceState.tick = SimulationTuning.primordialGraceTicks / 2
+        let mid = SimulationController(state: graceState)
+        XCTAssertGreaterThan(mid.currentPredatorAggression(), SimulationTuning.primordialGraceMinAggressionFraction)
+        XCTAssertLessThan(mid.currentPredatorAggression(), 1.0)
+
+        graceState.tick = SimulationTuning.primordialGraceTicks
+        let late = SimulationController(state: graceState)
+        XCTAssertEqual(late.currentPredatorAggression(), 1.0, accuracy: 0.001)
+
+        var reefState = SimulationState(config: SimulationConfig(seed: 42, era: .reefShallows))
+        reefState.tick = 0
+        let reef = SimulationController(state: reefState)
+        XCTAssertEqual(reef.currentPredatorAggression(), 1.0, accuracy: 0.001)
+    }
+
+    func testGraceReducesEarlyPredatorBiteDamage() {
+        // A predator sitting on a stationary player deals less damage during the grace window
+        // than after it. Build a deterministic adjacent-predator scenario for each phase.
+        func damageOver(tick: Int) -> Double {
+            var state = SimulationState(config: SimulationConfig(seed: 1, era: .primordialPool, enableMassExtinctionEvents: false))
+            let playerID = EntityID(rawValue: 1)
+            let player = Organism(id: playerID, position: Vector2(x: 400, y: 300), isPlayerControlled: true)
+            state.organisms = [player]
+            state.playerOrganismID = playerID
+            state.predators = [
+                Predator(
+                    id: EntityID(rawValue: 2),
+                    position: Vector2(x: 400, y: 300),
+                    speed: EraContent.predatorSpeed(for: .primordialPool),
+                    senseRadius: EraContent.predatorSenseRadius(for: .primordialPool),
+                    damage: EraContent.predatorDamage(for: .primordialPool)
+                )
+            ]
+            state.tick = tick
+            let controller = SimulationController(state: state)
+            let before = controller.state.playerOrganism?.health ?? 0
             controller.step()
-            XCTAssertTrue(controller.state.playerOrganism?.isAlive ?? false)
+            let after = controller.state.playerOrganism?.health ?? 0
+            return before - after
+        }
+
+        let earlyDamage = damageOver(tick: 0)
+        let lateDamage = damageOver(tick: SimulationTuning.primordialGraceTicks)
+        XCTAssertGreaterThan(earlyDamage, 0)
+        XCTAssertGreaterThan(lateDamage, earlyDamage)
+    }
+
+    func testEraDamageAndSenseScalingIsMonotonic() {
+        let eras: [GameEra] = [.primordialPool, .reefShallows, .landfall, .biomes, .ecosystemDominance]
+        for i in 1..<eras.count {
+            XCTAssertLessThan(
+                EraContent.predatorDamage(for: eras[i - 1]),
+                EraContent.predatorDamage(for: eras[i])
+            )
+            XCTAssertLessThanOrEqual(
+                EraContent.predatorSenseRadius(for: eras[i - 1]),
+                EraContent.predatorSenseRadius(for: eras[i])
+            )
         }
     }
 

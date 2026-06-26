@@ -109,7 +109,8 @@ public enum PredatorSystem {
         predator: inout Predator,
         targetPosition: Vector2,
         bounds: WorldBounds,
-        rng: inout SeededRNG
+        rng: inout SeededRNG,
+        aggression: Double = 1.0
     ) {
         guard predator.isAlive else { return }
 
@@ -119,7 +120,7 @@ public enum PredatorSystem {
 
         if distToTarget <= predator.senseRadius {
             movementDirection = (targetPosition - predator.position).normalized
-            movementSpeed = predator.speed
+            movementSpeed = predator.speed * aggression
         } else {
             let angle = rng.nextDouble(in: 0...(2 * .pi))
             movementDirection = Vector2(x: cos(angle), y: sin(angle))
@@ -131,12 +132,12 @@ public enum PredatorSystem {
             .clamped(to: bounds)
     }
 
-    public static func attack(organism: inout Organism, predator: Predator) -> Bool {
+    public static func attack(organism: inout Organism, predator: Predator, aggression: Double = 1.0) -> Bool {
         guard organism.isAlive, predator.isAlive else { return false }
         let dist = organism.position.distance(to: predator.position)
         guard dist <= organism.radius + predator.radius else { return false }
 
-        let damage = predator.damage * (1.0 - organism.traits.armor * 0.5)
+        let damage = predator.damage * aggression * (1.0 - organism.traits.armor * 0.5)
         organism.health -= damage
         if organism.health <= 0 {
             organism.health = 0

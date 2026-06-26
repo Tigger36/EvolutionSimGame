@@ -240,6 +240,43 @@ public final class SimulationController: @unchecked Sendable {
         reset(config: config)
     }
 
+    /// Deterministically samples a spawn point at least `minDistance` from `anchor`.
+    /// Uses bounded rejection sampling; if no sample qualifies it pushes the last candidate
+    /// out to the buffer ring (clamped to bounds) so spawning stays deterministic and never
+    /// places a predator on top of the player.
+    static func spawnPosition(
+        awayFrom anchor: Vector2,
+        minDistance: Double,
+        bounds: WorldBounds,
+        rng: inout SeededRNG
+    ) -> Vector2 {
+        let maxAttempts = 20
+        var candidate = bounds.randomPoint(rng: &rng)
+        var attempts = 1
+        while candidate.distance(to: anchor) < minDistance && attempts < maxAttempts {
+            candidate = bounds.randomPoint(rng: &rng)
+            attempts += 1
+        }
+        if candidate.distance(to: anchor) < minDistance {
+            let raw = (candidate - anchor).normalized
+            let direction = raw == .zero ? Vector2(x: 1, y: 0) : raw
+            candidate = (anchor + direction * minDistance).clamped(to: bounds)
+        }
+        return candidate
+    }
+
+    /// Predator aggression scalar for the current tick. During the primordial grace window this
+    /// ramps linearly from `primordialGraceMinAggressionFraction` to 1.0, scaling chase speed and
+    /// bite damage so the earliest ticks are learnable. Always 1.0 outside primordial/grace.
+    func currentPredatorAggression() -> Double {
+        guard state.config.era == .primordialPool else { return 1.0 }
+        let grace = SimulationTuning.primordialGraceTicks
+        guard grace > 0, state.tick < grace else { return 1.0 }
+        let minFraction = SimulationTuning.primordialGraceMinAggressionFraction
+        let progress = Double(state.tick) / Double(grace)
+        return minFraction + (1.0 - minFraction) * progress
+    }
+
     private func bootstrapWorld() {
         let startPos = state.config.bounds.center
         let playerID = state.idGenerator.next()
@@ -270,7 +307,12 @@ public final class SimulationController: @unchecked Sendable {
         let predatorCount = state.config.predatorCountOverride
             ?? EraContent.predatorCount(for: state.config.era)
         for _ in 0..<predatorCount {
-            let pos = state.config.bounds.randomPoint(rng: &rng)
+            let pos = Self.spawnPosition(
+                awayFrom: startPos,
+                minDistance: SimulationTuning.predatorSpawnMinDistanceFromPlayer,
+                bounds: state.config.bounds,
+                rng: &rng
+            )
             let era = state.config.era
             state.predators.append(
                 Predator(
@@ -363,7 +405,7 @@ public final class SimulationController: @unchecked Sendable {
                     state.pressure.predator += SimulationTuning.predatorNearMissPressure
                 }
             }
-            if PredatorSystem.attack(organism: &organism, predator: predator) {
+            if PredatorSystem.attack(organism: &organism, predator: predator, aggression: currentPredatorAggression()) {
                 hit = true
             }
         }
@@ -430,9 +472,9 @@ public final class SimulationController: @unchecked Sendable {
 
             if let (_, dist) = PredatorSystem.nearestPredator(to: organism.position, predators: state.predators),
                dist <= organism.radius + SimulationTuning.predatorRadius {
-                _ = PredatorSystem.nearestPredator(to: organism.position, predators: state.predators)
+                let aggression = currentPredatorAggression()
                 for pIndex in state.predators.indices where state.predators[pIndex].isAlive {
-                    if PredatorSystem.attack(organism: &organism, predator: state.predators[pIndex]) {
+                    if PredatorSystem.attack(organism: &organism, predator: state.predators[pIndex], aggression: aggression) {
                         break
                     }
                 }
@@ -448,13 +490,15 @@ public final class SimulationController: @unchecked Sendable {
 
     private func updatePredators() {
         let targetPos = state.playerOrganism?.position ?? state.config.bounds.center
+        let aggression = currentPredatorAggression()
         var rng = state.rng
         for index in state.predators.indices {
             PredatorSystem.update(
                 predator: &state.predators[index],
                 targetPosition: targetPos,
                 bounds: state.config.bounds,
-                rng: &rng
+                rng: &rng,
+                aggression: aggression
             )
         }
         state.rng = rng
@@ -563,8 +607,14 @@ public final class SimulationController: @unchecked Sendable {
         if currentCount < targetCount {
             var rng = state.rng
             var idGenerator = state.idGenerator
+            let anchor = state.playerOrganism?.position ?? state.config.bounds.center
             for _ in 0..<(targetCount - currentCount) {
-                let pos = state.config.bounds.randomPoint(rng: &rng)
+                let pos = Self.spawnPosition(
+                    awayFrom: anchor,
+                    minDistance: SimulationTuning.predatorSpawnMinDistanceFromPlayer,
+                    bounds: state.config.bounds,
+                    rng: &rng
+                )
                 var speed = EraContent.predatorSpeed(for: era)
                 if state.massExtinctionActive {
                     speed *= SimulationTuning.massExtinctionSpeedMultiplier
