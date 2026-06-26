@@ -13,20 +13,14 @@ struct ContentView: View {
                 iPadMacLayout
             }
         }
+        .overlay { gameOverlays }
+        .overlay(alignment: .top) { topBanners }
         .overlay {
-            if viewModel.snapshot.phase == .awaitingMutationChoice {
-                MutationChoiceView(
-                    offers: viewModel.snapshot.pendingMutationOffers,
-                    onSelect: viewModel.selectMutation
-                )
-            }
-            if viewModel.snapshot.phase == .extinct {
-                gameOverOverlay(title: "Extinction", message: "Your lineage has died out.")
-            }
-            if viewModel.snapshot.phase == .victory {
-                gameOverOverlay(
-                    title: "Victory!",
-                    message: "Goal achieved: \(viewModel.snapshot.victoryGoal.displayName)"
+            if viewModel.appPhase == .tutorial, let step = viewModel.tutorialStep {
+                TutorialCalloutView(
+                    step: step,
+                    onContinue: viewModel.advanceTutorialManually,
+                    onSkip: viewModel.skipTutorial
                 )
             }
         }
@@ -54,7 +48,10 @@ struct ContentView: View {
             ZStack {
                 SimulationCanvasView(
                     snapshot: viewModel.snapshot,
-                    debugOverlay: viewModel.showDebugOverlays ? viewModel.selectedDebugOverlay : .none
+                    debugOverlay: viewModel.showDebugOverlays ? viewModel.selectedDebugOverlay : .none,
+                    showBiomeFitOverlay: viewModel.showBiomeFitOverlay,
+                    showTerrainLegend: viewModel.showTerrainLegend,
+                    onDismissLegend: viewModel.dismissTerrainLegend
                 )
                 if viewModel.showDebugOverlays {
                     DebugOverlayLegend(overlay: viewModel.selectedDebugOverlay)
@@ -89,6 +86,43 @@ struct ContentView: View {
         .background(.ultraThinMaterial)
     }
 
+    @ViewBuilder
+    private var topBanners: some View {
+        VStack(spacing: 8) {
+            if let banner = viewModel.terrainEntryBanner {
+                TerrainEntryBanner(message: banner)
+            }
+            if let tip = viewModel.contextualTip {
+                ContextualTipBanner(tip: tip, onDismiss: viewModel.dismissContextualTip)
+            }
+            if let feedback = viewModel.mutationFeedback {
+                FeedbackBanner(message: feedback)
+            }
+        }
+        .padding(.top, 8)
+    }
+
+    @ViewBuilder
+    private var gameOverlays: some View {
+        if viewModel.snapshot.phase == .awaitingMutationChoice {
+            MutationChoiceView(
+                offers: viewModel.snapshot.pendingMutationOffers,
+                pressure: viewModel.snapshot.pressure,
+                offspringTraits: viewModel.snapshot.pendingMutationTargetTraits,
+                onSelect: viewModel.selectMutation
+            )
+        }
+        if viewModel.snapshot.phase == .extinct {
+            gameOverOverlay(title: "Extinction", message: "Your lineage has died out.")
+        }
+        if viewModel.snapshot.phase == .victory {
+            gameOverOverlay(
+                title: "Victory!",
+                message: "Goal achieved: \(viewModel.snapshot.victoryGoal.displayName)"
+            )
+        }
+    }
+
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
         #if os(macOS)
@@ -102,6 +136,9 @@ struct ContentView: View {
         }
         #endif
         ToolbarItem(placement: .automatic) {
+            Button("How to Play") { viewModel.showHowToPlay = true }
+        }
+        ToolbarItem(placement: .automatic) {
             Toggle("Debug", isOn: $viewModel.showDebugOverlays)
                 .accessibilityIdentifier("debugToggle")
         }
@@ -114,7 +151,7 @@ struct ContentView: View {
                 Text(title).font(.largeTitle.bold())
                 Text(message).multilineTextAlignment(.center)
                 Text("Fitness: \(Int(viewModel.snapshot.fitness.compositeScore))")
-                Button("Play Again") { viewModel.reset() }
+                Button("Play Again") { viewModel.resetToStartScreen() }
                     .buttonStyle(.borderedProminent)
                     .accessibilityIdentifier("playAgainButton")
             }
@@ -136,6 +173,10 @@ struct GameCommands: Commands {
                 .keyboardShortcut("s", modifiers: [.command])
             Button("Reset") { viewModel.reset() }
                 .keyboardShortcut("r", modifiers: [.command])
+            Divider()
+            Button("How to Play") { viewModel.showHowToPlay = true }
+            Button("Restart Tutorial") { viewModel.beginTutorial() }
+            Button("New Game") { viewModel.resetToStartScreen() }
             Divider()
             Button("Speed 1x") { viewModel.setSpeed(1) }
             Button("Speed 2x") { viewModel.setSpeed(2) }

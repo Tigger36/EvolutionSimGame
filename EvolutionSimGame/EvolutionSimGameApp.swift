@@ -7,7 +7,7 @@ struct EvolutionSimGameApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            AppRootView()
                 .environmentObject(viewModel)
         }
         #if os(macOS)

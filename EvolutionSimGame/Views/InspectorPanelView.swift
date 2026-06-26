@@ -39,15 +39,23 @@ struct InspectorPanelView: View {
                 }
             }
 
-            Section("Biome Compatibility") {
-                if let player = playerOrganism {
-                    ForEach(viewModel.biomeCompatibility(for: player).filter { $0.1 > 0.01 }, id: \.0) { terrain, score in
-                        HStack {
-                            Text(terrain.displayName)
-                            Spacer()
-                            CompatibilityBar(score: score)
-                        }
-                    }
+            Section {
+                Text("Compatibility combines movement, energy cost, and damage in each terrain.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            } header: {
+                Text("Biome Compatibility")
+            } footer: {
+                EmptyView()
+            }
+
+            if let player = playerOrganism {
+                ForEach(viewModel.biomeCompatibility(for: player).filter { $0.1 > 0.01 }, id: \.0) { terrain, score in
+                    BiomeCompatibilityRow(
+                        terrain: terrain,
+                        score: score,
+                        breakdown: viewModel.terrainEffectBreakdown(for: player, terrain: terrain)
+                    )
                 }
             }
 
@@ -81,41 +89,38 @@ struct InspectorPanelView: View {
             }
 
             Section("Game Settings") {
+                Button("New Game") { viewModel.resetToStartScreen() }
+                    .accessibilityIdentifier("newGameFromInspector")
                 Button("Reset (Seed 42)") { viewModel.reset(seed: 42) }
                     .accessibilityIdentifier("resetSeed42")
                 Button("Reset (Random Seed)") { viewModel.reset(seed: UInt64.random(in: 1...UInt64.max)) }
-                Text(victoryGoalDescription(snapshot.victoryGoal))
+                Text(GameCopy.victoryGoalDescription(snapshot.victoryGoal))
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
 
-            Section("Evolutionary Pressure") {
-                PressureRow(label: "Water", value: snapshot.pressure.water)
-                PressureRow(label: "Predator", value: snapshot.pressure.predator)
-                PressureRow(label: "Food Scarcity", value: snapshot.pressure.foodScarcity)
-                PressureRow(label: "Exploration", value: snapshot.pressure.exploration)
-                PressureRow(label: "Toxic", value: snapshot.pressure.toxic)
+            Section {
+                Text("Recent pressure shapes which adaptations appear when you reproduce.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                PressureRow(label: "Water", value: snapshot.pressure.water, isDominant: isDominant("Water exposure"))
+                PressureRow(label: "Predator", value: snapshot.pressure.predator, isDominant: isDominant("Predator encounters"))
+                PressureRow(label: "Food Scarcity", value: snapshot.pressure.foodScarcity, isDominant: isDominant("Food scarcity"))
+                PressureRow(label: "Exploration", value: snapshot.pressure.exploration, isDominant: isDominant("Exploration"))
+                PressureRow(label: "Toxic", value: snapshot.pressure.toxic, isDominant: isDominant("Toxic exposure"))
+            } header: {
+                Text("Evolutionary Pressure")
             }
         }
         .accessibilityIdentifier("inspectorPanel")
     }
 
     private var playerOrganism: Organism? {
-        guard let id = snapshot.playerOrganismID else { return nil }
-        return snapshot.organisms.first { $0.id == id }
+        snapshot.playerOrganism
     }
-}
 
-private func victoryGoalDescription(_ goal: VictoryGoal) -> String {
-    switch goal {
-    case .surviveMassExtinction:
-        return "Survive the mass extinction event that begins around tick 2000."
-    case .spreadToAllBiomes:
-        return "Explore and adapt to at least 6 different biome types."
-    case .reachPopulation:
-        return "Grow your lineage to 15 living organisms."
-    case .evolveIntelligence:
-        return "Reach generation 10 with a fitness score of 500+."
+    private func isDominant(_ label: String) -> Bool {
+        snapshot.pressure.dominantPressureLabel == label
     }
 }
 
@@ -143,6 +148,55 @@ struct TraitRow: View {
     }
 }
 
+struct BiomeCompatibilityRow: View {
+    let terrain: TerrainType
+    let score: Double
+    let breakdown: (speed: Double, energyDrain: Double, damage: Double)
+
+    @State private var isExpanded = false
+
+    var body: some View {
+        DisclosureGroup(isExpanded: $isExpanded) {
+            VStack(alignment: .leading, spacing: 4) {
+                breakdownRow("Speed", value: breakdown.speed, higherIsBetter: true)
+                breakdownRow("Energy use", value: breakdown.energyDrain, higherIsBetter: false)
+                if breakdown.damage > 0 {
+                    breakdownRow("Damage/tick", value: breakdown.damage, higherIsBetter: false, isRaw: true)
+                }
+            }
+            .font(.caption2)
+            .foregroundStyle(.secondary)
+        } label: {
+            HStack {
+                Text(terrain.displayName)
+                Spacer()
+                CompatibilityBar(score: score)
+            }
+        }
+    }
+
+    private func breakdownRow(_ label: String, value: Double, higherIsBetter: Bool, isRaw: Bool = false) -> some View {
+        HStack {
+            Text(label)
+            Spacer()
+            if isRaw {
+                Text(String(format: "%.2f", value))
+            } else {
+                Text(String(format: "%.0f%%", value * 100))
+                    .foregroundStyle(colorFor(value: value, higherIsBetter: higherIsBetter))
+            }
+        }
+    }
+
+    private func colorFor(value: Double, higherIsBetter: Bool) -> Color {
+        let good = higherIsBetter ? value >= 0.7 : value <= 1.1
+        let ok = higherIsBetter ? value >= 0.45 : value <= 1.4
+        if good { return .green }
+        if ok { return .orange }
+        return .red
+    }
+}
+
 struct CompatibilityBar: View {
     let score: Double
 
@@ -160,13 +214,16 @@ struct CompatibilityBar: View {
 struct PressureRow: View {
     let label: String
     let value: Double
+    var isDominant: Bool = false
 
     var body: some View {
         HStack {
             Text(label)
+                .fontWeight(isDominant ? .semibold : .regular)
             Spacer()
             ProgressView(value: min(value, 1.0))
                 .frame(width: 80)
+                .tint(isDominant ? .blue : nil)
         }
     }
 }

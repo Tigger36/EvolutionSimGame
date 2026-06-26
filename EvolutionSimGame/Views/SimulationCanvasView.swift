@@ -4,54 +4,78 @@ import EvolutionSimCore
 struct SimulationCanvasView: View {
     let snapshot: SimulationSnapshot
     let debugOverlay: DebugOverlay
+    let showBiomeFitOverlay: Bool
+    let showTerrainLegend: Bool
+    let onDismissLegend: () -> Void
 
     var body: some View {
-        Canvas { context, size in
-            let transform = ViewTransform(bounds: snapshot.bounds, viewSize: size)
+        ZStack(alignment: .topLeading) {
+            Canvas { context, size in
+                let transform = ViewTransform(bounds: snapshot.bounds, viewSize: size)
 
-            drawTerrain(context: &context, transform: transform)
-            if debugOverlay == .terrainCost {
-                drawTerrainCostOverlay(context: &context, transform: transform)
-            }
-            if debugOverlay == .foodDensity {
-                drawFoodDensityOverlay(context: &context, transform: transform)
-            }
-            if debugOverlay == .dangerZones {
-                drawDangerZones(context: &context, transform: transform)
-            }
+                drawTerrain(context: &context, transform: transform)
+                if debugOverlay == .terrainCost || showBiomeFitOverlay {
+                    drawTerrainCostOverlay(context: &context, transform: transform)
+                }
+                if debugOverlay == .foodDensity {
+                    drawFoodDensityOverlay(context: &context, transform: transform)
+                }
+                if debugOverlay == .dangerZones {
+                    drawDangerZones(context: &context, transform: transform)
+                }
 
-            for food in snapshot.food {
-                let center = transform.point(food.position)
-                let radius = transform.scale * food.radius
-                context.fill(
-                    Path(ellipseIn: CGRect(x: center.x - radius, y: center.y - radius, width: radius * 2, height: radius * 2)),
-                    with: .color(.green.opacity(0.8))
-                )
-            }
+                for food in snapshot.food {
+                    let center = transform.point(food.position)
+                    let radius = transform.scale * food.radius
+                    context.fill(
+                        Path(ellipseIn: CGRect(x: center.x - radius, y: center.y - radius, width: radius * 2, height: radius * 2)),
+                        with: .color(.green.opacity(0.8))
+                    )
+                }
 
-            for predator in snapshot.predators where predator.isAlive {
-                let center = transform.point(predator.position)
-                let radius = transform.scale * predator.radius
-                context.fill(
-                    Path(ellipseIn: CGRect(x: center.x - radius, y: center.y - radius, width: radius * 2, height: radius * 2)),
-                    with: .color(.red.opacity(0.85))
-                )
-            }
+                for predator in snapshot.predators where predator.isAlive {
+                    let center = transform.point(predator.position)
+                    let radius = transform.scale * predator.radius
+                    context.fill(
+                        Path(ellipseIn: CGRect(x: center.x - radius, y: center.y - radius, width: radius * 2, height: radius * 2)),
+                        with: .color(.red.opacity(0.85))
+                    )
+                }
 
-            for organism in snapshot.organisms where organism.isAlive && !organism.isPlayerControlled {
-                drawOrganism(context: &context, organism: organism, transform: transform, color: .cyan.opacity(0.7))
-            }
+                for organism in snapshot.organisms where organism.isAlive && !organism.isPlayerControlled {
+                    drawOrganism(context: &context, organism: organism, transform: transform, color: .cyan.opacity(0.7))
+                }
 
-            if let playerID = snapshot.playerOrganismID,
-               let player = snapshot.organisms.first(where: { $0.id == playerID && $0.isAlive }) {
-                drawOrganism(context: &context, organism: player, transform: transform, color: .yellow)
-                if debugOverlay == .lineage {
-                    drawSenseRadius(context: &context, organism: player, transform: transform)
+                if let player = snapshot.playerOrganism {
+                    drawOrganism(context: &context, organism: player, transform: transform, color: .yellow)
+                    if debugOverlay == .lineage {
+                        drawSenseRadius(context: &context, organism: player, transform: transform)
+                    }
                 }
             }
+            .background(Color(red: 0.12, green: 0.15, blue: 0.12))
+            .accessibilityIdentifier("simulationCanvas")
+
+            if showTerrainLegend {
+                TerrainLegendView(
+                    terrains: snapshot.activeTerrainsForLegend(),
+                    onDismiss: onDismissLegend
+                )
+                .padding(8)
+            }
+
+            if showBiomeFitOverlay {
+                VStack {
+                    Spacer()
+                    HStack {
+                        Spacer()
+                        BiomeFitLegendView()
+                            .padding(8)
+                    }
+                }
+                .allowsHitTesting(false)
+            }
         }
-        .background(Color(red: 0.12, green: 0.15, blue: 0.12))
-        .accessibilityIdentifier("simulationCanvas")
     }
 
     private func drawOrganism(context: inout GraphicsContext, organism: Organism, transform: ViewTransform, color: Color) {
@@ -74,7 +98,7 @@ struct SimulationCanvasView: View {
         for region in snapshot.terrain.regions {
             let center = transform.point(region.center)
             let radius = transform.scale * region.radius
-            let color = terrainColor(region.type)
+            let color = TerrainColors.color(for: region.type)
             context.fill(
                 Path(ellipseIn: CGRect(x: center.x - radius, y: center.y - radius, width: radius * 2, height: radius * 2)),
                 with: .color(color)
@@ -83,7 +107,7 @@ struct SimulationCanvasView: View {
     }
 
     private func drawTerrainCostOverlay(context: inout GraphicsContext, transform: ViewTransform) {
-        guard let player = snapshot.organisms.first(where: { $0.id == snapshot.playerOrganismID }) else { return }
+        guard let player = snapshot.playerOrganism else { return }
         let gridStep = 40.0
         var x = snapshot.bounds.minX
         while x <= snapshot.bounds.maxX {
@@ -96,7 +120,7 @@ struct SimulationCanvasView: View {
                 let size: CGFloat = 6
                 context.fill(
                     Path(CGRect(x: center.x - size/2, y: center.y - size/2, width: size, height: size)),
-                    with: .color(Color.red.opacity(1 - compat))
+                    with: .color(compat > 0.6 ? Color.green.opacity(0.35) : Color.red.opacity(1 - compat))
                 )
                 y += gridStep
             }
@@ -145,8 +169,10 @@ struct SimulationCanvasView: View {
             lineWidth: 1
         )
     }
+}
 
-    private func terrainColor(_ type: TerrainType) -> Color {
+enum TerrainColors {
+    static func color(for type: TerrainType) -> Color {
         switch type {
         case .land: return Color(red: 0.25, green: 0.45, blue: 0.2)
         case .water: return Color(red: 0.15, green: 0.35, blue: 0.7)
@@ -159,6 +185,57 @@ struct SimulationCanvasView: View {
         case .mountain: return Color(red: 0.45, green: 0.42, blue: 0.4)
         case .ice: return Color(red: 0.75, green: 0.85, blue: 0.95)
         }
+    }
+}
+
+struct TerrainLegendView: View {
+    let terrains: [TerrainType]
+    let onDismiss: () -> Void
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            HStack {
+                Text("Terrain")
+                    .font(.caption.bold())
+                Spacer()
+                Button(action: onDismiss) {
+                    Image(systemName: "xmark.circle.fill")
+                        .font(.caption)
+                }
+                .buttonStyle(.plain)
+            }
+            ForEach(terrains, id: \.self) { terrain in
+                HStack(spacing: 6) {
+                    Circle()
+                        .fill(TerrainColors.color(for: terrain))
+                        .frame(width: 10, height: 10)
+                    Text(terrain.displayName)
+                        .font(.caption2)
+                }
+            }
+        }
+        .padding(8)
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 8))
+        .accessibilityIdentifier("terrainLegend")
+    }
+}
+
+struct BiomeFitLegendView: View {
+    var body: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text("Biome Fit")
+                .font(.caption.bold())
+            HStack(spacing: 8) {
+                Label("Good", systemImage: "square.fill")
+                    .font(.caption2)
+                    .foregroundStyle(.green)
+                Label("Poor", systemImage: "square.fill")
+                    .font(.caption2)
+                    .foregroundStyle(.red)
+            }
+        }
+        .padding(8)
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 8))
     }
 }
 

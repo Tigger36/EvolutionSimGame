@@ -5,18 +5,38 @@ struct HUDView: View {
     let snapshot: SimulationSnapshot
 
     var body: some View {
-        HStack(spacing: 16) {
-            statBar(label: "Energy", value: playerEnergy, max: 150, color: .green)
-            statBar(label: "Health", value: playerHealth, max: 100, color: .red)
-            VStack(alignment: .leading, spacing: 2) {
-                Text("Tick \(snapshot.tick)")
-                    .font(.caption.monospaced())
-                Text(snapshot.era.displayName)
-                    .font(.caption2)
-                    .foregroundStyle(.secondary)
+        VStack(spacing: 8) {
+            HStack(spacing: 16) {
+                statBar(label: "Energy", value: playerEnergy, max: 150, color: .green)
+                statBar(label: "Health", value: playerHealth, max: 100, color: .red)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Tick \(snapshot.tick)")
+                        .font(.caption.monospaced())
+                    Text(snapshot.era.displayName)
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                }
+                Spacer()
+                reproductionBadge
             }
-            Spacer()
-            reproductionBadge
+
+            if let terrain = snapshot.playerCurrentTerrain {
+                HStack(spacing: 6) {
+                    Image(systemName: "map.fill")
+                        .font(.caption2)
+                    Text(terrain.displayName)
+                        .font(.caption.bold())
+                    Text("—")
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                    Text(TerrainSystem.playerFacingSummary(for: terrain))
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                        .lineLimit(2)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .accessibilityIdentifier("currentBiomeChip")
+            }
         }
         .accessibilityElement(children: .combine)
         .accessibilityLabel("Energy \(Int(playerEnergy)), Health \(Int(playerHealth))")
@@ -31,16 +51,19 @@ struct HUDView: View {
     }
 
     private var player: Organism? {
-        guard let id = snapshot.playerOrganismID else { return nil }
-        return snapshot.organisms.first { $0.id == id }
+        snapshot.playerOrganism
     }
 
     private var reproductionBadge: some View {
         Group {
-            if let player, player.canReproduce {
+            if snapshot.playerCanReproduceSafely {
                 Label("Ready to Reproduce", systemImage: "heart.fill")
                     .font(.caption.bold())
                     .foregroundStyle(.pink)
+            } else if player?.canReproduce == true {
+                Label("Move Away to Reproduce", systemImage: "heart.slash")
+                    .font(.caption.bold())
+                    .foregroundStyle(.orange)
             } else {
                 Label("Gather Energy", systemImage: "bolt.fill")
                     .font(.caption)
@@ -87,6 +110,11 @@ struct ControlBarView: View {
 
             Spacer()
 
+            Toggle("Biome Fit", isOn: $viewModel.showBiomeFitOverlay)
+                .font(.caption)
+                .toggleStyle(.button)
+                .accessibilityIdentifier("biomeFitToggle")
+
             Text("Gen \(viewModel.snapshot.lineage.generation)")
                 .font(.caption.monospaced())
             Text("Pop \(viewModel.snapshot.lineage.livingCount)")
@@ -118,8 +146,9 @@ struct MovementControlsView: View {
                 Button {
                     direction = .zero
                 } label: {
-                    Image(systemName: "stop.fill")
-                        .frame(width: 44, height: 44)
+                    Image(systemName: "circle.fill")
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
                 }
                 .accessibilityLabel("Stop")
                 moveButton(label: "Right", icon: "arrow.right", direction: Vector2(x: 1, y: 0))
@@ -128,39 +157,37 @@ struct MovementControlsView: View {
         }
     }
 
-    #if os(iOS)
-    private var touchPad: some View {
-        JoystickView(direction: $direction)
-            .frame(width: 120, height: 120)
-    }
-    #endif
-
-    private func moveButton(label: String, icon: String, direction moveDir: Vector2) -> some View {
+    private func moveButton(label: String, icon: String, direction move: Vector2) -> some View {
         Button {
-            direction = moveDir
+            direction = move
         } label: {
             Image(systemName: icon)
                 .frame(width: 44, height: 44)
         }
         .accessibilityLabel(label)
     }
+
+    #if os(iOS)
+    private var touchPad: some View {
+        TouchJoystick(direction: $direction)
+            .frame(width: 120, height: 120)
+    }
+    #endif
 }
 
 #if os(iOS)
-struct JoystickView: View {
+struct TouchJoystick: View {
     @Binding var direction: Vector2
     @State private var dragOffset: CGSize = .zero
 
     var body: some View {
         GeometryReader { geo in
             let center = CGPoint(x: geo.size.width / 2, y: geo.size.height / 2)
-            let maxRadius = min(geo.size.width, geo.size.height) / 2 - 20
-
             ZStack {
                 Circle()
-                    .stroke(.secondary.opacity(0.4), lineWidth: 2)
+                    .fill(.ultraThinMaterial)
                 Circle()
-                    .fill(.secondary.opacity(0.6))
+                    .fill(.secondary.opacity(0.5))
                     .frame(width: 40, height: 40)
                     .position(
                         x: center.x + dragOffset.width,
@@ -170,16 +197,17 @@ struct JoystickView: View {
             .gesture(
                 DragGesture(minimumDistance: 0)
                     .onChanged { value in
+                        let maxDist = geo.size.width / 2 - 20
                         let dx = value.location.x - center.x
                         let dy = value.location.y - center.y
                         let dist = sqrt(dx * dx + dy * dy)
-                        let clampedDist = min(dist, maxRadius)
+                        let clampedDist = min(dist, maxDist)
                         let angle = atan2(dy, dx)
                         dragOffset = CGSize(
                             width: cos(angle) * clampedDist,
                             height: sin(angle) * clampedDist
                         )
-                        if clampedDist > 5 {
+                        if dist > 5 {
                             direction = Vector2(
                                 x: cos(angle),
                                 y: sin(angle)
@@ -194,42 +222,77 @@ struct JoystickView: View {
                     }
             )
         }
-        .accessibilityLabel("Movement joystick")
     }
 }
 #endif
 
 struct MutationChoiceView: View {
     let offers: [MutationOption]
+    let pressure: PressureState
+    let offspringTraits: TraitSet?
     let onSelect: (MutationOption) -> Void
 
     var body: some View {
         ZStack {
             Color.black.opacity(0.6).ignoresSafeArea()
-            VStack(spacing: 16) {
-                Text("Choose an Adaptation")
-                    .font(.title2.bold())
-                Text("Your offspring awaits a guided mutation.")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
+            ScrollView {
+                VStack(spacing: 16) {
+                    Text("Choose an Adaptation")
+                        .font(.title2.bold())
+                    Text("Adaptations shaped by recent survival")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
 
-                ForEach(offers, id: \.self) { option in
-                    Button {
-                        onSelect(option)
-                    } label: {
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text(option.displayName).font(.headline)
-                            Text(option.description).font(.caption).foregroundStyle(.secondary)
-                        }
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding()
-                        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 10))
+                    if let label = pressure.dominantPressureLabel {
+                        Text("Suggested because: \(label)")
+                            .font(.caption.bold())
+                            .foregroundStyle(.blue)
                     }
-                    .accessibilityIdentifier("mutationOption_\(option.rawValue)")
+
+                    Text("Your offspring awaits a guided mutation.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+
+                    ForEach(offers, id: \.self) { option in
+                        mutationOptionButton(option)
+                    }
+
+                    Text("This affects your offspring. You keep playing as the parent until death.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.center)
                 }
+                .padding(24)
+                .frame(maxWidth: 440)
             }
-            .padding(24)
-            .frame(maxWidth: 400)
         }
+    }
+
+    @ViewBuilder
+    private func mutationOptionButton(_ option: MutationOption) -> some View {
+        let baseTraits = offspringTraits ?? TraitSet.default
+        let statChanges = MutationPreview.formattedTraitDeltas(option: option, base: baseTraits)
+        let biomeImpact = MutationPreview.formattedBiomeImpact(option: option, base: baseTraits)
+
+        Button {
+            onSelect(option)
+        } label: {
+            VStack(alignment: .leading, spacing: 6) {
+                Text(option.displayName).font(.headline)
+                Text(option.description).font(.caption).foregroundStyle(.secondary)
+                if !statChanges.isEmpty {
+                    Label(statChanges, systemImage: "chart.bar.fill")
+                        .font(.caption2)
+                        .foregroundStyle(.primary)
+                }
+                Label(biomeImpact, systemImage: "map")
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding()
+            .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 10))
+        }
+        .accessibilityIdentifier("mutationOption_\(option.rawValue)")
     }
 }

@@ -1,0 +1,144 @@
+import SwiftUI
+import EvolutionSimCore
+
+enum ContextualTip: String, Identifiable {
+    case firstWater
+    case firstToxic
+    case firstMud
+    case firstReproductionReady
+    case firstMutation
+    case firstLineageHandoff
+
+    var id: String { rawValue }
+
+    var title: String {
+        switch self {
+        case .firstWater: return "Water Terrain"
+        case .firstToxic: return "Toxic Pool"
+        case .firstMud: return "Mud Terrain"
+        case .firstReproductionReady: return "Ready to Reproduce"
+        case .firstMutation: return "Adaptation Choice"
+        case .firstLineageHandoff: return "Lineage Handoff"
+        }
+    }
+
+    var message: String {
+        switch self {
+        case .firstWater:
+            return TerrainSystem.playerFacingSummary(for: .water)
+        case .firstToxic:
+            return TerrainSystem.playerFacingSummary(for: .toxicPool)
+        case .firstMud:
+            return TerrainSystem.playerFacingSummary(for: .mud)
+        case .firstReproductionReady:
+            return "Your energy is high enough to reproduce. Move away from predators for a safe site."
+        case .firstMutation:
+            return "Recent survival pressure shapes which adaptations appear. Compare stat and biome changes before choosing."
+        case .firstLineageHandoff:
+            return "Control transferred to a descendant. Your lineage continues even when individuals die."
+        }
+    }
+}
+
+@MainActor
+final class ContextualTipsManager {
+    private let defaults: UserDefaults
+
+    init(defaults: UserDefaults = .standard) {
+        self.defaults = defaults
+    }
+
+    func shouldShow(_ tip: ContextualTip) -> Bool {
+        !defaults.bool(forKey: storageKey(for: tip))
+    }
+
+    func markShown(_ tip: ContextualTip) {
+        defaults.set(true, forKey: storageKey(for: tip))
+    }
+
+    func tipFor(snapshot: SimulationSnapshot, previousPhase: SimulationPhase?, generationChanged: Bool) -> ContextualTip? {
+        if let terrain = snapshot.playerCurrentTerrain {
+            switch terrain {
+            case .water where shouldShow(.firstWater): return .firstWater
+            case .toxicPool where shouldShow(.firstToxic): return .firstToxic
+            case .mud where shouldShow(.firstMud): return .firstMud
+            default: break
+            }
+        }
+
+        if snapshot.playerCanReproduceSafely, shouldShow(.firstReproductionReady) {
+            return .firstReproductionReady
+        }
+
+        if previousPhase != .awaitingMutationChoice,
+           snapshot.phase == .awaitingMutationChoice,
+           shouldShow(.firstMutation) {
+            return .firstMutation
+        }
+
+        if generationChanged, shouldShow(.firstLineageHandoff) {
+            return .firstLineageHandoff
+        }
+
+        return nil
+    }
+
+    private func storageKey(for tip: ContextualTip) -> String {
+        "contextualTipShown_\(tip.rawValue)"
+    }
+}
+
+struct ContextualTipBanner: View {
+    let tip: ContextualTip
+    let onDismiss: () -> Void
+
+    var body: some View {
+        HStack(alignment: .top, spacing: 12) {
+            VStack(alignment: .leading, spacing: 4) {
+                Text(tip.title)
+                    .font(.subheadline.bold())
+                Text(tip.message)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            Spacer()
+            Button {
+                onDismiss()
+            } label: {
+                Image(systemName: "xmark.circle.fill")
+            }
+            .buttonStyle(.plain)
+        }
+        .padding(12)
+        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 10))
+        .padding(.horizontal)
+        .accessibilityIdentifier("contextualTipBanner")
+    }
+}
+
+struct FeedbackBanner: View {
+    let message: String
+
+    var body: some View {
+        Text(message)
+            .font(.subheadline.bold())
+            .padding(.horizontal, 16)
+            .padding(.vertical, 10)
+            .background(.green.opacity(0.85), in: Capsule())
+            .foregroundStyle(.white)
+            .accessibilityIdentifier("feedbackBanner")
+    }
+}
+
+struct TerrainEntryBanner: View {
+    let message: String
+
+    var body: some View {
+        Text(message)
+            .font(.caption.bold())
+            .padding(.horizontal, 12)
+            .padding(.vertical, 8)
+            .background(.ultraThinMaterial, in: Capsule())
+            .accessibilityIdentifier("terrainEntryBanner")
+    }
+}

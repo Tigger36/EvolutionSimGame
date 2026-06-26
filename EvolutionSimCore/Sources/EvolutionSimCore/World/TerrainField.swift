@@ -171,4 +171,59 @@ public enum TerrainSystem {
         let damageScore = effects.damagePerTick <= 0 ? 1.0 : max(0, 1.0 - effects.damagePerTick * 10)
         return min(1.0, (speedScore + drainScore + damageScore) / 3.0)
     }
+
+    public static func playerFacingSummary(for terrain: TerrainType) -> String {
+        switch terrain {
+        case .land:
+            return "Baseline terrain; high swim efficiency slows land movement."
+        case .water:
+            return "Favors swim adaptations; slows land-focused builds."
+        case .mud:
+            return "Slows movement and drains energy; smaller size helps."
+        case .toxicPool:
+            return "Damage over time; raise Toxin Resistance to survive."
+        case .forest:
+            return "Dense cover; high sense radius improves movement."
+        case .swamp:
+            return "Slow and draining; swim efficiency helps."
+        case .desert:
+            return "Hot and draining; efficient metabolism helps."
+        case .tundra:
+            return "Cold terrain; lower metabolism adapts better."
+        case .mountain:
+            return "Steep and draining; smaller size climbs easier."
+        case .ice:
+            return "Slippery and cold; armor improves grip."
+        }
+    }
+
+    public static func entryMessage(for terrain: TerrainType) -> String {
+        switch terrain {
+        case .land:
+            return "On Land — standard movement and energy use."
+        case .water:
+            return "Entered Water — movement slows unless adapted."
+        case .mud:
+            return "Entered Mud — slower movement and higher energy drain."
+        case .toxicPool:
+            return "Entered Toxic Pool — damage over time without resistance."
+        case .forest:
+            return "Entered Forest — cover affects movement speed."
+        case .swamp:
+            return "Entered Swamp — slow and energy-intensive."
+        case .desert:
+            return "Entered Desert — high heat drains energy quickly."
+        case .tundra:
+            return "Entered Tundra — cold slows unprepared organisms."
+        case .mountain:
+            return "Entered Mountain — steep terrain slows large builds."
+        case .ice:
+            return "Entered Ice — slippery and damaging without armor."
+        }
+    }
+
+    public static func effectBreakdown(for terrain: TerrainType, traits: TraitSet) -> (speed: Double, energyDrain: Double, damage: Double) {
+        let effects = effects(for: terrain, traits: traits)
+        return (effects.speedMultiplier, effects.energyDrainMultiplier, effects.damagePerTick)
+    }
 }

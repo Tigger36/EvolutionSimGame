@@ -16,24 +16,38 @@ public enum SimulationPhase: String, Codable, Sendable {
 }
 
 public struct SimulationConfig: Codable, Equatable, Sendable {
+    public static let tutorialSeed: UInt64 = 1001
+
     public var seed: UInt64
     public var bounds: WorldBounds
     public var era: GameEra
     public var victoryGoal: VictoryGoal
     public var enableMassExtinctionEvents: Bool
+    public var predatorCountOverride: Int?
 
     public init(
         seed: UInt64 = 42,
         bounds: WorldBounds = .standard,
         era: GameEra = .primordialPool,
         victoryGoal: VictoryGoal = .spreadToAllBiomes,
-        enableMassExtinctionEvents: Bool = true
+        enableMassExtinctionEvents: Bool = true,
+        predatorCountOverride: Int? = nil
     ) {
         self.seed = seed
         self.bounds = bounds
         self.era = era
         self.victoryGoal = victoryGoal
         self.enableMassExtinctionEvents = enableMassExtinctionEvents
+        self.predatorCountOverride = predatorCountOverride
+    }
+
+    public static func tutorialPreset() -> SimulationConfig {
+        SimulationConfig(
+            seed: tutorialSeed,
+            victoryGoal: .reachPopulation,
+            enableMassExtinctionEvents: false,
+            predatorCountOverride: 2
+        )
     }
 }
 
@@ -130,6 +144,8 @@ public struct SimulationSnapshot: Codable, Equatable, Sendable {
     public let lineage: LineageSummary
     public let pressure: PressureState
     public let pendingMutationOffers: [MutationOption]
+    public let pendingMutationTargetID: EntityID?
+    public let playerCanReproduceSafely: Bool
     public let era: GameEra
     public let victoryGoal: VictoryGoal
     public let isPaused: Bool
@@ -149,11 +165,39 @@ public struct SimulationSnapshot: Codable, Equatable, Sendable {
         lineage = state.lineageSummary
         pressure = state.pressure
         pendingMutationOffers = state.pendingMutationOffers
+        pendingMutationTargetID = state.pendingMutationTargetID
+        if let player = state.playerOrganism {
+            playerCanReproduceSafely = player.canReproduce
+                && ReproductionSystem.isSafeSite(position: player.position, predators: state.predators)
+        } else {
+            playerCanReproduceSafely = false
+        }
         era = state.config.era
         victoryGoal = state.config.victoryGoal
         isPaused = state.isPaused
         speedMultiplier = state.speedMultiplier
         massExtinctionActive = state.massExtinctionActive
+    }
+
+    public var playerOrganism: Organism? {
+        guard let id = playerOrganismID else { return nil }
+        return organisms.first { $0.id == id && $0.isAlive }
+    }
+
+    public var playerCurrentTerrain: TerrainType? {
+        guard let player = playerOrganism else { return nil }
+        return terrain.terrain(at: player.position)
+    }
+
+    public var pendingMutationTargetTraits: TraitSet? {
+        guard let targetID = pendingMutationTargetID else { return nil }
+        return organisms.first { $0.id == targetID }?.traits
+    }
+
+    public func activeTerrainsForLegend() -> [TerrainType] {
+        var types = Set(terrain.regions.map(\.type))
+        types.insert(terrain.defaultType)
+        return TerrainType.allCases.filter { types.contains($0) }
     }
 }
 
@@ -223,7 +267,9 @@ public final class SimulationController: @unchecked Sendable {
             )
         }
 
-        for _ in 0..<EraContent.predatorCount(for: state.config.era) {
+        let predatorCount = state.config.predatorCountOverride
+            ?? EraContent.predatorCount(for: state.config.era)
+        for _ in 0..<predatorCount {
             let pos = state.config.bounds.randomPoint(rng: &rng)
             let era = state.config.era
             state.predators.append(

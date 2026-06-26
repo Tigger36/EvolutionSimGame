@@ -59,6 +59,46 @@ final class MutationOfferTests: XCTestCase {
     }
 }
 
+final class MutationPreviewTests: XCTestCase {
+    func testStrongerFinsTraitDeltas() {
+        let base = TraitSet.default
+        let deltas = MutationPreview.traitDeltas(option: .strongerFins, base: base)
+        XCTAssertTrue(deltas.contains { $0.name == "Swim" && $0.delta > 0 })
+        XCTAssertTrue(deltas.contains { $0.name == "Speed" && $0.delta < 0 })
+    }
+
+    func testDominantPressureLabel() {
+        var pressure = PressureState()
+        XCTAssertNil(pressure.dominantPressureLabel)
+        pressure.water = 0.2
+        XCTAssertEqual(pressure.dominantPressureLabel, "Water exposure")
+    }
+
+    func testCompatibilityChangesForToxinFilter() {
+        let base = TraitSet.default
+        let changes = MutationPreview.compatibilityChanges(option: .toxinFilter, base: base)
+        let toxic = changes.first { $0.terrain == .toxicPool }
+        XCTAssertNotNil(toxic)
+        XCTAssertGreaterThan(toxic!.after, toxic!.before)
+    }
+
+    func testPlayerFacingTerrainSummary() {
+        XCTAssertTrue(TerrainSystem.playerFacingSummary(for: .toxicPool).contains("Toxin"))
+    }
+
+    func testSnapshotIncludesReproductionSafety() {
+        let controller = SimulationController(config: SimulationConfig(seed: 42))
+        let snapshot = controller.snapshot()
+        XCTAssertNotNil(snapshot.playerCurrentTerrain)
+        XCTAssertNil(snapshot.pendingMutationTargetID)
+        if let player = snapshot.playerOrganism {
+            let expected = player.canReproduce
+                && ReproductionSystem.isSafeSite(position: player.position, predators: snapshot.predators)
+            XCTAssertEqual(snapshot.playerCanReproduceSafely, expected)
+        }
+    }
+}
+
 final class SimulationDeterminismTests: XCTestCase {
     func testSameSeedSameStateAfterNTicks() throws {
         let config = SimulationConfig(seed: 42)

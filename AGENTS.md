@@ -76,6 +76,7 @@ Use these agents when appropriate:
 - `/evolution-dev-project-manager`: planning, scoping, task breakdowns, handoff prompts, model/tool recommendations, milestone sequencing, and agent coordination.
 - `/evolution-simulation-gameplay-specialist`: organism behavior, traits, mutation, reproduction, selection pressure, environment dynamics, deterministic simulation loops, balancing, debug visualizations, and testable game mechanics.
 - `/evolution-apple-platform-ui-specialist`: SwiftUI, SpriteKit/Metal/Canvas integration decisions, macOS/iPadOS/iOS layout, touch/pointer/keyboard input, game controls, accessibility, previews, and platform-native visual polish.
+- `/evolution-graphics-specialist`: art direction, organism/environment visual language, rendering quality, animation, VFX, camera polish, asset prompts, visual readability, visual QA, and graphics performance across macOS, iPadOS, and iOS.
 - `/evolution-verifier`: post-implementation verification, diff inspection, focused tests/builds, deterministic simulation checks, Apple-platform runtime checks, and separation of real regressions from toolchain or simulator noise.
 - `/evolution-code-reviewer`: code review for bugs, regressions, scope creep, missing tests, simulation determinism issues, Apple-platform UI/input risks, performance risks, and violations of the native evolution simulator game direction.
 
@@ -89,6 +90,16 @@ When a task should be handled by a specific subagent, invoke it directly by name
 - Use macOS affordances when appropriate: menus, commands, keyboard shortcuts, toolbars, inspectors, settings windows, pointer targets, and multiwindow assumptions.
 - Keep the simulation view visually primary; controls and overlays should not obscure important organism/environment state.
 - Preserve accessibility labels, identifiers, and test hooks for important controls.
+
+## Graphics And Visual Direction Guidance
+
+- Make adaptation visible through organism shape, size, motion, color, texture, behavior cues, overlays, or selected-organism detail.
+- Keep organism, resource, terrain, hazard, and population state readable across zoom levels, population densities, and device sizes.
+- Do not rely on color alone for important state; pair color with shape, motion, iconography, labels, or inspector details when practical.
+- Prefer a coherent visual language over disconnected effects, particles, gradients, or decorative polish.
+- Keep rendering, camera, animation, and visual effects performance-aware for iPhone and iPad, not only macOS.
+- Avoid visual effects that obscure simulation state or make cause and effect harder to understand.
+- Document important rendering technology decisions when choosing between SwiftUI Canvas, SpriteKit, Metal, SceneKit, or hybrid approaches.
 
 ## Simulation And Gameplay Guidance
 

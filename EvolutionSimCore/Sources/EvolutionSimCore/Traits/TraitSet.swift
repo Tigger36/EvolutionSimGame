@@ -224,6 +224,19 @@ public struct PressureState: Codable, Equatable, Sendable {
         ]
         return pairs.max(by: { $0.1 < $1.1 })?.0 ?? "general"
     }
+
+    public var dominantPressureLabel: String? {
+        let threshold = 0.05
+        let pairs: [(String, Double)] = [
+            ("Water exposure", water),
+            ("Predator encounters", predator),
+            ("Food scarcity", foodScarcity),
+            ("Exploration", exploration),
+            ("Toxic exposure", toxic),
+        ]
+        guard let top = pairs.max(by: { $0.1 < $1.1 }), top.1 >= threshold else { return nil }
+        return top.0
+    }
 }
 
 public enum MutationSystem {
