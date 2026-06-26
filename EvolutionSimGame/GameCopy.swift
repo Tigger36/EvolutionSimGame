@@ -14,6 +14,14 @@ enum GameCopy {
         }
     }
 
+    static func eraAdvanceTipTitle(for era: GameEra) -> String {
+        "New Era: \(era.displayName)"
+    }
+
+    static func eraAdvanceTipMessage(for era: GameEra) -> String {
+        predatorThreatSummary(for: era, massExtinctionActive: false)
+    }
+
     static func predatorThreatSummary(for era: GameEra, massExtinctionActive: Bool) -> String {
         if massExtinctionActive {
             return "Predators move faster and chase more aggressively during the extinction event."

@@ -8,10 +8,17 @@ enum ContextualTip: String, Identifiable {
     case firstReproductionReady
     case firstMutation
     case firstLineageHandoff
+    case eraAdvanceReefShallows
+    case eraAdvanceLandfall
+    case eraAdvanceBiomes
+    case eraAdvanceEcosystemDominance
 
     var id: String { rawValue }
 
     var title: String {
+        if let era = associatedEra {
+            return GameCopy.eraAdvanceTipTitle(for: era)
+        }
         switch self {
         case .firstWater: return "Water Terrain"
         case .firstToxic: return "Toxic Pool"
@@ -19,10 +26,14 @@ enum ContextualTip: String, Identifiable {
         case .firstReproductionReady: return "Ready to Reproduce"
         case .firstMutation: return "Adaptation Choice"
         case .firstLineageHandoff: return "Lineage Handoff"
+        default: return ""
         }
     }
 
     var message: String {
+        if let era = associatedEra {
+            return GameCopy.eraAdvanceTipMessage(for: era)
+        }
         switch self {
         case .firstWater:
             return TerrainSystem.playerFacingSummary(for: .water)
@@ -36,7 +47,57 @@ enum ContextualTip: String, Identifiable {
             return "Recent survival pressure shapes which adaptations appear. Compare stat and biome changes before choosing."
         case .firstLineageHandoff:
             return "Control transferred to a descendant. Your lineage continues even when individuals die."
+        default: return ""
         }
+    }
+
+    var associatedEra: GameEra? {
+        switch self {
+        case .eraAdvanceReefShallows: return .reefShallows
+        case .eraAdvanceLandfall: return .landfall
+        case .eraAdvanceBiomes: return .biomes
+        case .eraAdvanceEcosystemDominance: return .ecosystemDominance
+        default: return nil
+        }
+    }
+
+    static func eraAdvanceTip(for era: GameEra) -> ContextualTip? {
+        switch era {
+        case .primordialPool: return nil
+        case .reefShallows: return .eraAdvanceReefShallows
+        case .landfall: return .eraAdvanceLandfall
+        case .biomes: return .eraAdvanceBiomes
+        case .ecosystemDominance: return .eraAdvanceEcosystemDominance
+        }
+    }
+
+    static func eraAdvanceTipForForwardAdvance(from oldEra: GameEra, to newEra: GameEra) -> ContextualTip? {
+        guard newEra.rawValue > oldEra.rawValue, newEra != .primordialPool else { return nil }
+        return eraAdvanceTip(for: newEra)
+    }
+}
+
+struct EraAdvanceTipCoordinator {
+    private(set) var pendingTip: ContextualTip?
+
+    mutating func registerForwardAdvance(
+        from oldEra: GameEra,
+        to newEra: GameEra,
+        shouldShow: (ContextualTip) -> Bool
+    ) {
+        guard let tip = ContextualTip.eraAdvanceTipForForwardAdvance(from: oldEra, to: newEra),
+              shouldShow(tip) else { return }
+        pendingTip = tip
+    }
+
+    mutating func consumePendingTip(if shouldShow: (ContextualTip) -> Bool) -> ContextualTip? {
+        guard let pending = pendingTip, shouldShow(pending) else { return nil }
+        pendingTip = nil
+        return pending
+    }
+
+    mutating func reset() {
+        pendingTip = nil
     }
 }
 
@@ -56,7 +117,11 @@ final class ContextualTipsManager {
         defaults.set(true, forKey: storageKey(for: tip))
     }
 
-    func tipFor(snapshot: SimulationSnapshot, previousPhase: SimulationPhase?, generationChanged: Bool) -> ContextualTip? {
+    func tipFor(
+        snapshot: SimulationSnapshot,
+        previousPhase: SimulationPhase?,
+        generationChanged: Bool
+    ) -> ContextualTip? {
         if let terrain = snapshot.playerCurrentTerrain {
             switch terrain {
             case .water where shouldShow(.firstWater): return .firstWater

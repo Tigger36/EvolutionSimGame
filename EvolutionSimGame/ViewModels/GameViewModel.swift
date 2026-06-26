@@ -35,6 +35,8 @@ final class GameViewModel: ObservableObject {
     private var lastTerrain: TerrainType?
     private var previousPhase: SimulationPhase?
     private var previousPlayerGeneration: Int?
+    private var previousEra: GameEra?
+    private var eraAdvanceTipCoordinator = EraAdvanceTipCoordinator()
     private var feedbackClearTask: Task<Void, Never>?
     private var terrainBannerClearTask: Task<Void, Never>?
     private let contextualTips = ContextualTipsManager()
@@ -51,6 +53,7 @@ final class GameViewModel: ObservableObject {
         controller.setPaused(true)
         previousPhase = snapshot.phase
         previousPlayerGeneration = snapshot.playerOrganism?.generation
+        previousEra = snapshot.era
     }
 
     deinit {
@@ -92,11 +95,17 @@ final class GameViewModel: ObservableObject {
     private func updateSnapshot() {
         let oldPhase = snapshot.phase
         let oldGeneration = snapshot.playerOrganism?.generation
+        let oldEra = snapshot.era
         snapshot = controller.snapshot()
         updateTerrainFeedback()
-        updateContextualTips(previousPhase: oldPhase, generationChanged: oldGeneration != snapshot.playerOrganism?.generation)
+        updateContextualTips(
+            previousPhase: oldPhase,
+            generationChanged: oldGeneration != snapshot.playerOrganism?.generation,
+            previousEra: oldEra
+        )
         previousPhase = snapshot.phase
         previousPlayerGeneration = snapshot.playerOrganism?.generation
+        previousEra = snapshot.era
         evaluateTutorialProgress()
     }
 
@@ -122,9 +131,11 @@ final class GameViewModel: ObservableObject {
         terrainEntryBanner = nil
         mutationFeedback = nil
         contextualTip = nil
+        eraAdvanceTipCoordinator.reset()
         snapshot = controller.snapshot()
         previousPhase = snapshot.phase
         previousPlayerGeneration = snapshot.playerOrganism?.generation
+        previousEra = snapshot.era
     }
 
     func resetToStartScreen() {
@@ -184,6 +195,9 @@ final class GameViewModel: ObservableObject {
         tutorialStep = .move
         appPhase = .tutorial
         showBiomeFitOverlay = true
+        previousPhase = snapshot.phase
+        previousPlayerGeneration = snapshot.playerOrganism?.generation
+        previousEra = snapshot.era
         controller.setPaused(false)
         startTickLoop()
     }
@@ -210,6 +224,7 @@ final class GameViewModel: ObservableObject {
         lastTerrain = snapshot.playerCurrentTerrain
         previousPhase = snapshot.phase
         previousPlayerGeneration = snapshot.playerOrganism?.generation
+        previousEra = snapshot.era
         appPhase = .playing
         tutorialStep = nil
         controller.setPaused(false)
@@ -232,6 +247,7 @@ final class GameViewModel: ObservableObject {
             contextualTips.markShown(tip)
         }
         contextualTip = nil
+        presentPendingEraAdvanceTipIfNeeded()
     }
 
     func advanceTutorialManually() {
@@ -250,9 +266,23 @@ final class GameViewModel: ObservableObject {
         lastTerrain = terrain
     }
 
-    private func updateContextualTips(previousPhase: SimulationPhase?, generationChanged: Bool) {
+    private func updateContextualTips(
+        previousPhase: SimulationPhase?,
+        generationChanged: Bool,
+        previousEra: GameEra
+    ) {
         guard appPhase == .playing else { return }
+
+        eraAdvanceTipCoordinator.registerForwardAdvance(
+            from: previousEra,
+            to: snapshot.era,
+            shouldShow: contextualTips.shouldShow(_:)
+        )
+
         if contextualTip != nil { return }
+
+        if presentPendingEraAdvanceTipIfNeeded() { return }
+
         if let tip = contextualTips.tipFor(
             snapshot: snapshot,
             previousPhase: previousPhase,
@@ -260,6 +290,16 @@ final class GameViewModel: ObservableObject {
         ) {
             contextualTip = tip
         }
+    }
+
+    @discardableResult
+    private func presentPendingEraAdvanceTipIfNeeded() -> Bool {
+        guard appPhase == .playing, contextualTip == nil else { return false }
+        guard let pending = eraAdvanceTipCoordinator.consumePendingTip(if: contextualTips.shouldShow(_:)) else {
+            return false
+        }
+        contextualTip = pending
+        return true
     }
 
     private func evaluateTutorialProgress(forceManual: Bool = false) {
