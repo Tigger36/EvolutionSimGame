@@ -151,7 +151,7 @@ struct SimulationCanvasView: View {
     private func drawDangerZones(context: inout GraphicsContext, transform: ViewTransform) {
         for predator in snapshot.predators where predator.isAlive {
             let center = transform.point(predator.position)
-            let radius = transform.scale * SimulationTuning.predatorSenseRadius
+            let radius = transform.scale * predator.senseRadius
             context.stroke(
                 Path(ellipseIn: CGRect(x: center.x - radius, y: center.y - radius, width: radius * 2, height: radius * 2)),
                 with: .color(.red.opacity(0.3)),

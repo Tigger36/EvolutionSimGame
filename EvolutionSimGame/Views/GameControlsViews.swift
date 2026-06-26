@@ -12,9 +12,13 @@ struct HUDView: View {
                 VStack(alignment: .leading, spacing: 2) {
                     Text("Tick \(snapshot.tick)")
                         .font(.caption.monospaced())
-                    Text(snapshot.era.displayName)
-                        .font(.caption2)
-                        .foregroundStyle(.secondary)
+                    HStack(spacing: 8) {
+                        Text(snapshot.era.displayName)
+                            .font(.caption2)
+                            .foregroundStyle(.secondary)
+                            .lineLimit(1)
+                        PredatorThreatHUDChip(presentation: PredatorThreatPresentation.make(from: snapshot))
+                    }
                 }
                 Spacer()
                 reproductionBadge

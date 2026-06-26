@@ -68,6 +68,7 @@ struct InspectorPanelView: View {
                 Text(EraContent.eraDescription(snapshot.era))
                     .font(.caption)
                     .foregroundStyle(.secondary)
+                PredatorThreatInspectorRow(presentation: PredatorThreatPresentation.make(from: snapshot))
                 LabeledContent("Victory Goal", value: snapshot.victoryGoal.displayName)
             }
 
@@ -78,13 +79,6 @@ struct InspectorPanelView: View {
                             Text(overlay.displayName).tag(overlay)
                         }
                     }
-                }
-            }
-
-            if snapshot.massExtinctionActive {
-                Section("Mass Extinction Event") {
-                    Label("Active — survive to win!", systemImage: "exclamationmark.triangle.fill")
-                        .foregroundStyle(.orange)
                 }
             }
 

@@ -37,3 +37,12 @@ targets:
           - UIInterfaceOrientationPortraitUpsideDown
           - UIInterfaceOrientationLandscapeLeft
           - UIInterfaceOrientationLandscapeRight
+schemes:
+  EvolutionSimGame_macOS:
+    build:
+      targets:
+        EvolutionSimGame_macOS: all
+  EvolutionSimGame_iOS:
+    build:
+      targets:
+        EvolutionSimGame_iOS: all

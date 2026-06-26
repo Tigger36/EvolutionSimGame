@@ -1,6 +1,37 @@
 import EvolutionSimCore
 
 enum GameCopy {
+    static func predatorThreatLabel(for era: GameEra, massExtinctionActive: Bool) -> String {
+        if massExtinctionActive {
+            return "Critical — Mass Extinction"
+        }
+        switch era {
+        case .primordialPool: return "Low"
+        case .reefShallows: return "Moderate"
+        case .landfall: return "Elevated"
+        case .biomes: return "High"
+        case .ecosystemDominance: return "Extreme"
+        }
+    }
+
+    static func predatorThreatSummary(for era: GameEra, massExtinctionActive: Bool) -> String {
+        if massExtinctionActive {
+            return "Predators move faster and chase more aggressively during the extinction event."
+        }
+        switch era {
+        case .primordialPool:
+            return "Predators hunt less aggressively and notice you from shorter range."
+        case .reefShallows:
+            return "Predators are more alert and a bit faster as shallow waters grow crowded."
+        case .landfall:
+            return "More predators roam the world, with wider awareness and sharper pursuit."
+        case .biomes:
+            return "Predators are faster, more numerous, and harder to evade across diverse biomes."
+        case .ecosystemDominance:
+            return "Peak predator pressure — fast hunters with long range and heavy damage."
+        }
+    }
+
     static func victoryGoalDescription(_ goal: VictoryGoal) -> String {
         switch goal {
         case .surviveMassExtinction:
