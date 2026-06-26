@@ -1,0 +1,39 @@
+name: EvolutionSimGame
+options:
+  bundleIdPrefix: com.evolutionsimgame
+  deploymentTarget:
+    iOS: "17.0"
+    macOS: "14.0"
+  createIntermediateGroups: true
+packages:
+  EvolutionSimCore:
+    path: EvolutionSimCore
+targets:
+  EvolutionSimGame:
+    type: application
+    platform: [iOS, macOS]
+    sources:
+      - EvolutionSimGame
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: com.evolutionsimgame.app
+      MARKETING_VERSION: "0.1.0"
+      CURRENT_PROJECT_VERSION: 1
+      SWIFT_VERSION: "5.9"
+      TARGETED_DEVICE_FAMILY: "1,2"
+      SUPPORTS_MACCATALYST: false
+    dependencies:
+      - package: EvolutionSimCore
+        product: EvolutionSimCore
+    info:
+      path: EvolutionSimGame/Info.plist
+      properties:
+        UILaunchScreen: {}
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationPortraitUpsideDown
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight

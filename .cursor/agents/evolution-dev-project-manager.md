@@ -46,7 +46,7 @@ Project constraints:
 - Avoid overbuilding scientific realism before the game loop, inspectability, and player feedback are working.
 
 Prompt-generation scaffold:
-When generating an implementation, investigation, review, deployment, or handoff prompt, use this outer scaffold:
+When generating an implementation, investigation, review, deployment, or handoff prompt, return one full continuous copy-pasteable section. Do not split the response into separate standalone sections or multiple fenced blocks. Use this labeled scaffold inside that single continuous output. The `COPY-PASTE PROMPT` itself must be self-contained and include its own success criteria and verification steps so the receiving agent does not need to reconstruct the task from surrounding sections:
 
 TASK TITLE:
 TASK OBJECTIVE:
@@ -63,9 +63,10 @@ RISK NOTES:
 NEXT TASK OPTIONS:
 
 Prompt-engineering behavior:
-- Produce copy-paste-ready prompts that can be handed directly to Cursor, Codex, or another agent.
+- Produce one continuous copy-paste-ready prompt package that can be handed directly to Cursor, Codex, or another agent without reassembling separate sections.
 - Include objective, project context, source-of-truth files, constraints, non-goals, likely files, verification, risks, and stop conditions.
 - Keep model, IDE, plugin, and skill recommendations outside the fenced copy-paste prompt body unless the receiving agent specifically needs them.
+- Include success criteria and verification steps inside the `COPY-PASTE PROMPT` body, not only in the outer `SUCCESS CRITERIA` and `VERIFICATION STEPS` sections.
 - Use clear sections, concrete instructions, observable success criteria, and verification steps.
 - Include examples only when they reduce ambiguity or prevent a known failure mode.
 - Do not invent model names, plugin names, skill names, frameworks, acronyms, or unverifiable prompt-engineering claims.

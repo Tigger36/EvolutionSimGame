@@ -1,0 +1,474 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		353054441460B14925F6B320 /* EvolutionSimGameApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9894A7BEA2C966D343C4EB51 /* EvolutionSimGameApp.swift */; };
+		37BBCE463E86B68A1C66BD42 /* GameViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A65C144843BF4CADB4B9B767 /* GameViewModel.swift */; };
+		44495EFF848582C949843D27 /* GameControlsViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D4942224C267B0EFEE603AC /* GameControlsViews.swift */; };
+		5D227C33CB7D6612F4B87D64 /* EvolutionSimCore in Frameworks */ = {isa = PBXBuildFile; productRef = AE8774746056CBDBB8B33339 /* EvolutionSimCore */; };
+		8795D4F13B1364E1BB4F8BAC /* SimulationCanvasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9B87063741F83904CA7759E /* SimulationCanvasView.swift */; };
+		8FD0FFE37C18E38142BD683C /* EvolutionSimGameApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9894A7BEA2C966D343C4EB51 /* EvolutionSimGameApp.swift */; };
+		A4BBB8B50CBB92B3AF8CAE10 /* SimulationCanvasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9B87063741F83904CA7759E /* SimulationCanvasView.swift */; };
+		A51F6AC09C2071FB8DD02218 /* InspectorPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F20398414EA58C6C7303BFD9 /* InspectorPanelView.swift */; };
+		B31ADAF999C390DC5DC44906 /* EvolutionSimCore in Frameworks */ = {isa = PBXBuildFile; productRef = AA35B9D586C0A8888EB3A448 /* EvolutionSimCore */; };
+		B36C31C286FB19A457DC896B /* GameControlsViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D4942224C267B0EFEE603AC /* GameControlsViews.swift */; };
+		B414CB97CE0D03A1510F9744 /* InspectorPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F20398414EA58C6C7303BFD9 /* InspectorPanelView.swift */; };
+		BE3334ED4E2C619672D4F63B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08053F5088C71A4A633A5F66 /* ContentView.swift */; };
+		EABEA0F7AEDAD3D1FCF38DEA /* GameViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A65C144843BF4CADB4B9B767 /* GameViewModel.swift */; };
+		FAC84F4BB341CA4A09D11B0C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08053F5088C71A4A633A5F66 /* ContentView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		08053F5088C71A4A633A5F66 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		11BD1EB4EAE91825C5F05AAD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		2F5A990509877DEC26C21C10 /* EvolutionSimGame.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = EvolutionSimGame.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		5D4942224C267B0EFEE603AC /* GameControlsViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameControlsViews.swift; sourceTree = "<group>"; };
+		9894A7BEA2C966D343C4EB51 /* EvolutionSimGameApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EvolutionSimGameApp.swift; sourceTree = "<group>"; };
+		A65C144843BF4CADB4B9B767 /* GameViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewModel.swift; sourceTree = "<group>"; };
+		A6DA1DDB63920221BAD59D41 /* EvolutionSimCore */ = {isa = PBXFileReference; lastKnownFileType = folder; name = EvolutionSimCore; path = EvolutionSimCore; sourceTree = SOURCE_ROOT; };
+		B9B87063741F83904CA7759E /* SimulationCanvasView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimulationCanvasView.swift; sourceTree = "<group>"; };
+		BDAAAA2131B6E97688C9FEB1 /* EvolutionSimGame.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EvolutionSimGame.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F20398414EA58C6C7303BFD9 /* InspectorPanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InspectorPanelView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8AE50BC152F7A346EF5349CA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B31ADAF999C390DC5DC44906 /* EvolutionSimCore in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B82EA4CB18C04FC15A0F1E62 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5D227C33CB7D6612F4B87D64 /* EvolutionSimCore in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		43258C8A7B22169E0CC333C8 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				2F5A990509877DEC26C21C10 /* EvolutionSimGame.app */,
+				BDAAAA2131B6E97688C9FEB1 /* EvolutionSimGame.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		AF96A91820191159D802BBF6 /* EvolutionSimGame */ = {
+			isa = PBXGroup;
+			children = (
+				9894A7BEA2C966D343C4EB51 /* EvolutionSimGameApp.swift */,
+				11BD1EB4EAE91825C5F05AAD /* Info.plist */,
+				FB1D7DEA49B7AB5A361F044C /* ViewModels */,
+				CC830A9246CFED3FFCA4DD31 /* Views */,
+			);
+			path = EvolutionSimGame;
+			sourceTree = "<group>";
+		};
+		CC830A9246CFED3FFCA4DD31 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				08053F5088C71A4A633A5F66 /* ContentView.swift */,
+				5D4942224C267B0EFEE603AC /* GameControlsViews.swift */,
+				F20398414EA58C6C7303BFD9 /* InspectorPanelView.swift */,
+				B9B87063741F83904CA7759E /* SimulationCanvasView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		E1DBD5B4E537A69057AF90FA = {
+			isa = PBXGroup;
+			children = (
+				AF96A91820191159D802BBF6 /* EvolutionSimGame */,
+				FFBB8C5D6974B77C8C60C634 /* Packages */,
+				43258C8A7B22169E0CC333C8 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		FB1D7DEA49B7AB5A361F044C /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				A65C144843BF4CADB4B9B767 /* GameViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		FFBB8C5D6974B77C8C60C634 /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				A6DA1DDB63920221BAD59D41 /* EvolutionSimCore */,
+			);
+			name = Packages;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		69013A725B79AA7846A27FDF /* EvolutionSimGame_macOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 236341F8A92DD1F3C7D73692 /* Build configuration list for PBXNativeTarget "EvolutionSimGame_macOS" */;
+			buildPhases = (
+				529162A876A2AD5A3905BC13 /* Sources */,
+				8AE50BC152F7A346EF5349CA /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = EvolutionSimGame_macOS;
+			packageProductDependencies = (
+				AA35B9D586C0A8888EB3A448 /* EvolutionSimCore */,
+			);
+			productName = EvolutionSimGame_macOS;
+			productReference = BDAAAA2131B6E97688C9FEB1 /* EvolutionSimGame.app */;
+			productType = "com.apple.product-type.application";
+		};
+		AAD657F168B133B5D786102E /* EvolutionSimGame_iOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6DEA2974090966FBC01F8A1D /* Build configuration list for PBXNativeTarget "EvolutionSimGame_iOS" */;
+			buildPhases = (
+				8BE9A52A5C53DD51B039E581 /* Sources */,
+				B82EA4CB18C04FC15A0F1E62 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = EvolutionSimGame_iOS;
+			packageProductDependencies = (
+				AE8774746056CBDBB8B33339 /* EvolutionSimCore */,
+			);
+			productName = EvolutionSimGame_iOS;
+			productReference = 2F5A990509877DEC26C21C10 /* EvolutionSimGame.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		2BA5B3830FC6715846601AF7 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+				};
+			};
+			buildConfigurationList = 52FD7A4C5955D1068D0C1FB8 /* Build configuration list for PBXProject "EvolutionSimGame" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = E1DBD5B4E537A69057AF90FA;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				F8E5F68EF6C8DFE34557DB83 /* XCLocalSwiftPackageReference "EvolutionSimCore" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 43258C8A7B22169E0CC333C8 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				AAD657F168B133B5D786102E /* EvolutionSimGame_iOS */,
+				69013A725B79AA7846A27FDF /* EvolutionSimGame_macOS */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		529162A876A2AD5A3905BC13 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BE3334ED4E2C619672D4F63B /* ContentView.swift in Sources */,
+				353054441460B14925F6B320 /* EvolutionSimGameApp.swift in Sources */,
+				B36C31C286FB19A457DC896B /* GameControlsViews.swift in Sources */,
+				37BBCE463E86B68A1C66BD42 /* GameViewModel.swift in Sources */,
+				B414CB97CE0D03A1510F9744 /* InspectorPanelView.swift in Sources */,
+				8795D4F13B1364E1BB4F8BAC /* SimulationCanvasView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8BE9A52A5C53DD51B039E581 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FAC84F4BB341CA4A09D11B0C /* ContentView.swift in Sources */,
+				8FD0FFE37C18E38142BD683C /* EvolutionSimGameApp.swift in Sources */,
+				44495EFF848582C949843D27 /* GameControlsViews.swift in Sources */,
+				EABEA0F7AEDAD3D1FCF38DEA /* GameViewModel.swift in Sources */,
+				A51F6AC09C2071FB8DD02218 /* InspectorPanelView.swift in Sources */,
+				A4BBB8B50CBB92B3AF8CAE10 /* SimulationCanvasView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		85C64B055419DE8058841C51 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				INFOPLIST_FILE = EvolutionSimGame/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.evolutionsimgame.app;
+				PRODUCT_NAME = EvolutionSimGame;
+				SDKROOT = iphoneos;
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		AAA5FCC39AE1298853F5D421 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		ACB73B3C33FCD3CF71428874 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				INFOPLIST_FILE = EvolutionSimGame/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.evolutionsimgame.app;
+				PRODUCT_NAME = EvolutionSimGame;
+				SDKROOT = macosx;
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		B509DBC17BA78ED6578BFAD8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		B9B0E5825346A9DC86408FFB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				INFOPLIST_FILE = EvolutionSimGame/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.evolutionsimgame.app;
+				PRODUCT_NAME = EvolutionSimGame;
+				SDKROOT = iphoneos;
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		D17C941A29C4623BD494A5C2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				INFOPLIST_FILE = EvolutionSimGame/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.evolutionsimgame.app;
+				PRODUCT_NAME = EvolutionSimGame;
+				SDKROOT = macosx;
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		236341F8A92DD1F3C7D73692 /* Build configuration list for PBXNativeTarget "EvolutionSimGame_macOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D17C941A29C4623BD494A5C2 /* Debug */,
+				ACB73B3C33FCD3CF71428874 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		52FD7A4C5955D1068D0C1FB8 /* Build configuration list for PBXProject "EvolutionSimGame" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B509DBC17BA78ED6578BFAD8 /* Debug */,
+				AAA5FCC39AE1298853F5D421 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		6DEA2974090966FBC01F8A1D /* Build configuration list for PBXNativeTarget "EvolutionSimGame_iOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				85C64B055419DE8058841C51 /* Debug */,
+				B9B0E5825346A9DC86408FFB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		F8E5F68EF6C8DFE34557DB83 /* XCLocalSwiftPackageReference "EvolutionSimCore" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = EvolutionSimCore;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		AA35B9D586C0A8888EB3A448 /* EvolutionSimCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = EvolutionSimCore;
+		};
+		AE8774746056CBDBB8B33339 /* EvolutionSimCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = EvolutionSimCore;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 2BA5B3830FC6715846601AF7 /* Project object */;
+}

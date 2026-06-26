@@ -80,3 +80,13 @@ export_presets.cfg
 *.app
 *.zip
 *.tar.gz
+
+# Swift / Xcode
+.build/
+DerivedData/
+*.xcuserstate
+xcuserdata/
+*.xccheckout
+*.xcscmblueprint
+.swiftpm/
+Package.resolved
