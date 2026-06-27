@@ -25,7 +25,7 @@ todos:
     status: completed
   - id: phase-7-gameplay-hardening
     content: "Phase 7: Harden beta gameplay balance, tuning, progression, and failure/recovery loops"
-    status: pending
+    status: completed
   - id: phase-8-onboarding-clarity
     content: "Phase 8: Polish tutorial, contextual explanations, mutation clarity, and player-facing feedback"
     status: pending
@@ -124,7 +124,7 @@ Beta planning artifacts (Phase 6): [docs/beta/feature-inventory.md](docs/beta/fe
 
 ## Phase Overview
 
-Phases 0–5 are completed historical milestones. Phases 6–12 are the active public-beta roadmap.
+Phases 0–7 are completed milestones. Phases 8–12 are the active public-beta roadmap.
 
 ```mermaid
 flowchart LR
@@ -341,6 +341,8 @@ Public beta means an external Apple-platform player can install a TestFlight bui
 
 ## Phase 7 — Beta Gameplay Hardening
 
+**Status:** Completed (2026-06-27). Verified on `main` at commit `684bcc6`.
+
 **Goal:** Turn the implemented loop into a reliable beta run with understandable challenge.
 
 **Deliverables:**
@@ -351,12 +353,7 @@ Public beta means an external Apple-platform player can install a TestFlight bui
 - Player-facing pacing targets for first food, first reproduction, first mutation, first era transition, and first victory/loss
 - Regression tests for common-start viability and deterministic progression outcomes
 
-**Acceptance criteria:**
-
-- `swift test` passes with deterministic balance coverage across representative seeds
-- No common tutorial or default seed produces an unavoidable early extinction
-- At least one victory path and one extinction path are reproducible from seed + input log
-- Tuning constants remain centralized and documented
+**Acceptance criteria:** Met — 61 `swift test` passes (15 Phase 7 balance tests); seeds 42 and 1001 viable under naive play; all four victory goals reachable; victory and extinction paths reproducible from seed + input log; tuning centralized in `SimulationTuning.swift`; pacing documented in [docs/beta/pacing-targets.md](docs/beta/pacing-targets.md).
 
 **Primary agent:** `/evolution-simulation-gameplay-specialist`
 **Verify:** `/evolution-verifier` for seeded balance tests and replay checks
@@ -534,16 +531,17 @@ Use focused branches for each implementation task, following the active agent en
 
 ---
 
-## Immediate Next Step (Phase 7)
+## Immediate Next Step (Phase 8)
 
-Harden beta gameplay balance with a representative seed suite and tuning pass:
+Polish onboarding and player-facing clarity so a first-time player understands cause, effect, and adaptation without external instructions:
 
-- Representative seeds for early, mid, and late-run balance
-- Tuning for food density, predator pressure, reproduction thresholds, era thresholds, victory goals
-- Regression tests for common-start viability and deterministic progression outcomes
+- Tutorial pass for move, eat, avoid predator, terrain, reproduce, mutation, lineage handoff, and victory
+- Contextual explanations for death, offspring loss, unsafe reproduction, damaging terrain, and mass extinction
+- Mutation cards with clear tradeoffs; start/new-game copy for seed, era, victory goal, and tutorial preset
+- Player guide update matching the app’s current rules
 
-**Success:** `swift test` passes with seeded balance coverage; no common tutorial/default seed produces unavoidable early extinction; victory and extinction paths reproducible from seed + input log.
+**Success:** Manual first-run smoke (tutorial → move → eat → reproduce → mutation → handoff); key UI has accessibility labels/identifiers; player guide and in-app copy agree on core rules.
 
-**Recommended prompt target:** `/evolution-simulation-gameplay-specialist` with `/evolution-verifier` for seeded balance tests and replay checks.
+**Recommended prompt target:** `/evolution-apple-platform-ui-specialist` with `/evolution-simulation-gameplay-specialist` for explanation data and `/evolution-verifier` for first-run smoke and docs consistency.
 
-**Planning reference:** [docs/beta/public-beta-scope.md](docs/beta/public-beta-scope.md), [docs/beta/risk-register.md](docs/beta/risk-register.md).
+**Planning reference:** [docs/beta/public-beta-scope.md](docs/beta/public-beta-scope.md), [docs/beta/risk-register.md](docs/beta/risk-register.md), [docs/beta/pacing-targets.md](docs/beta/pacing-targets.md).
