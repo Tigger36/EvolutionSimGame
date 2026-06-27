@@ -89,8 +89,8 @@ final class GameViewModel: ObservableObject {
     private static let terrainLegendDismissedKey = "terrainLegendDismissed"
 
     /// UI-only deferral: first mutation modal waits this many timer callbacks while sim is
-    /// `.awaitingMutationChoice` in normal play (sim ticks do not advance during that phase).
-    static let firstMutationMinimumTick = 60
+    /// `.awaitingMutationChoice` in normal play (sim continues via deferred stepping).
+    static let firstMutationMinimumTick = SimulationTuning.firstMutationMinimumPresentationTicks
 
     init(
         config: SimulationConfig = SimulationConfig(seed: 42),

@@ -109,4 +109,10 @@ public enum SimulationTuning {
     /// Composite-fitness floor paired with generation depth so the intelligence goal still
     /// demands an accomplished run, not just survival churn.
     public static let intelligenceCompositeRequirement: Double = 1200
+
+    // UI sequencing
+    /// UI-only deferral for first-run mutation modal presentation in standard play.
+    /// 150 ticks is ~5 seconds at 1x speed (30 ticks/sec), giving players time to
+    /// establish movement, food gathering, and hazard awareness before the first choice.
+    public static let firstMutationMinimumPresentationTicks: Int = 150
 }

@@ -43,7 +43,8 @@ enum TutorialStep: Int, CaseIterable, Identifiable {
         case .lineageHandoff:
             return "If your organism dies after reproducing, control passes to a living descendant. Keep offspring alive with safe terrain, food, and protective traits."
         case .victoryGoals:
-            return "Full runs let you pick a victory goal: spread across biomes, grow population, evolve intelligence, or survive mass extinction. This tutorial uses seed 1001 with reduced predators, no mass extinction, and a population goal."
+            let tutorialGoal = SimulationConfig.tutorialPreset().victoryGoal
+            return "Full runs let you pick a victory goal: spread across biomes, grow population, evolve intelligence, or survive mass extinction. This tutorial uses seed 1001 with reduced predators, no mass extinction, and a population goal. For this goal: \(GameCopy.victoryGoalActionHint(tutorialGoal))"
         }
     }
 
@@ -88,6 +89,7 @@ struct TutorialContext {
 
 struct TutorialCalloutView: View {
     let step: TutorialStep
+    let lineageNote: String?
     let onContinue: () -> Void
     let onSkip: () -> Void
 
@@ -111,6 +113,15 @@ struct TutorialCalloutView: View {
                 Text(step.message)
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
+                
+                if let lineageNote {
+                    Text(lineageNote)
+                        .font(.caption.weight(.semibold))
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 4)
+                        .background(.thinMaterial, in: Capsule())
+                        .accessibilityIdentifier("tutorialLineageDescendantCount")
+                }
 
                 HStack {
                     if step.requiresManualContinue {

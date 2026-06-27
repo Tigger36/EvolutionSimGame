@@ -33,6 +33,14 @@ The default reproduction threshold is 60 energy. The `Reproduction Rate` trait
 changes that threshold from 72 energy at the lowest value to 48 energy at the
 highest value. Reproduction costs the parent 40 energy.
 
+The HUD reproduction status badge shows when automatic reproduction is close or
+ready:
+
+- `Gather Energy to Reproduce` means your energy is still below threshold.
+- `Safe Site Needed` means energy is high enough, but predators or damaging
+  terrain are blocking reproduction.
+- `Auto-Reproduce Ready` means energy and safety requirements are both met.
+
 After reproduction:
 
 - The offspring spawns near the parent.

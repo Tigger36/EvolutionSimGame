@@ -53,6 +53,23 @@ enum GameCopy {
         }
     }
 
+    static func victoryGoalActionHint(_ goal: VictoryGoal) -> String {
+        switch goal {
+        case .spreadToAllBiomes:
+            return "Move into new terrain types; each adapts your lineage differently."
+        case .reachPopulation:
+            return "Reproduce often and protect offspring from predators and hazards."
+        case .evolveIntelligence:
+            return "Survive across many lineage generations; depth matters more than speed."
+        case .surviveMassExtinction:
+            return "Build a colony strong enough to survive a predator surge at tick 2000."
+        }
+    }
+
+    static func tutorialDescendantCountNote(livingDescendants: Int) -> String {
+        "Descendants: \(livingDescendants)"
+    }
+
     static func extinctionMessage(totalBorn: Int, generation: Int) -> String {
         if totalBorn == 0 {
             return "Your lineage died out before reproducing. Gather energy, avoid predators, and reproduce at a safe site to continue the lineage."

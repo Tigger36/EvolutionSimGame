@@ -18,6 +18,7 @@ struct ContentView: View {
             if viewModel.appPhase == .tutorial, let step = viewModel.tutorialStep {
                 TutorialCalloutView(
                     step: step,
+                    lineageNote: tutorialLineageNote(for: step),
                     onContinue: viewModel.advanceTutorialManually,
                     onSkip: viewModel.skipTutorial
                 )
@@ -88,6 +89,12 @@ struct ContentView: View {
         }
         .frame(maxHeight: 200)
         .background(.ultraThinMaterial)
+    }
+    
+    private func tutorialLineageNote(for step: TutorialStep) -> String? {
+        guard step == .lineageHandoff else { return nil }
+        let livingDescendants = max(0, viewModel.snapshot.lineage.livingCount - 1)
+        return GameCopy.tutorialDescendantCountNote(livingDescendants: livingDescendants)
     }
 
     @ViewBuilder

@@ -246,6 +246,29 @@ struct MutationChoiceView: View {
     let pressure: PressureState
     let offspringTraits: TraitSet?
     let onSelect: (MutationOption) -> Void
+    
+    private var recentPressureSubtitle: String {
+        if let dominantLabel = pressure.dominantPressureLabel?
+            .trimmingCharacters(in: .whitespacesAndNewlines),
+           !dominantLabel.isEmpty {
+            return dominantLabel
+        }
+        
+        switch pressure.dominantCategory {
+        case "water":
+            return "Water exposure"
+        case "predator":
+            return "Predator encounters"
+        case "food":
+            return "Food scarcity"
+        case "exploration":
+            return "Exploration"
+        case "toxic":
+            return "Toxic exposure"
+        default:
+            return "General adaptation"
+        }
+    }
 
     var body: some View {
         ZStack {
@@ -254,15 +277,12 @@ struct MutationChoiceView: View {
                 VStack(spacing: 16) {
                     Text("Choose an Adaptation")
                         .font(.title2.bold())
-                    Text("Adaptations shaped by recent survival")
-                        .font(.subheadline)
+                    Text("Recent pressure: \(recentPressureSubtitle)")
+                        .font(.subheadline.weight(.semibold))
                         .foregroundStyle(.secondary)
-
-                    if let label = pressure.dominantPressureLabel {
-                        Text("Suggested because: \(label)")
-                            .font(.caption.bold())
-                            .foregroundStyle(.blue)
-                    }
+                        .multilineTextAlignment(.center)
+                        .lineLimit(2)
+                        .minimumScaleFactor(0.85)
 
                     Text("Pick one guided mutation for your offspring. You keep playing as the parent.")
                         .font(.caption)

@@ -40,6 +40,11 @@ struct HowToPlayView: View {
                 Section("Eras & Progression") {
                     Text("Fitness from survival, offspring, food, biomes explored, and predator near-misses drives era progression.")
                     Label("Primordial Pool → Reef / Shallows → Landfall → Biomes → Ecosystem Dominance", systemImage: "arrow.triangle.branch")
+                    Label("Primordial Pool: safer opening to learn food routes and secure your first reproduction.", systemImage: "sparkles")
+                    Label("Reef / Shallows: early water adaptations open lower-drain travel lines for growth.", systemImage: "drop.fill")
+                    Label("Landfall: mixed terrain rewards flexible traits and smart route choices.", systemImage: "map.fill")
+                    Label("Biomes: the full terrain set unlocks, creating new adaptation paths and niche strategies.", systemImage: "globe.americas.fill")
+                    Label("Ecosystem Dominance: mature lineages can convert trait synergy into sustained colony momentum.", systemImage: "trophy.fill")
                     Text("Higher eras increase predator count, speed, damage, and sense radius. The Biomes era unlocks the full terrain set on the world map.")
                 }
 
