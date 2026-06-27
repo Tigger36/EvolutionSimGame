@@ -75,6 +75,7 @@ Use these agents when appropriate:
 
 - `/evolution-dev-project-manager`: planning, scoping, task breakdowns, handoff prompts, model/tool recommendations, milestone sequencing, and agent coordination.
 - `/evolution-simulation-gameplay-specialist`: organism behavior, traits, mutation, reproduction, selection pressure, environment dynamics, deterministic simulation loops, balancing, debug visualizations, and testable game mechanics.
+- `/evolution-player-experience-specialist`: reward loops, fun factor, player goals, pacing, progression, onboarding, failure clarity, replayability, moment-to-moment satisfaction, and making the evolution simulator feel rewarding rather than only technically correct.
 - `/evolution-apple-platform-ui-specialist`: SwiftUI, SpriteKit/Metal/Canvas integration decisions, macOS/iPadOS/iOS layout, touch/pointer/keyboard input, game controls, accessibility, previews, and platform-native visual polish.
 - `/evolution-graphics-specialist`: art direction, organism/environment visual language, rendering quality, animation, VFX, camera polish, asset prompts, visual readability, visual QA, and graphics performance across macOS, iPadOS, and iOS.
 - `/evolution-verifier`: post-implementation verification, diff inspection, focused tests/builds, deterministic simulation checks, Apple-platform runtime checks, and separation of real regressions from toolchain or simulator noise.
@@ -109,6 +110,17 @@ When a task should be handled by a specific subagent, invoke it directly by name
 - Centralize tuning constants enough to support balancing.
 - Design for pause, step, speed control, reset, seed/world settings, selected-organism details, and debug metrics when practical.
 - Test edge cases such as empty populations, overpopulation, resource exhaustion, extreme mutation rates, tiny/huge worlds, and reset behavior.
+
+## Player Experience And Reward Guidance
+
+- Make the simulator rewarding to play, not only correct to observe.
+- Preserve a clear short loop of move, forage, avoid danger, recover, and survive.
+- Preserve a clear medium loop of reproduce, choose or receive mutation, hand off lineage control, and see adaptation change outcomes.
+- Preserve a clear long loop of era progression, species spread, victory goals, extinction pressure, replayable seeds, and emergent lineage stories.
+- Make goals, progress, success, danger, and failure causes visible enough that players understand what happened and what to try next.
+- Reward observation and adaptation rather than hidden min-maxing, arbitrary points, grind, daily rewards, or engagement tricks disconnected from the simulation.
+- Treat onboarding, contextual tips, milestone feedback, and failure explanations as part of game design, not just UI copy.
+- Pair subjective "fun" judgments with evidence when practical: seeded pacing, first-run smoke notes, screenshots, manual QA observations, or deterministic tests.
 
 ## Development And Validation
 
