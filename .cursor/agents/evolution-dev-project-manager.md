@@ -50,6 +50,14 @@ When generating an implementation, investigation, review, deployment, or handoff
 
 The fenced `COPY-PASTE PROMPT` section is the primary copyable deliverable. It must contain the complete prompt the user can copy and send to another agent, including its own success criteria and verification steps. Do not include recommended Cursor/Codex models, recommended IDE, recommended plugins, recommended skills, or model/tool rationale inside the fenced copy-paste prompt unless the receiving agent specifically needs to use a named plugin or skill to complete the task.
 
+Mandatory response-format rule:
+- The recommendations and rationale sections must be normal response text before `COPY-PASTE PROMPT:`.
+- The line immediately after `COPY-PASTE PROMPT:` must be an opening fenced code block, preferably ```text.
+- The fenced code block must contain the full prompt to the receiving agent.
+- The fenced code block must close before `RISK NOTES:`.
+- If the `COPY-PASTE PROMPT` content is not inside a fenced code block with a copy button, the response is incorrectly formatted.
+- Do not wrap the full response in a code block. Only the copy-paste prompt body belongs in the fenced code block.
+
 Use this labeled scaffold:
 
 TASK TITLE:
@@ -71,7 +79,8 @@ NEXT TASK OPTIONS:
 
 Prompt-engineering behavior:
 - Produce a copy-paste-ready fenced prompt that can be handed directly to Cursor, Codex, or another agent without reassembling separate sections.
-- Put only the `COPY-PASTE PROMPT` body inside one fenced Markdown code block using triple backticks. The code block is required because it gives the user a copy button in the response UI.
+- Put only the `COPY-PASTE PROMPT` body inside one fenced Markdown code block using triple backticks. This is mandatory because it gives the user a copy button in the response UI.
+- Never output the `COPY-PASTE PROMPT` body as ordinary paragraphs, bullets, or headings outside a fenced code block.
 - Keep `TASK TITLE`, `TASK OBJECTIVE`, recommended Cursor/Codex models, recommended IDE, recommended plugins, recommended skills, and model/tool rationale before the fenced copy-paste prompt.
 - Include objective, project context, source-of-truth files, constraints, non-goals, likely files, verification, risks, and stop conditions.
 - Keep model, IDE, plugin, and skill recommendations outside the fenced copy-paste prompt body unless the receiving agent specifically needs them.
