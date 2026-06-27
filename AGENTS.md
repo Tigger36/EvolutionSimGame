@@ -130,3 +130,19 @@ For simulation work, prefer deterministic unit tests with seeded randomness. For
 - Add tests proportional to risk and behavior surface.
 - Avoid broad abstractions until duplication or complexity justifies them.
 - Prefer deterministic behavior and measurable verification over subjective claims.
+
+## Cursor Cloud specific instructions
+
+The Cursor Cloud VM is **Linux (Ubuntu 24.04, x86_64), not macOS**. This changes what can be validated here:
+
+- **In scope on Linux:** `EvolutionSimCore` — the headless, deterministic simulation Swift package. It imports only `Foundation`/`XCTest`, so it builds and tests with the open-source Swift toolchain.
+- **Out of scope on Linux (require macOS + Xcode, do not attempt here):** the `EvolutionSimGame` SwiftUI app, `xcodebuild` (the `EvolutionSimGame_macOS` / `EvolutionSimGame_iOS` schemes), the `EvolutionSimGameTests` target, and `xcodegen generate`. Verify those on an Apple host.
+
+Toolchain notes:
+
+- The open-source Swift toolchain (6.1.x) is preinstalled at `/usr/local/swift`, with `swift`/`swiftc` symlinked into `/usr/local/bin` (on `PATH` for non-interactive shells). No `nvm`/profile sourcing is needed.
+- Commands (see `README.md` for the canonical list): build with `swift build` and test with `swift test`, both run from inside `EvolutionSimCore/`.
+- There is no SwiftLint config; the Swift compiler (`swift build`, clean with no warnings) is the static check.
+- The package has **no external dependencies**, so `swift package resolve` is effectively a no-op (this is what the startup update script runs).
+
+Running/demoing the engine headlessly (no UI): create a throwaway SwiftPM executable that adds `EvolutionSimCore` as a path dependency and drives `SimulationController` (`init` → `step(input:)` → `snapshot()`), e.g. steering the player toward food to exercise movement, eating, reproduction, mutation choices, era progression, determinism, and save/restore.
