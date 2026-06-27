@@ -386,6 +386,8 @@ Public beta means an external Apple-platform player can install a TestFlight bui
 
 ## Phase 9 — Persistence and Run Management
 
+**Status:** Implementation complete; manual relaunch smoke pending before formal closeout.
+
 **Goal:** Make local runs safe to pause, leave, resume, restart, and share by seed.
 
 **Deliverables:**
@@ -402,6 +404,8 @@ Public beta means an external Apple-platform player can install a TestFlight bui
 - Manual relaunch smoke confirms continue resumes the same tick, phase, player organism, and pending mutation state
 - Deleting/resetting a run never affects unrelated local app data
 - No cloud storage, accounts, or networking are introduced
+
+**Current note (2026-06-27):** The Phase 9 implementation is in place: single-slot local persistence, versioned app-layer save envelope, Continue flow, autosave triggers, destructive-action confirmations, corrupt/incompatible save recovery, seed copy/share, updated docs, green core tests, green app tests, and green macOS/iPad builds. The remaining gate is the interactive relaunch smoke checklist, so this phase should be treated as **ready to proceed from an engineering standpoint** but **not formally complete until manual runtime verification passes**.
 
 **Primary agent:** `/evolution-apple-platform-ui-specialist`
 **Support:** `/evolution-simulation-gameplay-specialist` for state/version boundaries

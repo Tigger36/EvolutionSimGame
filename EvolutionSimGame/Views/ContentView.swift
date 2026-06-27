@@ -14,7 +14,6 @@ struct ContentView: View {
             }
         }
         .overlay { gameOverlays }
-        .overlay(alignment: .top) { topBanners }
         .overlay {
             if viewModel.appPhase == .tutorial, let step = viewModel.tutorialStep {
                 TutorialCalloutView(
@@ -44,6 +43,7 @@ struct ContentView: View {
 
     private var simulationDetail: some View {
         VStack(spacing: 8) {
+            topBanners
             HUDView(snapshot: viewModel.snapshot)
             ZStack {
                 SimulationCanvasView(
@@ -88,18 +88,21 @@ struct ContentView: View {
 
     @ViewBuilder
     private var topBanners: some View {
-        VStack(spacing: 8) {
-            if let banner = viewModel.terrainEntryBanner {
-                TerrainEntryBanner(message: banner)
-            }
-            if let tip = viewModel.contextualTip {
-                ContextualTipBanner(tip: tip, onDismiss: viewModel.dismissContextualTip)
-            }
-            if let feedback = viewModel.mutationFeedback {
-                FeedbackBanner(message: feedback)
+        if viewModel.terrainEntryBanner != nil
+            || viewModel.contextualTip != nil
+            || viewModel.mutationFeedback != nil {
+            VStack(spacing: 8) {
+                if let banner = viewModel.terrainEntryBanner {
+                    TerrainEntryBanner(message: banner)
+                }
+                if let tip = viewModel.contextualTip {
+                    ContextualTipBanner(tip: tip, onDismiss: viewModel.dismissContextualTip)
+                }
+                if let feedback = viewModel.mutationFeedback {
+                    FeedbackBanner(message: feedback)
+                }
             }
         }
-        .padding(.top, 8)
     }
 
     @ViewBuilder
