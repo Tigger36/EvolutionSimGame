@@ -32,11 +32,11 @@ Non-blockers (unless escalated): cosmetic VFX, non-critical overlay polish, bala
 |----|------|------------|--------|------------|-------------|--------|----------|
 | R1 | Plan/docs drift from implementation | Medium | High | Phase 6 reconciliation; grep gate | 6 | **Mitigated** | `AGENTS.md`, README, player guide updated; beta docs created |
 | R2 | Non-deterministic sim regressions | Low | Blocker | Seeded RNG, fixed ticks, 61 core tests, replay tests | 7 | **Mitigated** | `testSameSeedSameStateAfterNTicks`; Phase 7 victory/extinction replay-from-input-log tests; verifier on sim PRs |
-| R3 | Save corruption / no durable UX | High | Blocker | Phase 9 versioned saves, migration tests, corrupt-save path | 9 | Open | Model round-trip passes; no file UX |
+| R3 | Save corruption / no durable UX | High | Blocker | Phase 9 versioned saves, migration tests, corrupt-save path | 9 | Partial | Single-slot Application Support save, schema v1 envelope, corrupt/incompatible recovery, and save/restore tests implemented; interactive relaunch smoke still pending |
 | R4 | iPhone compact layout second-class | Medium | High | Phase 10 compact-width smoke; graphics QA iPhone row | 10 | Open | Checklist row blank; code has compact layout |
 | R5 | Canvas performance at worst-case population | Medium | High | Phase 11 Instruments; `RenderQuality` coarsening | 11 | Open | No iPhone measurements; M6 macOS only |
 | R6 | Backend/analytics scope creep | Low | High | Public beta scope doc; TestFlight-only feedback | 6 + 12 | **Mitigated** | [public-beta-scope.md](public-beta-scope.md) exclusions |
-| R7 | Testers cannot reproduce failures | High | Medium | Phase 9 seed display/copy/share; feedback template with seed | 9 | Open | Seed in config only; not exposed in UI |
+| R7 | Testers cannot reproduce failures | High | Medium | Phase 9 seed display/copy/share; feedback template with seed | 9 | Partial | Seed is visible in-run with copy/share affordances; interactive pasteboard/share-sheet smoke still pending |
 | R8 | Tutorial insufficient for victory goals | Medium | High | Phase 8 first-run + player guide; new-game copy | 8 | Open | Tutorial has 7 steps; no victory step |
 | R9 | Accessibility unverified | Medium | Blocker | Phase 10 VoiceOver, Reduce Motion, grayscale passes | 10 | Open | Identifiers exist; manual QA blank |
 | R10 | Unwinnable common-start seed | Low | Blocker | Phase 7 seed suite + primordial balance tests | 7 | **Mitigated** | `Phase7BalanceTests`: seeds 42 & 1001 viable under naive play; all four victory goals reachable; pacing in [pacing-targets.md](pacing-targets.md) |

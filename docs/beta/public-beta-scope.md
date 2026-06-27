@@ -53,7 +53,7 @@ Each criterion maps to owner phase, primary agent, and verification gate.
 | # | Criterion | Status | Owner phase | Primary agent | Verification gate | Blocking? |
 |---|-----------|--------|-------------|---------------|-------------------|-----------|
 | 1 | First-run flow explains movement, food, predators, terrain, reproduction, mutation, lineage handoff, and at least one victory goal | **Partial** — tutorial covers 7 mechanics; victory goals and eras weak in first-run | 8 | `/evolution-apple-platform-ui-specialist` | First-run smoke — Phase 8 | Yes |
-| 2 | Local save/continue survives relaunch; incompatible save versions handled gracefully | **Not started** — `SavedSimulation` + `saveSimulation()` only; no durable UX | 9 | `/evolution-apple-platform-ui-specialist` | Save/restore test + relaunch smoke — Phase 9 | Yes |
+| 2 | Local save/continue survives relaunch; incompatible save versions handled gracefully | **Partial** — single-slot local save, schema v1 envelope, corrupt/incompatible recovery, and seed copy/share are implemented; interactive relaunch smoke is still pending | 9 | `/evolution-apple-platform-ui-specialist` | Save/restore test + relaunch smoke — Phase 9 | Yes |
 | 3 | iPhone, iPad, macOS pass focused smoke with platform controls | **Partial** — builds green; macOS M6 only | 10 | `/evolution-apple-platform-ui-specialist` | Multi-platform smoke — Phase 10 | Yes |
 | 4 | Reduce Motion, VoiceOver on core controls, non-color state cues verified | **Partial** — code hooks + identifiers; manual pass missing | 10 | `/evolution-apple-platform-ui-specialist` | Graphics QA a11y rows — Phase 10 | Yes |
 | 5 | Worst-case beta population has measured performance on iPhone-class hardware | **Not started** — scenario: 40 food, 5 predators, 20 descendants per [graphics-qa-checklist.md](../graphics-qa-checklist.md) | 11 | `/evolution-verifier` | Instruments per [graphics-asset-spec.md](../graphics-asset-spec.md) — Phase 11 | Yes |
@@ -66,7 +66,7 @@ Each criterion maps to owner phase, primary agent, and verification gate.
 |-------------|----------------|-------------|---------------|-------------------|------------------|
 | Representative seed balance suite | **Done** (Phase 7) | 7 | `/evolution-simulation-gameplay-specialist` | `swift test` seeded balance coverage — 61 tests, all four goals reachable | Yes |
 | Tutorial + victory goal clarity | Partial | 8 | `/evolution-apple-platform-ui-specialist` | First-run smoke + player guide alignment | Yes |
-| Durable local save/continue | Not started | 9 | `/evolution-apple-platform-ui-specialist` | Relaunch smoke + schema migration tests | Yes |
+| Durable local save/continue | Partial | 9 | `/evolution-apple-platform-ui-specialist` | Core/app save tests green; relaunch smoke still required | Yes |
 | iPhone compact layout pass | Partial | 10 | `/evolution-apple-platform-ui-specialist` | iPhone simulator smoke | Yes |
 | iPad / macOS layout + lifecycle | Partial | 10 | `/evolution-apple-platform-ui-specialist` | iPad/macOS smoke + background/foreground | Yes |
 | Accessibility verification | Partial | 10 | `/evolution-apple-platform-ui-specialist` | VoiceOver, Reduce Motion, grayscale filters | Yes |

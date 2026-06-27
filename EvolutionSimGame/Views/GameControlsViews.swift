@@ -120,7 +120,7 @@ struct ControlBarView: View {
                 Button("4x") { viewModel.setSpeed(4) }
             }
 
-            Button("Reset") { viewModel.reset() }
+            Button("Reset") { viewModel.requestResetRun() }
                 .accessibilityIdentifier("resetButton")
 
             Spacer()

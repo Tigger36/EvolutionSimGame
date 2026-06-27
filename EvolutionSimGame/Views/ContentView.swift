@@ -137,7 +137,7 @@ struct ContentView: View {
                 .keyboardShortcut(" ", modifiers: [])
             Button("Step") { viewModel.stepOnce() }
                 .keyboardShortcut("s", modifiers: [.command])
-            Button("Reset") { viewModel.reset() }
+            Button("Reset") { viewModel.requestResetRun() }
                 .keyboardShortcut("r", modifiers: [.command])
         }
         #endif
@@ -157,9 +157,12 @@ struct ContentView: View {
                 Text(title).font(.largeTitle.bold())
                 Text(message).multilineTextAlignment(.center)
                 Text("Fitness: \(Int(viewModel.snapshot.fitness.compositeScore))")
-                Button("Play Again") { viewModel.resetToStartScreen() }
+                Button("Play Again") { viewModel.requestResetRun() }
                     .buttonStyle(.borderedProminent)
                     .accessibilityIdentifier("playAgainButton")
+                Button("New Game") { viewModel.requestNewGameFromPlaying() }
+                    .buttonStyle(.bordered)
+                    .accessibilityIdentifier("newGameFromOverlay")
             }
             .padding(32)
             .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16))
@@ -177,12 +180,12 @@ struct GameCommands: Commands {
                 .keyboardShortcut(" ", modifiers: [])
             Button("Step Tick") { viewModel.stepOnce() }
                 .keyboardShortcut("s", modifiers: [.command])
-            Button("Reset") { viewModel.reset() }
+            Button("Reset") { viewModel.requestResetRun() }
                 .keyboardShortcut("r", modifiers: [.command])
             Divider()
             Button("How to Play") { viewModel.showHowToPlay = true }
             Button("Restart Tutorial") { viewModel.beginTutorial() }
-            Button("New Game") { viewModel.resetToStartScreen() }
+            Button("New Game") { viewModel.requestNewGameFromPlaying() }
             Divider()
             Button("Speed 1x") { viewModel.setSpeed(1) }
             Button("Speed 2x") { viewModel.setSpeed(2) }

@@ -34,6 +34,7 @@
 		76A1A388196B5226303C244B /* ContextualTipsViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C8AB6C88BBE8ACBAB2A8E63 /* ContextualTipsViews.swift */; };
 		7D12F209C403E64A73D47C55 /* TutorialViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 483D682AF469048A38602B72 /* TutorialViews.swift */; };
 		825308EDF193BE97AFFBD9A2 /* ContextualTipsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76520AA614AAD216BC74099F /* ContextualTipsTests.swift */; };
+		85E4A62374128D4984157B9C /* RunPersistenceServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9304B09A6525D95BCF15D31B /* RunPersistenceServiceTests.swift */; };
 		8795D4F13B1364E1BB4F8BAC /* SimulationCanvasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9B87063741F83904CA7759E /* SimulationCanvasView.swift */; };
 		8BC02D62398FBD538864E0BE /* HowToPlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C071157F4157B057B95AD580 /* HowToPlayView.swift */; };
 		8FD0FFE37C18E38142BD683C /* EvolutionSimGameApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9894A7BEA2C966D343C4EB51 /* EvolutionSimGameApp.swift */; };
@@ -59,8 +60,10 @@
 		D51F75EA145122F86D84ED9D /* SimulationRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7994570C88F3D044A1060B4A /* SimulationRenderer.swift */; };
 		D7BC625B93C6700727DCAEDA /* TerrainRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42AE5DBBCAA4777DABE85C71 /* TerrainRenderer.swift */; };
 		DF0161861C883E7C4A644EEF /* VisualTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7726489CF7E86D24A9B88BE2 /* VisualTokens.swift */; };
+		E7911BA56DBF269E9626C7C0 /* RunPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54CB739ACF5E2B6AD9BE9D81 /* RunPersistence.swift */; };
 		EABEA0F7AEDAD3D1FCF38DEA /* GameViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A65C144843BF4CADB4B9B767 /* GameViewModel.swift */; };
 		EE332B6C2FAD7ED4D6670B20 /* OrganismThumbnail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AF3C9FD7AA454B77EE55A1C /* OrganismThumbnail.swift */; };
+		F11ED2096D8AF7BCBC6E8C3E /* RunPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54CB739ACF5E2B6AD9BE9D81 /* RunPersistence.swift */; };
 		F8FAC45160068C6C976480B2 /* OverlayRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3041921145A1B792771AA6C7 /* OverlayRenderer.swift */; };
 		FAC84F4BB341CA4A09D11B0C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08053F5088C71A4A633A5F66 /* ContentView.swift */; };
 		FC4A2B16DD83120D004EB7E5 /* OrganismRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C1EDF40DD514BB77DDC0E9 /* OrganismRenderer.swift */; };
@@ -86,6 +89,7 @@
 		42BF3EA4C62A51519F4170E7 /* StartScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartScreenView.swift; sourceTree = "<group>"; };
 		483D682AF469048A38602B72 /* TutorialViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialViews.swift; sourceTree = "<group>"; };
 		52D20D51A210DE3E3ED34C93 /* NewGameSetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGameSetupView.swift; sourceTree = "<group>"; };
+		54CB739ACF5E2B6AD9BE9D81 /* RunPersistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunPersistence.swift; sourceTree = "<group>"; };
 		5D4942224C267B0EFEE603AC /* GameControlsViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameControlsViews.swift; sourceTree = "<group>"; };
 		5DB1C1531913D2E13CC0F524 /* VisualEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualEffect.swift; sourceTree = "<group>"; };
 		732441860CBF9D5FE82A0193 /* GameViewModelMutationGatingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewModelMutationGatingTests.swift; sourceTree = "<group>"; };
@@ -97,6 +101,7 @@
 		816A36E0CD921D25B1E7394C /* PredatorThreatViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PredatorThreatViews.swift; sourceTree = "<group>"; };
 		8C8AB6C88BBE8ACBAB2A8E63 /* ContextualTipsViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextualTipsViews.swift; sourceTree = "<group>"; };
 		92C1EDF40DD514BB77DDC0E9 /* OrganismRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganismRenderer.swift; sourceTree = "<group>"; };
+		9304B09A6525D95BCF15D31B /* RunPersistenceServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunPersistenceServiceTests.swift; sourceTree = "<group>"; };
 		9894A7BEA2C966D343C4EB51 /* EvolutionSimGameApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EvolutionSimGameApp.swift; sourceTree = "<group>"; };
 		9AF3C9FD7AA454B77EE55A1C /* OrganismThumbnail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganismThumbnail.swift; sourceTree = "<group>"; };
 		A65C144843BF4CADB4B9B767 /* GameViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewModel.swift; sourceTree = "<group>"; };
@@ -168,6 +173,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		A2F360FB45C3132D4A58277B /* Persistence */ = {
+			isa = PBXGroup;
+			children = (
+				54CB739ACF5E2B6AD9BE9D81 /* RunPersistence.swift */,
+			);
+			path = Persistence;
+			sourceTree = "<group>";
+		};
 		AF96A91820191159D802BBF6 /* EvolutionSimGame */ = {
 			isa = PBXGroup;
 			children = (
@@ -175,6 +188,7 @@
 				8077F46D59712864C6510A18 /* GameCopy.swift */,
 				11BD1EB4EAE91825C5F05AAD /* Info.plist */,
 				F76400F4F9BB80D2967E2A14 /* PredatorThreatPresentation.swift */,
+				A2F360FB45C3132D4A58277B /* Persistence */,
 				28E32EE4DBFF997238EB7656 /* Rendering */,
 				FB1D7DEA49B7AB5A361F044C /* ViewModels */,
 				CC830A9246CFED3FFCA4DD31 /* Views */,
@@ -215,6 +229,7 @@
 			children = (
 				76520AA614AAD216BC74099F /* ContextualTipsTests.swift */,
 				732441860CBF9D5FE82A0193 /* GameViewModelMutationGatingTests.swift */,
+				9304B09A6525D95BCF15D31B /* RunPersistenceServiceTests.swift */,
 			);
 			path = EvolutionSimGameTests;
 			sourceTree = "<group>";
@@ -354,6 +369,7 @@
 				4136A15D583CAC30A4FC3A3A /* PredatorThreatPresentation.swift in Sources */,
 				AF4E4FE83454878298DCE085 /* PredatorThreatViews.swift in Sources */,
 				913C148FD3D2A6176D52F80B /* RenderQuality.swift in Sources */,
+				E7911BA56DBF269E9626C7C0 /* RunPersistence.swift in Sources */,
 				8795D4F13B1364E1BB4F8BAC /* SimulationCanvasView.swift in Sources */,
 				6923BC3DD62DF663FAB1D79B /* SimulationRenderer.swift in Sources */,
 				B9B682518B24AE1FE1923884 /* StartScreenView.swift in Sources */,
@@ -387,6 +403,7 @@
 				4CEC3F83A53ADAD8537F3E55 /* PredatorThreatPresentation.swift in Sources */,
 				AB6AEBF231524F7ABFE6D7B8 /* PredatorThreatViews.swift in Sources */,
 				9F6AC696B36DC230E12D322C /* RenderQuality.swift in Sources */,
+				F11ED2096D8AF7BCBC6E8C3E /* RunPersistence.swift in Sources */,
 				A4BBB8B50CBB92B3AF8CAE10 /* SimulationCanvasView.swift in Sources */,
 				D51F75EA145122F86D84ED9D /* SimulationRenderer.swift in Sources */,
 				32DECB259BC1C23A1B52ABAF /* StartScreenView.swift in Sources */,
@@ -404,6 +421,7 @@
 			files = (
 				825308EDF193BE97AFFBD9A2 /* ContextualTipsTests.swift in Sources */,
 				AFE65ECECD8017D2A29ED030 /* GameViewModelMutationGatingTests.swift in Sources */,
+				85E4A62374128D4984157B9C /* RunPersistenceServiceTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

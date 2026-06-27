@@ -66,7 +66,7 @@ choice, and [docs/beta/](docs/beta/) for public beta scope and readiness.
 7. Progress through eras as fitness grows; survive mass extinction events when enabled.
 8. Pursue a selected victory goal (spread biomes, population, intelligence, or survive extinction).
 
-Tutorial and how-to-play flows cover the core loop; durable save/continue on relaunch is planned for Phase 9 (Codable `SavedSimulation` exists in core).
+Tutorial and how-to-play flows cover the core loop; Phase 9 durable save/continue now persists one active standard run locally, restores it from the start screen, and exposes the run seed for copy/share.
 
 ## License
 

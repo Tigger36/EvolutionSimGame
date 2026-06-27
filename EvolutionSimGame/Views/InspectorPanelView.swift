@@ -103,12 +103,27 @@ struct InspectorPanelView: View {
                 }
             }
 
-            Section("Game Settings") {
-                Button("New Game") { viewModel.resetToStartScreen() }
+            Section("Save & Run") {
+                LabeledContent("Seed", value: "\(viewModel.currentRunSeed)")
+                LabeledContent("Saved Slot", value: viewModel.hasSavedRun ? "Active" : "Empty")
+                Button("Copy Seed") { viewModel.copyCurrentSeed() }
+                    .accessibilityIdentifier("copySeedButton")
+                ShareLink(item: viewModel.currentSeedShareText) {
+                    Label("Share Seed", systemImage: "square.and.arrow.up")
+                }
+                .accessibilityIdentifier("shareSeedButton")
+                Text("Share the seed when reporting balance issues or bugs so the same world layout can be reproduced.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+
+            Section("Run Management") {
+                Button("Reset Run") { viewModel.requestResetRun() }
+                    .accessibilityIdentifier("resetRunButton")
+                Button("New Game") { viewModel.requestNewGameFromPlaying() }
                     .accessibilityIdentifier("newGameFromInspector")
-                Button("Reset (Seed 42)") { viewModel.reset(seed: 42) }
-                    .accessibilityIdentifier("resetSeed42")
-                Button("Reset (Random Seed)") { viewModel.reset(seed: UInt64.random(in: 1...UInt64.max)) }
+                Button("Delete Saved Run", role: .destructive) { viewModel.requestDeleteSavedRun() }
+                    .accessibilityIdentifier("deleteSavedRunButton")
                 Text(GameCopy.victoryGoalDescription(snapshot.victoryGoal))
                     .font(.caption)
                     .foregroundStyle(.secondary)

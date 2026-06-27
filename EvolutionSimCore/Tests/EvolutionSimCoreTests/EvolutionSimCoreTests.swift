@@ -458,14 +458,115 @@ final class EraAndVictoryTests: XCTestCase {
 }
 
 final class SavedSimulationTests: XCTestCase {
-    func testSaveRestoreRoundTrip() throws {
+    func testSaveRestoreRoundTrip_activePlay() throws {
         let controller = SimulationController(config: SimulationConfig(seed: 77))
-        controller.step(input: PlayerInput(movementDirection: Vector2(x: 1, y: 0)))
-        let saved = SavedSimulation(state: controller.state)
+        try assertRoundTrip(
+            saved: SavedSimulation(state: controller.state),
+            expectedPhase: controller.state.phase,
+            expectedTick: controller.state.tick,
+            expectedPlayerOrganismID: controller.state.playerOrganismID,
+            expectedPendingOffers: controller.state.pendingMutationOffers,
+            expectedSeed: 77
+        )
+    }
 
+    func testSaveRestoreRoundTrip_awaitingMutationChoice() throws {
+        let controller = SimulationController(config: .tutorialPreset())
+        controller.step()
+
+        try assertRoundTrip(
+            saved: SavedSimulation(state: controller.state),
+            expectedPhase: .awaitingMutationChoice,
+            expectedTick: controller.state.tick,
+            expectedPlayerOrganismID: controller.state.playerOrganismID,
+            expectedPendingOffers: controller.state.pendingMutationOffers,
+            expectedSeed: SimulationConfig.tutorialSeed
+        )
+    }
+
+    func testSaveRestoreRoundTrip_victory() throws {
+        let playerID = EntityID(rawValue: 1)
+        var state = SimulationState(
+            config: SimulationConfig(
+                seed: 909,
+                victoryGoal: .reachPopulation,
+                enableMassExtinctionEvents: false,
+                predatorCountOverride: 0
+            )
+        )
+        var organisms: [Organism] = []
+        for index in 0..<12 {
+            organisms.append(
+                Organism(
+                    id: EntityID(rawValue: UInt64(index + 1)),
+                    position: Vector2(x: Double(40 + index * 10), y: 120),
+                    isPlayerControlled: index == 0,
+                    generation: index == 0 ? 1 : 2,
+                    lineageID: 1
+                )
+            )
+        }
+        state.organisms = organisms
+        state.playerOrganismID = playerID
+
+        let controller = SimulationController(state: state)
+        controller.step()
+
+        XCTAssertEqual(controller.state.phase, .victory)
+        try assertRoundTrip(
+            saved: SavedSimulation(state: controller.state),
+            expectedPhase: .victory,
+            expectedTick: controller.state.tick,
+            expectedPlayerOrganismID: controller.state.playerOrganismID,
+            expectedPendingOffers: controller.state.pendingMutationOffers,
+            expectedSeed: 909
+        )
+    }
+
+    func testSaveRestoreRoundTrip_extinct() throws {
+        let playerID = EntityID(rawValue: 1)
+        var state = SimulationState(config: SimulationConfig(seed: 404, predatorCountOverride: 0))
+        state.organisms = [
+            Organism(id: playerID, position: .zero, isPlayerControlled: true)
+        ]
+        state.organisms[0].isAlive = false
+        state.playerOrganismID = playerID
+
+        let controller = SimulationController(state: state)
+        controller.step()
+
+        XCTAssertEqual(controller.state.phase, .extinct)
+        try assertRoundTrip(
+            saved: SavedSimulation(state: controller.state),
+            expectedPhase: .extinct,
+            expectedTick: controller.state.tick,
+            expectedPlayerOrganismID: controller.state.playerOrganismID,
+            expectedPendingOffers: [],
+            expectedSeed: 404
+        )
+    }
+
+    private func assertRoundTrip(
+        saved: SavedSimulation,
+        expectedPhase: SimulationPhase,
+        expectedTick: Int,
+        expectedPlayerOrganismID: EntityID?,
+        expectedPendingOffers: [MutationOption],
+        expectedSeed: UInt64
+    ) throws {
         let encoded = try JSONEncoder().encode(saved)
         let decoded = try JSONDecoder().decode(SavedSimulation.self, from: encoded)
+
         XCTAssertEqual(saved, decoded)
+        XCTAssertEqual(decoded.state.phase, expectedPhase)
+        XCTAssertEqual(decoded.state.tick, expectedTick)
+        XCTAssertEqual(decoded.state.playerOrganismID, expectedPlayerOrganismID)
+        XCTAssertEqual(decoded.state.pendingMutationOffers, expectedPendingOffers)
+        XCTAssertEqual(decoded.state.config.seed, expectedSeed)
+
+        let restored = SimulationController(state: decoded.state)
+        XCTAssertEqual(restored.state.phase, expectedPhase)
+        XCTAssertEqual(restored.state.tick, expectedTick)
     }
 }
 

@@ -11,7 +11,7 @@ Phase 6 reconciliation artifact. Maps implemented systems to docs, source, tests
 | macOS build (`EvolutionSimGame_macOS`) | **Pass** — BUILD SUCCEEDED |
 | iPad build (`EvolutionSimGame_iOS`, iPad A16 sim) | **Pass** — BUILD SUCCEEDED |
 | iPhone build (`EvolutionSimGame_iOS`, iPhone Air sim) | **Pass** — BUILD SUCCEEDED (verifier 2026-06-27) |
-| `EvolutionSimGameTests` | **Not run** — 8 tests in repo; not wired to Xcode test target |
+| `EvolutionSimGameTests` | **Pass** — 21 tests, 0 failures (contextual tips, mutation gating, persistence/run management) |
 
 ---
 
@@ -39,9 +39,9 @@ Phase 6 reconciliation artifact. Maps implemented systems to docs, source, tests
 | Accessibility identifiers / labels | Yes | `GameControlsViews`, `StartScreenView`, `PredatorThreatViews`, etc. | Missing | Missing | Aligned | Partial (checklist blank) | None | Missing — VoiceOver unverified | No | Phase 10 — VoiceOver pass |
 | Reduce Motion behavior | Yes | `SimulationCanvasView`, renderers (`reduceMotion` param) | Missing | Missing | Missing | Partial (checklist blank) | None | Missing | No | Phase 10 — Reduce Motion smoke |
 | Codable save model (`SavedSimulation`) | Yes | `SimulationController.swift` (`SavedSimulation`) | Aligned (architecture) | Missing | N/A | N/A | `testSaveRestoreRoundTrip`, `testStateSerializationRoundTrip` | N/A | Partial (model only) | Phase 9 — durable UX |
-| Durable save/load / continue UX | No | `GameViewModel.saveSimulation()` only | Partial (README notes Phase 9) | Missing | N/A | N/A | Round-trip on model only | Missing | No | Phase 9 |
+| Durable save/load / continue UX | Yes (single active slot) | `RunPersistence.swift`, `GameViewModel.swift`, `StartScreenView.swift`, `InspectorPanelView.swift` | Aligned | Aligned | N/A | N/A | `SavedSimulationTests`, `RunPersistenceServiceTests` | Partial — interactive relaunch smoke still pending | Partial | Phase 9 smoke + lifecycle polish |
 | Platform layouts (iPad / iPhone / macOS) | Partial | `ContentView.swift`, platform targets | Aligned | Missing | Aligned | Partial | None | Partial — macOS resize pass; iPad/iPhone blank | Partial | Phase 10 |
-| Seed display / sharing | No | Seed in `SimulationConfig` only | Missing | Missing | Missing | Missing | Determinism tests | Missing | No | Phase 9 |
+| Seed display / sharing | Yes | `GameViewModel.swift`, `InspectorPanelView.swift` | Aligned | Aligned | Missing | Missing | `RunPersistenceServiceTests` restore/seed coverage + determinism tests | Partial — copy/share interaction not manually smoked | Partial | Phase 9 smoke |
 | Performance evidence (worst-case population) | No | `RenderQuality.swift` coarsening exists | Missing | Missing | Missing | Partial (how to measure) | None | Missing | No | Phase 11 — Instruments |
 
 **Doc status key:** Aligned = matches implementation; Partial = incomplete or MVP-only; Missing = not documented; Contradicts = doc claims differ from code.

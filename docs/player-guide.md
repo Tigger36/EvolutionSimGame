@@ -136,10 +136,29 @@ game setup for a full run.
 
 ## Save and Continue
 
-The simulation core supports Codable save state (`SavedSimulation`) for tests and
-future persistence. **Durable save/continue after app relaunch is not yet in the
-player-facing app** (planned Phase 9). Closing the app mid-run does not restore
-progress today.
+Standard runs now use a single local save slot in Application Support. The app
+autosaves the active run when you pause, change speed, choose a mutation, hit
+victory/extinction, or the app moves to the background/inactive state.
+
+From the start screen:
+
+- **Continue** restores the latest standard run directly into gameplay.
+- **New Game** replaces the active saved run after confirmation.
+- **Tutorial** does not overwrite the saved standard run until you start a new
+  full run.
+
+During a run:
+
+- The inspector shows the current seed and lets you **Copy Seed** or
+  **Share Seed** for bug reports and balance feedback.
+- **Reset Run** restarts the current config and overwrites the active save after
+  confirmation.
+- **Delete Saved Run** discards the current run and returns to the start screen
+  without changing tutorial or accessibility preferences.
+
+If the active save is corrupt or from a newer unsupported schema, the app shows
+an alert, quarantines the bad save, and returns to a safe start screen so you
+can start a new run.
 
 ## Implemented vs Future
 
@@ -162,4 +181,3 @@ Future design ideas not implemented yet:
 - Terrain-specific food sources.
 - Descendants reproducing independently.
 - Detailed death notifications explaining exactly why each offspring died.
-- Player-facing save/continue and seed sharing UI.
