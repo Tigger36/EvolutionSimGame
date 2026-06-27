@@ -433,9 +433,14 @@ final class FitnessTests: XCTestCase {
 
 final class EraAndVictoryTests: XCTestCase {
     func testEraProgression() {
+        // Thresholds rebalanced in Phase 7 (era2=180, era3=480, era4=950, era5=1600) to slow
+        // difficulty escalation so a lineage has time to grow before predators multiply.
         XCTAssertEqual(EraSystem.era(for: 10), .primordialPool)
-        XCTAssertEqual(EraSystem.era(for: 100), .reefShallows)
-        XCTAssertEqual(EraSystem.era(for: 500), .ecosystemDominance)
+        XCTAssertEqual(EraSystem.era(for: SimulationTuning.era2FitnessThreshold), .reefShallows)
+        XCTAssertEqual(EraSystem.era(for: SimulationTuning.era3FitnessThreshold), .landfall)
+        XCTAssertEqual(EraSystem.era(for: SimulationTuning.era4FitnessThreshold), .biomes)
+        XCTAssertEqual(EraSystem.era(for: SimulationTuning.era5FitnessThreshold), .ecosystemDominance)
+        XCTAssertEqual(EraSystem.era(for: SimulationTuning.era5FitnessThreshold + 500), .ecosystemDominance)
     }
 
     func testBiomeVictory() {
@@ -504,7 +509,7 @@ final class PredatorDifficultyTests: XCTestCase {
     func testEraTransitionUpdatesPredatorSpeeds() {
         let bootstrapped = SimulationController(config: SimulationConfig(seed: 77))
         var state = bootstrapped.state
-        state.fitness.survivalTicks = 600
+        state.fitness.survivalTicks = 2000 // Phase 7: era2 threshold raised to 180 composite (~1600 survival ticks).
         let controller = SimulationController(state: state)
         controller.step()
 
@@ -518,7 +523,7 @@ final class PredatorDifficultyTests: XCTestCase {
         XCTAssertEqual(bootstrapped.state.predators.count, 3)
 
         var state = bootstrapped.state
-        state.fitness.survivalTicks = 600
+        state.fitness.survivalTicks = 2000 // Phase 7: era2 threshold raised to 180 composite (~1600 survival ticks).
         let advancing = SimulationController(state: state)
         advancing.step()
 
@@ -572,7 +577,7 @@ final class PredatorDifficultyTests: XCTestCase {
     func testMassExtinctionMultipliesEraScaledSpeed() {
         let bootstrapped = SimulationController(config: SimulationConfig(seed: 42))
         var state = bootstrapped.state
-        state.fitness.survivalTicks = 600
+        state.fitness.survivalTicks = 2000 // Phase 7: era2 threshold raised to 180 composite (~1600 survival ticks).
         state.tick = 1999
         let controller = SimulationController(state: state)
         let preExtinctionSpeed = EraContent.predatorSpeed(for: .reefShallows)

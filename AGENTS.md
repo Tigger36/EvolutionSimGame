@@ -79,6 +79,7 @@ Use these agents when appropriate:
 - `/evolution-graphics-specialist`: art direction, organism/environment visual language, rendering quality, animation, VFX, camera polish, asset prompts, visual readability, visual QA, and graphics performance across macOS, iPadOS, and iOS.
 - `/evolution-verifier`: post-implementation verification, diff inspection, focused tests/builds, deterministic simulation checks, Apple-platform runtime checks, and separation of real regressions from toolchain or simulator noise.
 - `/evolution-code-reviewer`: code review for bugs, regressions, scope creep, missing tests, simulation determinism issues, Apple-platform UI/input risks, performance risks, and violations of the native evolution simulator game direction.
+- `/evolution-git-handoff-specialist`: safe branch/status checks, scoped staging, commits, branch pushes, merge-to-main handoffs, beta/release branch hygiene, remote sync verification, and non-destructive git workflow troubleshooting.
 
 When a task should be handled by a specific subagent, invoke it directly by name, such as `/evolution-simulation-gameplay-specialist design the first deterministic organism reproduction model`.
 

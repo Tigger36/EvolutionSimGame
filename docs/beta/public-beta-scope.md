@@ -58,13 +58,13 @@ Each criterion maps to owner phase, primary agent, and verification gate.
 | 4 | Reduce Motion, VoiceOver on core controls, non-color state cues verified | **Partial** — code hooks + identifiers; manual pass missing | 10 | `/evolution-apple-platform-ui-specialist` | Graphics QA a11y rows — Phase 10 | Yes |
 | 5 | Worst-case beta population has measured performance on iPhone-class hardware | **Not started** — scenario: 40 food, 5 predators, 20 descendants per [graphics-qa-checklist.md](../graphics-qa-checklist.md) | 11 | `/evolution-verifier` | Instruments per [graphics-asset-spec.md](../graphics-asset-spec.md) — Phase 11 | Yes |
 | 6 | Known issues, feedback instructions, privacy copy, release checklist exist | **Not started** | 12 | `/evolution-dev-project-manager` | Release checklist complete — Phase 12 | Yes |
-| 7 | No known release-blocking crash, data-loss bug, or common-start unwinnable seed | **Partial** — primordial balance tests exist; no triage dashboard | 7 + 11 | `/evolution-simulation-gameplay-specialist` + `/evolution-verifier` | Seeded balance suite + blocker list — Phase 7/11 | Yes |
+| 7 | No known release-blocking crash, data-loss bug, or common-start unwinnable seed | **Partial** — Phase 7 seeded balance suite done (no unwinnable common start; all goals reachable; [pacing-targets.md](pacing-targets.md)); crash/data-loss triage dashboard still Phase 11 | 7 + 11 | `/evolution-simulation-gameplay-specialist` + `/evolution-verifier` | Seeded balance suite + blocker list — Phase 7 met, Phase 11 pending | Yes |
 
 ## Requirement traceability matrix
 
 | Requirement | Current status | Owner phase | Primary agent | Verification gate | Blocking for beta? |
 |-------------|----------------|-------------|---------------|-------------------|------------------|
-| Representative seed balance suite | Not started | 7 | `/evolution-simulation-gameplay-specialist` | `swift test` seeded balance coverage | Yes |
+| Representative seed balance suite | **Done** (Phase 7) | 7 | `/evolution-simulation-gameplay-specialist` | `swift test` seeded balance coverage — 61 tests, all four goals reachable | Yes |
 | Tutorial + victory goal clarity | Partial | 8 | `/evolution-apple-platform-ui-specialist` | First-run smoke + player guide alignment | Yes |
 | Durable local save/continue | Not started | 9 | `/evolution-apple-platform-ui-specialist` | Relaunch smoke + schema migration tests | Yes |
 | iPhone compact layout pass | Partial | 10 | `/evolution-apple-platform-ui-specialist` | iPhone simulator smoke | Yes |

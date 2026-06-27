@@ -654,7 +654,11 @@ public final class SimulationController: @unchecked Sendable {
             state.predators[index].damage = damage
         }
 
-        adjustPredatorCount(to: EraContent.predatorCount(for: era), era: era)
+        // Respect an explicit predator-count override (e.g. the gentle tutorial preset) across
+        // era transitions. Without this the override only held at bootstrap and eras silently
+        // re-escalated predator counts, making the tutorial harder than intended.
+        let targetCount = state.config.predatorCountOverride ?? EraContent.predatorCount(for: era)
+        adjustPredatorCount(to: targetCount, era: era)
     }
 
     private func adjustPredatorCount(to targetCount: Int, era: GameEra) {

@@ -10,7 +10,7 @@ public enum SimulationTuning {
     public static let baseHealth: Double = 100
     public static let baseSpeed: Double = 80
     public static let baseRadius: Double = 8
-    public static let baseMetabolismDrain: Double = 0.15
+    public static let baseMetabolismDrain: Double = 0.12
     public static let movementEnergyCost: Double = 0.08
     public static let starvationDamage: Double = 0.5
     public static let maxAge: Int = 5000
@@ -22,10 +22,10 @@ public enum SimulationTuning {
     public static let offspringTraitVariance: Double = 0.05
 
     // Food
-    public static let foodEnergyValue: Double = 15
+    public static let foodEnergyValue: Double = 22
     public static let foodRadius: Double = 4
-    public static let maxFoodParticles: Int = 40
-    public static let foodSpawnInterval: Int = 45
+    public static let maxFoodParticles: Int = 70
+    public static let foodSpawnInterval: Int = 12
 
     // Predators — `predatorSpeed`, `predatorDamage`, and `predatorSenseRadius` are era-5 baselines.
     public static let predatorSpeed: Double = 70
@@ -88,13 +88,25 @@ public enum SimulationTuning {
     public static let toxicExposurePressure: Double = 0.03
 
     // Era progression thresholds
-    public static let era2FitnessThreshold: Double = 50
-    public static let era3FitnessThreshold: Double = 120
-    public static let era4FitnessThreshold: Double = 250
-    public static let era5FitnessThreshold: Double = 400
+    public static let era2FitnessThreshold: Double = 180
+    public static let era3FitnessThreshold: Double = 480
+    public static let era4FitnessThreshold: Double = 950
+    public static let era5FitnessThreshold: Double = 1600
 
     // Victory goals
     public static let biomeSpreadVictoryCount: Int = 6
-    public static let populationVictoryCount: Int = 15
+    /// A thriving colony goal. Tuned down from 15 because only the player-controlled organism
+    /// reproduces, so 15 simultaneous survivors was reachable on only ~1 in 30 seeds. 12 is a
+    /// clearly "thriving" colony that skilled play can reach across many common starts.
+    public static let populationVictoryCount: Int = 12
     public static let massExtinctionSurvivalTicks: Int = 3000
+
+    // Intelligence victory: a deep, high-fitness lineage rather than a single lucky organism.
+    /// Generation depth required for the intelligence goal. Lineage generation only advances on
+    /// death-and-handoff cycles, so depth ~5 already represents many sustained survival rounds;
+    /// gen 10 was structurally unreachable within a normal run.
+    public static let intelligenceGenerationRequirement: Int = 5
+    /// Composite-fitness floor paired with generation depth so the intelligence goal still
+    /// demands an accomplished run, not just survival churn.
+    public static let intelligenceCompositeRequirement: Double = 1200
 }

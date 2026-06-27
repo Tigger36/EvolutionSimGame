@@ -314,7 +314,8 @@ public enum EraSystem {
         case .reachPopulation:
             return livingPopulation >= SimulationTuning.populationVictoryCount
         case .evolveIntelligence:
-            return metrics.generationsReached >= 10 && metrics.compositeScore >= 500
+            return metrics.generationsReached >= SimulationTuning.intelligenceGenerationRequirement
+                && metrics.compositeScore >= SimulationTuning.intelligenceCompositeRequirement
         }
     }
 }

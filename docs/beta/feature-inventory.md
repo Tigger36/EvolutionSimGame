@@ -6,7 +6,7 @@ Phase 6 reconciliation artifact. Maps implemented systems to docs, source, tests
 
 | Gate | Result |
 |------|--------|
-| `swift test` (EvolutionSimCore) | **Pass** — 46 tests, 0 failures |
+| `swift test` (EvolutionSimCore) | **Pass** — 61 tests, 0 failures (Phase 7: +15 balance/progression/failure-recovery) |
 | `ContextualTipsTests` | **Pass** — 8 tests (app test target; not in core package) |
 | macOS build (`EvolutionSimGame_macOS`) | **Pass** — BUILD SUCCEEDED |
 | iPad build (`EvolutionSimGame_iOS`, iPad A16 sim) | **Pass** — BUILD SUCCEEDED |
@@ -50,7 +50,7 @@ Phase 6 reconciliation artifact. Maps implemented systems to docs, source, tests
 
 ## Test coverage summary
 
-### EvolutionSimCore (46 tests)
+### EvolutionSimCore (61 tests)
 
 | Suite / area | Tests | Notes |
 |--------------|-------|-------|
@@ -60,8 +60,9 @@ Phase 6 reconciliation artifact. Maps implemented systems to docs, source, tests
 | Reproduction | 6+ tests | Energy gate, offspring, parental care, safety, bounds |
 | Descendants / lineage | 4 tests | Food seek, flee, handoff, extinction |
 | Eras / predators | 10+ tests | Progression, scaling, mass extinction, primordial balance |
-| Victory | `testBiomeVictory` | One goal path tested |
+| Victory | `testBiomeVictory` | Goal logic unit test |
 | Primordial balance | 6+ tests | Early survival, grace ramp, food consumption |
+| Phase 7 balance/progression | `Phase7BalanceTests` (15 tests) | Seed suite + common-start viability, all four goal paths, victory/extinction replay reproducibility, energy economy, starvation/toxic/overpopulation/mass-extinction/tutorial-cap; see [pacing-targets.md](pacing-targets.md) |
 
 ### EvolutionSimGameTests (8 tests)
 
@@ -72,6 +73,7 @@ Phase 6 reconciliation artifact. Maps implemented systems to docs, source, tests
 ## Related artifacts
 
 - [public-beta-scope.md](public-beta-scope.md) — beta boundary and entry criteria
+- [pacing-targets.md](pacing-targets.md) — Phase 7 seed suite, tuning rationale, and pacing targets
 - [beta-readiness-matrix.md](beta-readiness-matrix.md) — implemented vs beta-ready dimensions
 - [risk-register.md](risk-register.md) — prioritized risks and release blockers
 - [graphics-qa-checklist.md](../graphics-qa-checklist.md) — manual visual QA with owners

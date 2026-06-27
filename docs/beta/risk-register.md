@@ -31,7 +31,7 @@ Non-blockers (unless escalated): cosmetic VFX, non-critical overlay polish, bala
 | ID | Risk | Likelihood | Impact | Mitigation | Owner phase | Status | Evidence |
 |----|------|------------|--------|------------|-------------|--------|----------|
 | R1 | Plan/docs drift from implementation | Medium | High | Phase 6 reconciliation; grep gate | 6 | **Mitigated** | `AGENTS.md`, README, player guide updated; beta docs created |
-| R2 | Non-deterministic sim regressions | Low | Blocker | Seeded RNG, fixed ticks, 46 core tests, replay tests | 7 | Open | `testSameSeedSameStateAfterNTicks`; verifier on sim PRs |
+| R2 | Non-deterministic sim regressions | Low | Blocker | Seeded RNG, fixed ticks, 61 core tests, replay tests | 7 | **Mitigated** | `testSameSeedSameStateAfterNTicks`; Phase 7 victory/extinction replay-from-input-log tests; verifier on sim PRs |
 | R3 | Save corruption / no durable UX | High | Blocker | Phase 9 versioned saves, migration tests, corrupt-save path | 9 | Open | Model round-trip passes; no file UX |
 | R4 | iPhone compact layout second-class | Medium | High | Phase 10 compact-width smoke; graphics QA iPhone row | 10 | Open | Checklist row blank; code has compact layout |
 | R5 | Canvas performance at worst-case population | Medium | High | Phase 11 Instruments; `RenderQuality` coarsening | 11 | Open | No iPhone measurements; M6 macOS only |
@@ -39,7 +39,7 @@ Non-blockers (unless escalated): cosmetic VFX, non-critical overlay polish, bala
 | R7 | Testers cannot reproduce failures | High | Medium | Phase 9 seed display/copy/share; feedback template with seed | 9 | Open | Seed in config only; not exposed in UI |
 | R8 | Tutorial insufficient for victory goals | Medium | High | Phase 8 first-run + player guide; new-game copy | 8 | Open | Tutorial has 7 steps; no victory step |
 | R9 | Accessibility unverified | Medium | Blocker | Phase 10 VoiceOver, Reduce Motion, grayscale passes | 10 | Open | Identifiers exist; manual QA blank |
-| R10 | Unwinnable common-start seed | Low | Blocker | Phase 7 seed suite + primordial balance tests | 7 | Partial | `testPrimordialPlayerSurvivesEarlyGame` etc.; no full suite |
+| R10 | Unwinnable common-start seed | Low | Blocker | Phase 7 seed suite + primordial balance tests | 7 | **Mitigated** | `Phase7BalanceTests`: seeds 42 & 1001 viable under naive play; all four victory goals reachable; pacing in [pacing-targets.md](pacing-targets.md) |
 | R11 | Mass extinction / era surprise | Medium | Medium | Contextual tips + Phase 8 copy | 8 | Partial | Era tips in code; not in player guide pre-Phase 6 |
 | R12 | Engine change without evidence | Low | High | Rendering decision record; Phase 11 before rewrite | 11 | Open | SwiftUI Canvas confirmed in docs |
 | R13 | Graphics QA stale test count | Low | Low | Update checklist gate (37 → 46 tests) | 6 | **Mitigated** | Checklist updated in Phase 6 |
