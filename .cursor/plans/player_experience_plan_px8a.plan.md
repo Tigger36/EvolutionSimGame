@@ -4,22 +4,22 @@ overview: Phased player-experience plan for `/evolution-player-experience-specia
 todos:
   - id: phase-a-mutation-defer
     content: "Phase A: Increase firstMutationMinimumTick to 150 (UI deferral; no sim balance change)"
-    status: pending
+    status: completed
   - id: phase-a-ready-badge
     content: "Phase A: Verify or fix tutorial step 5 \"ready badge\" reference"
-    status: pending
+    status: completed
   - id: phase-a-pressure-label
     content: "Phase A: Add dominant evolutionary pressure label to mutation choice modal"
-    status: pending
+    status: completed
   - id: phase-a-tutorial-victory
     content: "Phase A: Upgrade tutorial step 8 (Victory Goals) with per-goal action hints"
-    status: pending
+    status: completed
   - id: phase-a-descendant-hud
     content: "Phase A: Show living descendant count during tutorial step 7 (Lineage Handoff)"
-    status: pending
+    status: completed
   - id: phase-a-how-to-play-eras
     content: "Phase A: Update HowToPlayView Eras & Progression with opportunity framing"
-    status: pending
+    status: completed
   - id: phase-a-smoke-gate
     content: "Phase A gate: Run first-run smoke script v1.0 on macOS, iPad, and iPhone"
     status: pending
@@ -544,13 +544,21 @@ This is accurate but one-dimensional. Era transitions should feel like story cha
 1. **Add goal progress to the inspector as a labeled row** (see Theme B — this theme reinforces it from the inspector angle).
 
 2. **Add era threshold context to the Fitness Score row.** Change from:
-   ```
+   
+
+```
    Fitness Score: 847
-   ```
+   
+
+```
    to:
-   ```
+   
+
+```
    Fitness Score: 847 (next era: 950)
-   ```
+   
+
+```
    or use the existing caption text style to add `"Era 3 unlocks at 480 • Era 4 at 950"` below the fitness score value.
 
 3. **Move or duplicate the Evolutionary Pressure section higher in the inspector.** Currently it is the last section. Placing it immediately after "Organism" (or creating a compact version in the Organism section) would help new players understand the mutation connection before their first choice fires.
