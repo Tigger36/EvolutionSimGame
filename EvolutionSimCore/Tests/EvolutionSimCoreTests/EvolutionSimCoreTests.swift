@@ -791,3 +791,50 @@ final class PredatorDifficultyTests: XCTestCase {
         XCTAssertTrue(controller.state.playerOrganism?.isAlive ?? false)
     }
 }
+
+final class DeferredMutationPresentationTests: XCTestCase {
+    func testStepDuringDeferredMutationPresentationAdvancesWorldWithoutChangingPhase() {
+        let controller = SimulationController(config: .tutorialPreset())
+        controller.step()
+        XCTAssertEqual(controller.state.phase, .awaitingMutationChoice)
+
+        let tickBefore = controller.state.tick
+        let offers = controller.state.pendingMutationOffers
+        let targetID = controller.state.pendingMutationTargetID
+
+        controller.stepDuringDeferredMutationPresentation(
+            input: PlayerInput(movementDirection: Vector2(x: 1, y: 0))
+        )
+
+        XCTAssertEqual(controller.state.phase, .awaitingMutationChoice)
+        XCTAssertEqual(controller.state.pendingMutationOffers, offers)
+        XCTAssertEqual(controller.state.pendingMutationTargetID, targetID)
+        XCTAssertGreaterThan(controller.state.tick, tickBefore)
+    }
+
+    func testStepDuringDeferredMutationPresentationDoesNotTriggerSecondReproduction() {
+        let controller = SimulationController(config: .tutorialPreset())
+        controller.step()
+        let offspringCount = controller.state.organisms.count
+
+        for _ in 0..<20 {
+            controller.stepDuringDeferredMutationPresentation(
+                input: PlayerInput(movementDirection: Vector2(x: 1, y: 0))
+            )
+        }
+
+        XCTAssertEqual(controller.state.organisms.count, offspringCount)
+        XCTAssertEqual(controller.state.phase, .awaitingMutationChoice)
+    }
+
+    func testRegularStepStillBlocksWhileAwaitingMutationChoice() {
+        let controller = SimulationController(config: .tutorialPreset())
+        controller.step()
+        let tickBefore = controller.state.tick
+
+        controller.step(input: PlayerInput(movementDirection: Vector2(x: 1, y: 0)))
+
+        XCTAssertEqual(controller.state.tick, tickBefore)
+        XCTAssertEqual(controller.state.phase, .awaitingMutationChoice)
+    }
+}

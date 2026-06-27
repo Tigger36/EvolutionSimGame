@@ -9,6 +9,7 @@ enum TutorialStep: Int, CaseIterable, Identifiable {
     case reproduce
     case chooseMutation
     case lineageHandoff
+    case victoryGoals
 
     var id: Int { rawValue }
 
@@ -21,6 +22,7 @@ enum TutorialStep: Int, CaseIterable, Identifiable {
         case .reproduce: return "Reproduce"
         case .chooseMutation: return "Choose an Adaptation"
         case .lineageHandoff: return "Lineage Continues"
+        case .victoryGoals: return "Victory Goals"
         }
     }
 
@@ -40,12 +42,14 @@ enum TutorialStep: Int, CaseIterable, Identifiable {
             return "Pick one adaptation for the offspring. You keep playing as the parent after the choice."
         case .lineageHandoff:
             return "If your organism dies after reproducing, control passes to a living descendant. Keep offspring alive with safe terrain, food, and protective traits."
+        case .victoryGoals:
+            return "Full runs let you pick a victory goal: spread across biomes, grow population, evolve intelligence, or survive mass extinction. This tutorial uses seed 1001 with reduced predators, no mass extinction, and a population goal."
         }
     }
 
     var requiresManualContinue: Bool {
         switch self {
-        case .avoidPredators, .lineageHandoff: return true
+        case .avoidPredators, .lineageHandoff, .victoryGoals: return true
         default: return false
         }
     }
@@ -68,6 +72,8 @@ enum TutorialStep: Int, CaseIterable, Identifiable {
         case .chooseMutation:
             return context.mutationCompleted
         case .lineageHandoff:
+            return context.manualContinue
+        case .victoryGoals:
             return context.manualContinue
         }
     }
@@ -110,11 +116,13 @@ struct TutorialCalloutView: View {
                     if step.requiresManualContinue {
                         Button("Continue", action: onContinue)
                             .buttonStyle(.borderedProminent)
+                            .accessibilityIdentifier("tutorialContinueButton")
                     }
                     Spacer()
                     Button("Skip Tutorial", action: onSkip)
                         .font(.caption)
                         .foregroundStyle(.secondary)
+                        .accessibilityIdentifier("tutorialSkipButton")
                 }
             }
             .padding()
@@ -122,6 +130,8 @@ struct TutorialCalloutView: View {
             .padding()
         }
         .allowsHitTesting(true)
+        .accessibilityElement(children: .combine)
         .accessibilityIdentifier("tutorialCallout")
+        .accessibilityLabel("Tutorial step \(step.rawValue + 1) of \(TutorialStep.allCases.count). \(step.title). \(step.message)")
     }
 }

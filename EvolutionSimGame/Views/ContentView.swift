@@ -104,7 +104,7 @@ struct ContentView: View {
 
     @ViewBuilder
     private var gameOverlays: some View {
-        if viewModel.snapshot.phase == .awaitingMutationChoice {
+        if viewModel.shouldPresentMutationChoice {
             MutationChoiceView(
                 offers: viewModel.snapshot.pendingMutationOffers,
                 pressure: viewModel.snapshot.pressure,
@@ -113,7 +113,13 @@ struct ContentView: View {
             )
         }
         if viewModel.snapshot.phase == .extinct {
-            gameOverOverlay(title: "Extinction", message: "Your lineage has died out.")
+            gameOverOverlay(
+                title: "Extinction",
+                message: GameCopy.extinctionMessage(
+                    totalBorn: viewModel.snapshot.lineage.totalBorn,
+                    generation: viewModel.snapshot.lineage.generation
+                )
+            )
         }
         if viewModel.snapshot.phase == .victory {
             gameOverOverlay(

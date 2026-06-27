@@ -339,7 +339,18 @@ public final class SimulationController: @unchecked Sendable {
     public func step(input: PlayerInput = PlayerInput()) {
         guard !state.isPaused else { return }
         guard state.phase == .playing else { return }
+        advanceTick(input: input)
+    }
 
+    /// Continues simulation while the UI defers presenting the mutation choice modal.
+    /// World time, movement, and survival pressure keep advancing; reproduction and phase stay frozen.
+    public func stepDuringDeferredMutationPresentation(input: PlayerInput = PlayerInput()) {
+        guard !state.isPaused else { return }
+        guard state.phase == .awaitingMutationChoice else { return }
+        advanceTick(input: input)
+    }
+
+    private func advanceTick(input: PlayerInput) {
         state.tick += 1
         updateEraIfNeeded()
         updateMassExtinctionIfNeeded()
@@ -443,7 +454,9 @@ public final class SimulationController: @unchecked Sendable {
             terrain: terrainType,
             traits: organism.traits
         )
-        if organism.canReproduce && reproductionSiteIsSafe {
+        if state.phase == .playing,
+           organism.canReproduce,
+           reproductionSiteIsSafe {
             var rng = state.rng
             var idGenerator = state.idGenerator
             if let child = ReproductionSystem.reproduce(

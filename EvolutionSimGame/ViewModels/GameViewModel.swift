@@ -36,6 +36,11 @@ final class GameViewModel: ObservableObject {
     private var previousPhase: SimulationPhase?
     private var previousPlayerGeneration: Int?
     private var previousEra: GameEra?
+    private var previousTotalBorn: Int = 0
+    private var previousLivingCount: Int = 0
+    private var previousMassExtinctionActive: Bool = false
+    private var hasPresentedMutationChoiceThisRun = false
+    private var deferredMutationPresentationTicks = 0
     private var eraAdvanceTipCoordinator = EraAdvanceTipCoordinator()
     private var feedbackClearTask: Task<Void, Never>?
     private var terrainBannerClearTask: Task<Void, Never>?
@@ -44,6 +49,9 @@ final class GameViewModel: ObservableObject {
     private static let preferSkipTutorialKey = "preferSkipTutorial"
     private static let hasCompletedTutorialKey = "hasCompletedTutorial"
     private static let terrainLegendDismissedKey = "terrainLegendDismissed"
+    /// UI-only deferral: first mutation modal waits this many timer callbacks while sim is
+    /// `.awaitingMutationChoice` in normal play (sim ticks do not advance during that phase).
+    static let firstMutationMinimumTick = 60
 
     init(config: SimulationConfig = SimulationConfig(seed: 42)) {
         controller = SimulationController(config: config)
@@ -54,6 +62,43 @@ final class GameViewModel: ObservableObject {
         previousPhase = snapshot.phase
         previousPlayerGeneration = snapshot.playerOrganism?.generation
         previousEra = snapshot.era
+        previousTotalBorn = snapshot.lineage.totalBorn
+        previousLivingCount = snapshot.lineage.livingCount
+        previousMassExtinctionActive = snapshot.massExtinctionActive
+    }
+
+    /// Whether the mutation choice modal should be shown (UI-only gating; sim may already be `.awaitingMutationChoice`).
+    var shouldPresentMutationChoice: Bool {
+        meetsMutationStepRequirement && !isMutationPresentationDeferred
+    }
+
+    /// True while the sim waits for a mutation choice but the UI intentionally hides the modal.
+    private var isMutationPresentationDeferred: Bool {
+        guard snapshot.phase == .awaitingMutationChoice else { return false }
+
+        if appPhase == .tutorial {
+            guard let step = tutorialStep else { return true }
+            return step.rawValue < TutorialStep.chooseMutation.rawValue
+        }
+
+        if appPhase == .playing {
+            if hasPresentedMutationChoiceThisRun { return false }
+            return deferredMutationPresentationTicks < Self.firstMutationMinimumTick
+        }
+
+        return true
+    }
+
+    /// Tutorial step / phase eligibility for ever showing the mutation modal.
+    private var meetsMutationStepRequirement: Bool {
+        guard snapshot.phase == .awaitingMutationChoice else { return false }
+
+        if appPhase == .tutorial {
+            guard let step = tutorialStep else { return false }
+            return step.rawValue >= TutorialStep.chooseMutation.rawValue
+        }
+
+        return appPhase == .playing
     }
 
     deinit {
@@ -84,7 +129,21 @@ final class GameViewModel: ObservableObject {
     func tick() {
         guard appPhase == .playing || appPhase == .tutorial else { return }
         guard snapshot.phase == .playing || snapshot.phase == .awaitingMutationChoice else { return }
-        if snapshot.phase == .awaitingMutationChoice { return }
+
+        if snapshot.phase == .awaitingMutationChoice {
+            if isMutationPresentationDeferred {
+                let input = PlayerInput(movementDirection: movementDirection)
+                inputLog.append(input)
+                controller.stepDuringDeferredMutationPresentation(input: input)
+                if appPhase == .playing, !hasPresentedMutationChoiceThisRun {
+                    deferredMutationPresentationTicks += 1
+                }
+                updateSnapshot()
+                return
+            }
+            markMutationChoicePresentedIfNeeded()
+            return
+        }
 
         let input = PlayerInput(movementDirection: movementDirection)
         inputLog.append(input)
@@ -92,20 +151,38 @@ final class GameViewModel: ObservableObject {
         updateSnapshot()
     }
 
+    private func markMutationChoicePresentedIfNeeded() {
+        if shouldPresentMutationChoice {
+            hasPresentedMutationChoiceThisRun = true
+        }
+    }
+
     private func updateSnapshot() {
         let oldPhase = snapshot.phase
         let oldGeneration = snapshot.playerOrganism?.generation
         let oldEra = snapshot.era
+        let oldTotalBorn = snapshot.lineage.totalBorn
+        let oldLivingCount = snapshot.lineage.livingCount
+        let oldMassExtinctionActive = snapshot.massExtinctionActive
         snapshot = controller.snapshot()
         updateTerrainFeedback()
         updateContextualTips(
             previousPhase: oldPhase,
             generationChanged: oldGeneration != snapshot.playerOrganism?.generation,
-            previousEra: oldEra
+            previousEra: oldEra,
+            totalBornIncreased: snapshot.lineage.totalBorn > oldTotalBorn,
+            previousLivingCount: oldLivingCount,
+            massExtinctionJustStarted: !oldMassExtinctionActive && snapshot.massExtinctionActive
         )
+        if shouldPresentMutationChoice {
+            hasPresentedMutationChoiceThisRun = true
+        }
         previousPhase = snapshot.phase
         previousPlayerGeneration = snapshot.playerOrganism?.generation
         previousEra = snapshot.era
+        previousTotalBorn = snapshot.lineage.totalBorn
+        previousLivingCount = snapshot.lineage.livingCount
+        previousMassExtinctionActive = snapshot.massExtinctionActive
         evaluateTutorialProgress()
     }
 
@@ -132,10 +209,15 @@ final class GameViewModel: ObservableObject {
         mutationFeedback = nil
         contextualTip = nil
         eraAdvanceTipCoordinator.reset()
+        hasPresentedMutationChoiceThisRun = false
+        deferredMutationPresentationTicks = 0
         snapshot = controller.snapshot()
         previousPhase = snapshot.phase
         previousPlayerGeneration = snapshot.playerOrganism?.generation
         previousEra = snapshot.era
+        previousTotalBorn = snapshot.lineage.totalBorn
+        previousLivingCount = snapshot.lineage.livingCount
+        previousMassExtinctionActive = snapshot.massExtinctionActive
     }
 
     func resetToStartScreen() {
@@ -195,9 +277,14 @@ final class GameViewModel: ObservableObject {
         tutorialStep = .move
         appPhase = .tutorial
         showBiomeFitOverlay = true
+        hasPresentedMutationChoiceThisRun = false
+        deferredMutationPresentationTicks = 0
         previousPhase = snapshot.phase
         previousPlayerGeneration = snapshot.playerOrganism?.generation
         previousEra = snapshot.era
+        previousTotalBorn = snapshot.lineage.totalBorn
+        previousLivingCount = snapshot.lineage.livingCount
+        previousMassExtinctionActive = snapshot.massExtinctionActive
         controller.setPaused(false)
         startTickLoop()
     }
@@ -212,7 +299,9 @@ final class GameViewModel: ObservableObject {
 
     func finishTutorialAndContinuePlaying() {
         UserDefaults.standard.set(true, forKey: Self.hasCompletedTutorialKey)
-        appPhase = .playing
+        stopTickLoop()
+        controller.setPaused(true)
+        appPhase = .newGameSetup(skippedTutorial: false)
         tutorialStep = nil
         showBiomeFitOverlay = false
     }
@@ -225,8 +314,13 @@ final class GameViewModel: ObservableObject {
         previousPhase = snapshot.phase
         previousPlayerGeneration = snapshot.playerOrganism?.generation
         previousEra = snapshot.era
+        previousTotalBorn = snapshot.lineage.totalBorn
+        previousLivingCount = snapshot.lineage.livingCount
+        previousMassExtinctionActive = snapshot.massExtinctionActive
         appPhase = .playing
         tutorialStep = nil
+        hasPresentedMutationChoiceThisRun = false
+        deferredMutationPresentationTicks = 0
         controller.setPaused(false)
         startTickLoop()
     }
@@ -269,7 +363,10 @@ final class GameViewModel: ObservableObject {
     private func updateContextualTips(
         previousPhase: SimulationPhase?,
         generationChanged: Bool,
-        previousEra: GameEra
+        previousEra: GameEra,
+        totalBornIncreased: Bool,
+        previousLivingCount: Int,
+        massExtinctionJustStarted: Bool
     ) {
         guard appPhase == .playing else { return }
 
@@ -282,6 +379,18 @@ final class GameViewModel: ObservableObject {
         if contextualTip != nil { return }
 
         if presentPendingEraAdvanceTipIfNeeded() { return }
+
+        if massExtinctionJustStarted, contextualTips.shouldShow(.massExtinctionBegins) {
+            contextualTip = .massExtinctionBegins
+            return
+        }
+
+        if totalBornIncreased,
+           snapshot.lineage.livingCount <= previousLivingCount,
+           contextualTips.shouldShow(.firstOffspringLoss) {
+            contextualTip = .firstOffspringLoss
+            return
+        }
 
         if let tip = contextualTips.tipFor(
             snapshot: snapshot,

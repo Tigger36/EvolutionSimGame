@@ -37,11 +37,27 @@ targets:
           - UIInterfaceOrientationPortraitUpsideDown
           - UIInterfaceOrientationLandscapeLeft
           - UIInterfaceOrientationLandscapeRight
+  EvolutionSimGameTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - EvolutionSimGameTests
+    dependencies:
+      - target: EvolutionSimGame_macOS
+      - package: EvolutionSimCore
+        product: EvolutionSimCore
+    settings:
+      GENERATE_INFOPLIST_FILE: YES
+      SWIFT_VERSION: "5.9"
+      PRODUCT_BUNDLE_IDENTIFIER: com.evolutionsimgame.app.tests
 schemes:
   EvolutionSimGame_macOS:
     build:
       targets:
         EvolutionSimGame_macOS: all
+    test:
+      targets:
+        - EvolutionSimGameTests
   EvolutionSimGame_iOS:
     build:
       targets:

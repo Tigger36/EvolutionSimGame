@@ -121,6 +121,43 @@ final class ContextualTipsTests: XCTestCase {
         XCTAssertNil(tip?.associatedEra, "tipFor must not surface era-advance tips")
     }
 
+    func testContextualTipsManager_persistsNewTipsOnce() {
+        let manager = ContextualTipsManager(defaults: defaults)
+        XCTAssertTrue(manager.shouldShow(.firstUnsafeReproductionBlocked))
+        XCTAssertTrue(manager.shouldShow(.firstOffspringLoss))
+        XCTAssertTrue(manager.shouldShow(.massExtinctionBegins))
+        XCTAssertTrue(manager.shouldShow(.firstDamagingTerrain))
+
+        manager.markShown(.firstUnsafeReproductionBlocked)
+        manager.markShown(.firstOffspringLoss)
+        manager.markShown(.massExtinctionBegins)
+        manager.markShown(.firstDamagingTerrain)
+
+        XCTAssertFalse(manager.shouldShow(.firstUnsafeReproductionBlocked))
+        XCTAssertFalse(manager.shouldShow(.firstOffspringLoss))
+        XCTAssertFalse(manager.shouldShow(.massExtinctionBegins))
+        XCTAssertFalse(manager.shouldShow(.firstDamagingTerrain))
+    }
+
+    func testMassExtinctionTip_usesGameCopySummary() {
+        let tip = ContextualTip.massExtinctionBegins
+        XCTAssertEqual(
+            tip.message,
+            GameCopy.predatorThreatSummary(for: .ecosystemDominance, massExtinctionActive: true)
+        )
+        XCTAssertEqual(tip.title, "Mass Extinction")
+    }
+
+    func testLineageHandoffTip_mentionsParentDeath() {
+        XCTAssertTrue(ContextualTip.firstLineageHandoff.message.contains("parent organism died"))
+    }
+
+    func testTutorialStepCount_includesVictoryGoals() {
+        XCTAssertEqual(TutorialStep.allCases.count, 8)
+        XCTAssertEqual(TutorialStep.victoryGoals.rawValue, 7)
+        XCTAssertTrue(TutorialStep.victoryGoals.requiresManualContinue)
+    }
+
     private func makeSnapshot(era: GameEra) -> SimulationSnapshot {
         SimulationController(config: SimulationConfig(seed: 42, era: era)).snapshot()
     }

@@ -29,6 +29,12 @@ struct StartScreenView: View {
             .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 12))
             .frame(maxWidth: 420)
 
+            Text("Advance through fitness-driven eras, pick victory goals, and guide your lineage — not just one organism.")
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
+                .frame(maxWidth: 420)
+
             VStack(spacing: 12) {
                 if preferSkipTutorial {
                     Button("New Game", action: onSkipTutorial)

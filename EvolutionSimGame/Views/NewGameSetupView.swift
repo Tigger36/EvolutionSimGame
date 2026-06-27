@@ -9,6 +9,7 @@ struct NewGameSetupView: View {
     @State private var victoryGoal: VictoryGoal = .spreadToAllBiomes
     @State private var useRandomSeed = false
     @State private var fixedSeed: UInt64 = 42
+    @State private var enableMassExtinctionEvents = true
 
     var body: some View {
         VStack(spacing: 24) {
@@ -25,30 +26,65 @@ struct NewGameSetupView: View {
             }
 
             Form {
-                Picker("Victory Goal", selection: $victoryGoal) {
-                    ForEach(VictoryGoal.allCases, id: \.self) { goal in
-                        Text(goal.displayName).tag(goal)
+                Section {
+                    Picker("Victory Goal", selection: $victoryGoal) {
+                        ForEach(VictoryGoal.allCases, id: \.self) { goal in
+                            Text(goal.displayName).tag(goal)
+                        }
                     }
+                    .accessibilityIdentifier("victoryGoalPicker")
+
+                    Text(GameCopy.victoryGoalDescription(victoryGoal))
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
                 }
 
-                Toggle("Random Seed", isOn: $useRandomSeed)
+                Section("World & Difficulty") {
+                    Toggle("Random Seed", isOn: $useRandomSeed)
+                        .accessibilityIdentifier("randomSeedToggle")
 
-                if !useRandomSeed {
-                    Stepper("Seed: \(fixedSeed)", value: $fixedSeed, in: 1...9999)
+                    if !useRandomSeed {
+                        Stepper("Seed: \(fixedSeed)", value: $fixedSeed, in: 1...9999)
+                            .accessibilityIdentifier("fixedSeedStepper")
+                    }
+
+                    Text(GameCopy.seedExplanation(useRandomSeed: useRandomSeed))
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+
+                    Text(GameCopy.eraProgressionExplanation())
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+
+                    Toggle("Mass Extinction Events", isOn: $enableMassExtinctionEvents)
+                        .accessibilityIdentifier("massExtinctionToggle")
+
+                    Text(GameCopy.massExtinctionExplanation(enabled: enableMassExtinctionEvents))
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
                 }
 
-                Text(GameCopy.victoryGoalDescription(victoryGoal))
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+                Section("Tutorial vs Standard") {
+                    Text(GameCopy.tutorialPresetExplanation())
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
             }
             .frame(maxWidth: 420)
 
             HStack(spacing: 16) {
                 Button("Back", action: onBack)
                     .buttonStyle(.bordered)
+                    .accessibilityIdentifier("newGameBackButton")
                 Button("Start Game") {
                     let seed = useRandomSeed ? UInt64.random(in: 1...UInt64.max) : fixedSeed
-                    onStart(SimulationConfig(seed: seed, victoryGoal: victoryGoal))
+                    onStart(
+                        SimulationConfig(
+                            seed: seed,
+                            victoryGoal: victoryGoal,
+                            enableMassExtinctionEvents: enableMassExtinctionEvents
+                        )
+                    )
                 }
                 .buttonStyle(.borderedProminent)
                 .accessibilityIdentifier("confirmStartGame")

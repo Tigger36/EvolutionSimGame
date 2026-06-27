@@ -108,28 +108,31 @@ When starting a new game you choose one goal:
 | --- | --- |
 | Survive Mass Extinction | Survive the mass extinction event that begins around tick 2000. |
 | Spread to All Biomes | Explore and adapt to at least 6 different biome types. |
-| Reach Target Population | Grow your lineage to 15 living organisms. |
-| Evolve Intelligence | Reach generation 10 with a fitness score of 500+. |
+| Reach Target Population | Grow your lineage to 12 living organisms. |
+| Evolve Intelligence | Reach generation 5 with a fitness score of 1200+. |
 
 ## Mass Extinction
 
-When mass extinction events are enabled (default for standard new games), a
+When mass extinction events are enabled at new game setup (on by default), a
 global extinction phase begins around tick 2000. During this event predators move
 faster and chase more aggressively. The world tint shifts to signal heightened
-danger. Surviving through the event satisfies the **Survive Mass Extinction**
-victory goal.
+danger. Surviving through tick 3000 satisfies the **Survive Mass Extinction**
+victory goal. You can disable mass extinction events in the new game setup screen.
 
 ## Tutorial and First Run
 
 From the start screen you can:
 
-- **Tutorial** — guided steps for move, eat, avoid predators, terrain, reproduce,
-  choose mutation, and lineage handoff (tutorial preset with reduced pressure).
-- **How to Play** — reference copy for the core loop.
-- **New Game** — pick victory goal and mass-extinction setting.
+- **Tutorial** — eight guided steps for move, eat, avoid predators, terrain,
+  reproduce, choose mutation, lineage handoff, and victory goals (tutorial preset
+  with reduced pressure).
+- **How to Play** — reference copy for the core loop, eras, victory goals, and
+  mass extinction.
+- **New Game** — pick victory goal, seed, and mass-extinction setting.
 
 Tutorial steps auto-advance when you complete each action (some steps use a
-manual Continue button).
+manual Continue button). After the final victory-goals step, you proceed to new
+game setup for a full run.
 
 ## Save and Continue
 

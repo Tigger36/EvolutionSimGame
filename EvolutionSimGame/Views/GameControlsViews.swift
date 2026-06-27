@@ -264,15 +264,16 @@ struct MutationChoiceView: View {
                             .foregroundStyle(.blue)
                     }
 
-                    Text("Your offspring awaits a guided mutation.")
+                    Text("Pick one guided mutation for your offspring. You keep playing as the parent.")
                         .font(.caption)
                         .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.center)
 
                     ForEach(offers, id: \.self) { option in
                         mutationOptionButton(option)
                     }
 
-                    Text("This affects your offspring. You keep playing as the parent until death.")
+                    Text("Mutations apply to offspring only. Control transfers to a descendant when the parent dies.")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                         .multilineTextAlignment(.center)
@@ -281,20 +282,25 @@ struct MutationChoiceView: View {
                 .frame(maxWidth: 440)
             }
         }
+        .accessibilityElement(children: .contain)
+        .accessibilityIdentifier("mutationChoiceModal")
+        .accessibilityLabel("Choose an adaptation for your offspring")
     }
 
     @ViewBuilder
     private func mutationOptionButton(_ option: MutationOption) -> some View {
         let baseTraits = offspringTraits ?? TraitSet.default
-        let statChanges = MutationPreview.formattedTraitDeltas(option: option, base: baseTraits)
-        let biomeImpact = MutationPreview.formattedBiomeImpact(option: option, base: baseTraits)
+        let statChanges = MutationPreview.traitDeltas(option: option, base: baseTraits)
+        let biomeChanges = MutationPreview.compatibilityChanges(option: option, base: baseTraits)
         var afterTraits = baseTraits
         let _ = option.apply(to: &afterTraits)
+        let helpsBiomes = biomeChanges.filter { $0.delta >= 0.01 }.prefix(2)
+        let hurtsBiomes = biomeChanges.filter { $0.delta <= -0.01 }.prefix(2)
 
         Button {
             onSelect(option)
         } label: {
-            VStack(alignment: .leading, spacing: 6) {
+            VStack(alignment: .leading, spacing: 8) {
                 HStack(spacing: 8) {
                     OrganismThumbnail(traits: baseTraits, isPlayer: true, size: 44)
                     Image(systemName: "arrow.right")
@@ -304,21 +310,57 @@ struct MutationChoiceView: View {
                     Spacer()
                 }
                 .accessibilityHidden(true)
-                Text(option.displayName).font(.headline)
-                Text(option.description).font(.caption).foregroundStyle(.secondary)
-                if !statChanges.isEmpty {
-                    Label(statChanges, systemImage: "chart.bar.fill")
-                        .font(.caption2)
-                        .foregroundStyle(.primary)
-                }
-                Label(biomeImpact, systemImage: "map")
-                    .font(.caption2)
+
+                Text(option.displayName)
+                    .font(.headline)
+
+                Text(GameCopy.mutationCostSummary(for: option))
+                    .font(.caption)
                     .foregroundStyle(.secondary)
+
+                if !statChanges.isEmpty {
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Stat changes")
+                            .font(.caption2.bold())
+                        ForEach(statChanges, id: \.name) { delta in
+                            HStack(spacing: 4) {
+                                Image(systemName: delta.delta > 0 ? "arrow.up.circle.fill" : "arrow.down.circle.fill")
+                                    .font(.caption2)
+                                    .foregroundStyle(delta.delta > 0 ? .green : .orange)
+                                Text("\(delta.name) \(delta.formattedDelta)")
+                                    .font(.caption2)
+                            }
+                        }
+                    }
+                }
+
+                if !helpsBiomes.isEmpty {
+                    Label {
+                        Text(helpsBiomes.map(\.terrain.displayName).joined(separator: ", "))
+                            .font(.caption2)
+                    } icon: {
+                        Image(systemName: "hand.thumbsup.fill")
+                    }
+                    .foregroundStyle(.green)
+                    .accessibilityLabel("Helps: \(helpsBiomes.map(\.terrain.displayName).joined(separator: ", "))")
+                }
+
+                if !hurtsBiomes.isEmpty {
+                    Label {
+                        Text(hurtsBiomes.map(\.terrain.displayName).joined(separator: ", "))
+                            .font(.caption2)
+                    } icon: {
+                        Image(systemName: "hand.thumbsdown.fill")
+                    }
+                    .foregroundStyle(.orange)
+                    .accessibilityLabel("Hurts: \(hurtsBiomes.map(\.terrain.displayName).joined(separator: ", "))")
+                }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding()
             .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 10))
         }
         .accessibilityIdentifier("mutationOption_\(option.rawValue)")
+        .accessibilityLabel(GameCopy.mutationAccessibilityLabel(option: option, baseTraits: baseTraits))
     }
 }
