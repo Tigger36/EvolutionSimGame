@@ -334,7 +334,7 @@ Public beta means an external Apple-platform player can install a TestFlight bui
 - Every public beta requirement maps to a phase, owner agent, and verification gate
 - `/evolution-code-reviewer` confirms the beta scope avoids broad engine or backend expansion
 
-**Primary agent:** `/evolution-dev-project-manager`  
+**Primary agent:** `/evolution-dev-project-manager`
 **Support:** `/evolution-verifier`, `/evolution-code-reviewer`
 
 ---
@@ -358,7 +358,7 @@ Public beta means an external Apple-platform player can install a TestFlight bui
 - At least one victory path and one extinction path are reproducible from seed + input log
 - Tuning constants remain centralized and documented
 
-**Primary agent:** `/evolution-simulation-gameplay-specialist`  
+**Primary agent:** `/evolution-simulation-gameplay-specialist`
 **Verify:** `/evolution-verifier` for seeded balance tests and replay checks
 
 ---
@@ -381,8 +381,8 @@ Public beta means an external Apple-platform player can install a TestFlight bui
 - Key tutorial and contextual UI has accessibility labels/identifiers
 - Player guide and in-app copy agree on reproduction, descendants, terrain, and victory
 
-**Primary agent:** `/evolution-apple-platform-ui-specialist`  
-**Support:** `/evolution-simulation-gameplay-specialist` for explanation data  
+**Primary agent:** `/evolution-apple-platform-ui-specialist`
+**Support:** `/evolution-simulation-gameplay-specialist` for explanation data
 **Verify:** `/evolution-verifier` for first-run smoke and docs consistency
 
 ---
@@ -406,8 +406,8 @@ Public beta means an external Apple-platform player can install a TestFlight bui
 - Deleting/resetting a run never affects unrelated local app data
 - No cloud storage, accounts, or networking are introduced
 
-**Primary agent:** `/evolution-apple-platform-ui-specialist`  
-**Support:** `/evolution-simulation-gameplay-specialist` for state/version boundaries  
+**Primary agent:** `/evolution-apple-platform-ui-specialist`
+**Support:** `/evolution-simulation-gameplay-specialist` for state/version boundaries
 **Verify:** `/evolution-verifier` for restore tests and relaunch smoke
 
 ---
@@ -430,8 +430,8 @@ Public beta means an external Apple-platform player can install a TestFlight bui
 - Core loop is playable with touch, pointer/keyboard, and keyboard-only where platform-appropriate
 - Graphics QA checklist has pass/fail results for compact, regular, macOS, overlays, grayscale/color filters, and Reduce Motion
 
-**Primary agent:** `/evolution-apple-platform-ui-specialist`  
-**Support:** `/evolution-graphics-specialist`  
+**Primary agent:** `/evolution-apple-platform-ui-specialist`
+**Support:** `/evolution-graphics-specialist`
 **Verify:** `/evolution-verifier` for multi-platform runtime evidence
 
 ---
@@ -455,7 +455,7 @@ Public beta means an external Apple-platform player can install a TestFlight bui
 - All release-blocking bugs are fixed or beta scope is reduced to remove the broken path
 - `swift test`, macOS build, iPad build, and focused UI smoke are green on the beta candidate branch
 
-**Primary agent:** `/evolution-verifier`  
+**Primary agent:** `/evolution-verifier`
 **Support:** `/evolution-graphics-specialist`, `/evolution-simulation-gameplay-specialist`, `/evolution-apple-platform-ui-specialist`
 
 ---
@@ -479,7 +479,7 @@ Public beta means an external Apple-platform player can install a TestFlight bui
 - Privacy copy truthfully states that the app uses local simulation data and no custom analytics/backend
 - No release-blocking issue remains open
 
-**Primary agent:** `/evolution-dev-project-manager`  
+**Primary agent:** `/evolution-dev-project-manager`
 **Support:** `/evolution-apple-platform-ui-specialist`, `/evolution-verifier`
 
 ---
