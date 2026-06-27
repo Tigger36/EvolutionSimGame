@@ -33,13 +33,13 @@ enum TutorialStep: Int, CaseIterable, Identifiable {
         case .avoidPredators:
             return "Red predators chase you and reduce health. Use your sense radius to flee early."
         case .terrainBasics:
-            return "Enter a colored terrain region. Check the biome chip in the HUD to see how it affects you."
+            return "Enter a colored terrain region. The biome chip shows speed, energy, or damage tradeoffs."
         case .reproduce:
-            return "When energy is high and predators are far away, you can reproduce. Watch for the Ready badge."
+            return "Reproduction is automatic when energy is high and the site is safe. Watch for the ready badge."
         case .chooseMutation:
-            return "Pick one adaptation for your offspring. Recent survival pressure shapes which options appear."
+            return "Pick one adaptation for the offspring. You keep playing as the parent after the choice."
         case .lineageHandoff:
-            return "If your organism dies after reproducing, control passes to a descendant. The lineage lives on."
+            return "If your organism dies after reproducing, control passes to a living descendant. Keep offspring alive with safe terrain, food, and protective traits."
         }
     }
 

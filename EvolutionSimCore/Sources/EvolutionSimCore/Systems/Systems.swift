@@ -132,12 +132,18 @@ public enum PredatorSystem {
             .clamped(to: bounds)
     }
 
-    public static func attack(organism: inout Organism, predator: Predator, aggression: Double = 1.0) -> Bool {
+    public static func attack(
+        organism: inout Organism,
+        predator: Predator,
+        aggression: Double = 1.0,
+        damageMultiplier: Double = 1.0
+    ) -> Bool {
         guard organism.isAlive, predator.isAlive else { return false }
         let dist = organism.position.distance(to: predator.position)
         guard dist <= organism.radius + predator.radius else { return false }
 
-        let damage = predator.damage * aggression * (1.0 - organism.traits.armor * 0.5)
+        let socialMultiplier = min(1.0, max(0.0, damageMultiplier))
+        let damage = predator.damage * aggression * socialMultiplier * (1.0 - organism.traits.armor * 0.5)
         organism.health -= damage
         if organism.health <= 0 {
             organism.health = 0
@@ -161,6 +167,26 @@ public enum PredatorSystem {
     }
 }
 
+public enum SocialDefenseSystem {
+    public static func predatorDamageMultiplier(
+        for organism: Organism,
+        nearbyOrganisms: [Organism]
+    ) -> Double {
+        guard organism.traits.socialBehavior > 0 else { return 1.0 }
+
+        let hasNearbyAlly = nearbyOrganisms.contains { candidate in
+            candidate.id != organism.id
+                && candidate.isAlive
+                && candidate.lineageID == organism.lineageID
+                && candidate.position.distance(to: organism.position) <= SimulationTuning.socialDefenseRadius
+        }
+        guard hasNearbyAlly else { return 1.0 }
+
+        let reduction = organism.traits.socialBehavior * SimulationTuning.maxSocialPredatorDamageReduction
+        return 1.0 - reduction
+    }
+}
+
 public enum ReproductionSystem {
     public static func isSafeSite(
         position: Vector2,
@@ -174,14 +200,36 @@ public enum ReproductionSystem {
         return true
     }
 
+    public static func isSafeSite(
+        position: Vector2,
+        predators: [Predator],
+        terrain: TerrainType,
+        traits: TraitSet
+    ) -> Bool {
+        guard isSafeSite(position: position, predators: predators) else { return false }
+        return TerrainSystem.effects(for: terrain, traits: traits).damagePerTick <= 0
+    }
+
     public static func reproduce(
         parent: inout Organism,
         rng: inout SeededRNG,
         idGenerator: inout EntityIDGenerator,
-        predators: [Predator]
+        predators: [Predator],
+        bounds: WorldBounds? = nil,
+        terrainField: TerrainField? = nil
     ) -> Organism? {
         guard parent.canReproduce else { return nil }
-        guard isSafeSite(position: parent.position, predators: predators) else { return nil }
+        if let terrainField {
+            let parentTerrain = terrainField.terrain(at: parent.position)
+            guard isSafeSite(
+                position: parent.position,
+                predators: predators,
+                terrain: parentTerrain,
+                traits: parent.traits
+            ) else { return nil }
+        } else {
+            guard isSafeSite(position: parent.position, predators: predators) else { return nil }
+        }
 
         parent.energy -= SimulationTuning.reproductionEnergyCost
         parent.offspringCount += 1
@@ -189,10 +237,30 @@ public enum ReproductionSystem {
         let childTraits = parent.traits.inherited(from: parent.traits, rng: &rng)
         let childEnergy = SimulationTuning.baseEnergy * 0.5
             + parent.traits.parentalCare * 30
+        let rawPosition = parent.position + Vector2(
+            x: rng.nextDouble(in: -10...10),
+            y: rng.nextDouble(in: -10...10)
+        )
+        let candidatePosition = bounds.map { rawPosition.clamped(to: $0) } ?? rawPosition
+        let fallbackPosition = bounds.map { parent.position.clamped(to: $0) } ?? parent.position
+        let childPosition: Vector2
+        if let terrainField {
+            let childTerrain = terrainField.terrain(at: candidatePosition)
+            childPosition = isSafeSite(
+                position: candidatePosition,
+                predators: predators,
+                terrain: childTerrain,
+                traits: childTraits
+            ) ? candidatePosition : fallbackPosition
+        } else {
+            childPosition = isSafeSite(position: candidatePosition, predators: predators)
+                ? candidatePosition
+                : fallbackPosition
+        }
 
         let child = Organism(
             id: idGenerator.next(),
-            position: parent.position + Vector2(x: rng.nextDouble(in: -10...10), y: rng.nextDouble(in: -10...10)),
+            position: childPosition,
             traits: childTraits,
             energy: childEnergy,
             generation: parent.generation + 1,

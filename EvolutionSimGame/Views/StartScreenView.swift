@@ -21,8 +21,8 @@ struct StartScreenView: View {
 
             VStack(alignment: .leading, spacing: 10) {
                 loopRow("Move, eat, and flee predators")
-                loopRow("Reproduce when energy is sufficient")
-                loopRow("Choose mutations shaped by your survival")
+                loopRow("Reproduce automatically at safe, high-energy moments")
+                loopRow("Choose offspring mutations shaped by your survival")
                 loopRow("Continue as a descendant if you die")
             }
             .padding()

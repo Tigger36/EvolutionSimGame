@@ -30,6 +30,36 @@ final class TerrainTests: XCTestCase {
         let resistantEffects = TerrainSystem.effects(for: .toxicPool, traits: resistant)
         XCTAssertEqual(resistantEffects.damagePerTick, 0)
     }
+
+    func testWaterRewardsSwimAdaptationAndLowerEnergyUse() {
+        let defaultWater = TerrainSystem.effects(for: .water, traits: .default)
+        let swimAdaptedWater = TerrainSystem.effects(
+            for: .water,
+            traits: TraitSet(swimEfficiency: 1.0)
+        )
+
+        XCTAssertLessThan(defaultWater.energyDrainMultiplier, 1.0)
+        XCTAssertGreaterThan(swimAdaptedWater.speedMultiplier, defaultWater.speedMultiplier)
+    }
+
+    func testDamagingTerrainBlocksReproductionSafetyUnlessMitigated() {
+        XCTAssertFalse(
+            ReproductionSystem.isSafeSite(
+                position: .zero,
+                predators: [],
+                terrain: .toxicPool,
+                traits: TraitSet(toxinResistance: 0.0)
+            )
+        )
+        XCTAssertTrue(
+            ReproductionSystem.isSafeSite(
+                position: .zero,
+                predators: [],
+                terrain: .toxicPool,
+                traits: TraitSet(toxinResistance: 1.0)
+            )
+        )
+    }
 }
 
 final class TraitTests: XCTestCase {
@@ -84,6 +114,7 @@ final class MutationPreviewTests: XCTestCase {
 
     func testPlayerFacingTerrainSummary() {
         XCTAssertTrue(TerrainSystem.playerFacingSummary(for: .toxicPool).contains("Toxin"))
+        XCTAssertTrue(TerrainSystem.playerFacingSummary(for: .water).contains("energy"))
     }
 
     func testSnapshotIncludesReproductionSafety() {
@@ -92,8 +123,14 @@ final class MutationPreviewTests: XCTestCase {
         XCTAssertNotNil(snapshot.playerCurrentTerrain)
         XCTAssertNil(snapshot.pendingMutationTargetID)
         if let player = snapshot.playerOrganism {
+            let terrainType = snapshot.terrain.terrain(at: player.position)
             let expected = player.canReproduce
-                && ReproductionSystem.isSafeSite(position: player.position, predators: snapshot.predators)
+                && ReproductionSystem.isSafeSite(
+                    position: player.position,
+                    predators: snapshot.predators,
+                    terrain: terrainType,
+                    traits: player.traits
+                )
             XCTAssertEqual(snapshot.playerCanReproduceSafely, expected)
         }
     }
@@ -130,7 +167,7 @@ final class SimulationDeterminismTests: XCTestCase {
     }
 
     func testStateSerializationRoundTrip() throws {
-        var controller = SimulationController(config: SimulationConfig(seed: 5))
+        let controller = SimulationController(config: SimulationConfig(seed: 5))
         for _ in 0..<20 {
             controller.step(input: PlayerInput(movementDirection: Vector2(x: 0.5, y: 0.5)))
         }
@@ -177,6 +214,169 @@ final class ReproductionTests: XCTestCase {
         )
         XCTAssertNotNil(child)
         XCTAssertEqual(parent.offspringCount, 1)
+    }
+
+    func testParentalCareIncreasesOffspringStartingEnergy() {
+        var parent = Organism(
+            id: EntityID(rawValue: 1),
+            position: Vector2(x: 100, y: 100),
+            traits: TraitSet(parentalCare: 1.0),
+            energy: 100
+        )
+        var rng = SeededRNG(seed: 1)
+        var idGen = EntityIDGenerator(startingAt: 2)
+
+        let child = ReproductionSystem.reproduce(
+            parent: &parent,
+            rng: &rng,
+            idGenerator: &idGen,
+            predators: []
+        )
+
+        XCTAssertEqual(child?.energy ?? 0, 80, accuracy: 0.001)
+    }
+
+    func testReproductionBlocksDamagingTerrain() {
+        let terrain = TerrainField(defaultType: .toxicPool)
+        var parent = Organism(
+            id: EntityID(rawValue: 1),
+            position: Vector2(x: 100, y: 100),
+            traits: TraitSet(toxinResistance: 0.0),
+            energy: 100
+        )
+        var rng = SeededRNG(seed: 1)
+        var idGen = EntityIDGenerator(startingAt: 2)
+
+        let child = ReproductionSystem.reproduce(
+            parent: &parent,
+            rng: &rng,
+            idGenerator: &idGen,
+            predators: [],
+            terrainField: terrain
+        )
+
+        XCTAssertNil(child)
+    }
+
+    func testReproductionClampsOffspringPositionToBounds() {
+        let bounds = WorldBounds(minX: 0, minY: 0, maxX: 1, maxY: 1)
+        var parent = Organism(
+            id: EntityID(rawValue: 1),
+            position: Vector2(x: 1, y: 1),
+            energy: 100
+        )
+        var rng = SeededRNG(seed: 1)
+        var idGen = EntityIDGenerator(startingAt: 2)
+
+        let child = ReproductionSystem.reproduce(
+            parent: &parent,
+            rng: &rng,
+            idGenerator: &idGen,
+            predators: [],
+            bounds: bounds
+        )
+
+        XCTAssertNotNil(child)
+        XCTAssertTrue(bounds.contains(child?.position ?? Vector2(x: -1, y: -1)))
+    }
+}
+
+final class SocialDefenseTests: XCTestCase {
+    func testSocialBehaviorRequiresNearbyAlly() {
+        let organism = Organism(
+            id: EntityID(rawValue: 1),
+            position: .zero,
+            traits: TraitSet(socialBehavior: 1.0)
+        )
+        let distantAlly = Organism(
+            id: EntityID(rawValue: 2),
+            position: Vector2(x: SimulationTuning.socialDefenseRadius + 20, y: 0),
+            traits: TraitSet(socialBehavior: 1.0)
+        )
+        let nearbyAlly = Organism(
+            id: EntityID(rawValue: 3),
+            position: Vector2(x: SimulationTuning.socialDefenseRadius - 1, y: 0),
+            traits: TraitSet(socialBehavior: 1.0)
+        )
+
+        XCTAssertEqual(
+            SocialDefenseSystem.predatorDamageMultiplier(for: organism, nearbyOrganisms: [distantAlly]),
+            1.0
+        )
+        XCTAssertLessThan(
+            SocialDefenseSystem.predatorDamageMultiplier(for: organism, nearbyOrganisms: [nearbyAlly]),
+            1.0
+        )
+    }
+
+    func testPredatorDamageUsesSocialMultiplier() {
+        var organism = Organism(
+            id: EntityID(rawValue: 1),
+            position: .zero,
+            traits: TraitSet(armor: 0.0, socialBehavior: 1.0)
+        )
+        let predator = Predator(
+            id: EntityID(rawValue: 2),
+            position: .zero,
+            speed: SimulationTuning.predatorSpeed,
+            senseRadius: SimulationTuning.predatorSenseRadius,
+            damage: 20
+        )
+
+        _ = PredatorSystem.attack(
+            organism: &organism,
+            predator: predator,
+            damageMultiplier: 1.0 - SimulationTuning.maxSocialPredatorDamageReduction
+        )
+
+        XCTAssertEqual(organism.health, 87, accuracy: 0.001)
+    }
+}
+
+final class DescendantBehaviorTests: XCTestCase {
+    func testDescendantSeeksVisibleFood() {
+        let playerID = EntityID(rawValue: 1)
+        let childID = EntityID(rawValue: 2)
+        let childStart = Vector2(x: 100, y: 100)
+        var state = SimulationState(config: SimulationConfig(seed: 123, predatorCountOverride: 0))
+        state.organisms = [
+            Organism(id: playerID, position: Vector2(x: 400, y: 300), energy: 10, isPlayerControlled: true),
+            Organism(id: childID, position: childStart, energy: 80, generation: 2, lineageID: 1),
+        ]
+        state.playerOrganismID = playerID
+        state.food = [
+            FoodParticle(id: EntityID(rawValue: 3), position: Vector2(x: 160, y: 100))
+        ]
+        state.predators = []
+
+        let controller = SimulationController(state: state)
+        controller.step()
+
+        let child = controller.state.organisms.first { $0.id == childID }
+        XCTAssertGreaterThan(child?.position.x ?? childStart.x, childStart.x)
+        XCTAssertEqual(child?.position.y ?? 0, childStart.y, accuracy: 0.001)
+    }
+
+    func testDescendantFleesVisiblePredator() {
+        let playerID = EntityID(rawValue: 1)
+        let childID = EntityID(rawValue: 2)
+        let childStart = Vector2(x: 100, y: 100)
+        var state = SimulationState(config: SimulationConfig(seed: 123, predatorCountOverride: 0))
+        state.organisms = [
+            Organism(id: playerID, position: Vector2(x: 400, y: 300), energy: 10, isPlayerControlled: true),
+            Organism(id: childID, position: childStart, energy: 80, generation: 2, lineageID: 1),
+        ]
+        state.playerOrganismID = playerID
+        state.predators = [
+            Predator(id: EntityID(rawValue: 3), position: Vector2(x: 150, y: 100))
+        ]
+
+        let controller = SimulationController(state: state)
+        controller.step()
+
+        let child = controller.state.organisms.first { $0.id == childID }
+        XCTAssertLessThan(child?.position.x ?? childStart.x, childStart.x)
+        XCTAssertEqual(child?.position.y ?? 0, childStart.y, accuracy: 0.001)
     }
 }
 

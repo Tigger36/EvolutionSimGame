@@ -76,6 +76,8 @@ public enum SimulationTuning {
     // Population
     public static let maxDescendants: Int = 20
     public static let descendantWanderSpeed: Double = 40
+    public static let socialDefenseRadius: Double = 80
+    public static let maxSocialPredatorDamageReduction: Double = 0.35
 
     // Pressure
     public static let pressureDecayPerTick: Double = 0.001

@@ -1,0 +1,6 @@
+# Worker routing labels for self-hosted Cloud Agents.
+# Used when starting with --labels-file (see scripts/start-self-hosted-worker.sh).
+# Do not set `repo` or `pool` here — those are assigned automatically.
+
+project = "evolutionsimgame"
+platform = "apple"

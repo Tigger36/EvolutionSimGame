@@ -167,8 +167,14 @@ public struct SimulationSnapshot: Codable, Equatable, Sendable {
         pendingMutationOffers = state.pendingMutationOffers
         pendingMutationTargetID = state.pendingMutationTargetID
         if let player = state.playerOrganism {
+            let terrainType = state.terrain(at: player.position)
             playerCanReproduceSafely = player.canReproduce
-                && ReproductionSystem.isSafeSite(position: player.position, predators: state.predators)
+                && ReproductionSystem.isSafeSite(
+                    position: player.position,
+                    predators: state.predators,
+                    terrain: terrainType,
+                    traits: player.traits
+                )
         } else {
             playerCanReproduceSafely = false
         }
@@ -405,7 +411,16 @@ public final class SimulationController: @unchecked Sendable {
                     state.pressure.predator += SimulationTuning.predatorNearMissPressure
                 }
             }
-            if PredatorSystem.attack(organism: &organism, predator: predator, aggression: currentPredatorAggression()) {
+            let damageMultiplier = SocialDefenseSystem.predatorDamageMultiplier(
+                for: organism,
+                nearbyOrganisms: state.organisms
+            )
+            if PredatorSystem.attack(
+                organism: &organism,
+                predator: predator,
+                aggression: currentPredatorAggression(),
+                damageMultiplier: damageMultiplier
+            ) {
                 hit = true
             }
         }
@@ -422,14 +437,22 @@ public final class SimulationController: @unchecked Sendable {
         trackExploration(at: organism.position, terrain: terrainType)
         applyTerrainPressure(terrainType)
 
-        if organism.canReproduce && ReproductionSystem.isSafeSite(position: organism.position, predators: state.predators) {
+        let reproductionSiteIsSafe = ReproductionSystem.isSafeSite(
+            position: organism.position,
+            predators: state.predators,
+            terrain: terrainType,
+            traits: organism.traits
+        )
+        if organism.canReproduce && reproductionSiteIsSafe {
             var rng = state.rng
             var idGenerator = state.idGenerator
             if let child = ReproductionSystem.reproduce(
                 parent: &organism,
                 rng: &rng,
                 idGenerator: &idGenerator,
-                predators: state.predators
+                predators: state.predators,
+                bounds: state.config.bounds,
+                terrainField: state.terrain
             ) {
                 state.rng = rng
                 state.idGenerator = idGenerator
@@ -447,6 +470,22 @@ public final class SimulationController: @unchecked Sendable {
         state.organisms[index] = organism
     }
 
+    private func descendantMovementDirection(for organism: Organism) -> Vector2? {
+        if let (predator, dist) = PredatorSystem.nearestPredator(to: organism.position, predators: state.predators),
+           dist <= organism.traits.effectiveSenseRadius {
+            return (organism.position - predator.position).normalized
+        }
+
+        if let food = state.food.min(by: {
+            organism.position.distance(to: $0.position) < organism.position.distance(to: $1.position)
+        }),
+            organism.position.distance(to: food.position) <= organism.traits.effectiveSenseRadius {
+            return (food.position - organism.position).normalized
+        }
+
+        return nil
+    }
+
     private func updateDescendants() {
         let descendantCount = state.organisms.filter { $0.isAlive && !$0.isPlayerControlled }.count
         guard descendantCount <= SimulationTuning.maxDescendants else { return }
@@ -457,14 +496,23 @@ public final class SimulationController: @unchecked Sendable {
             var organism = state.organisms[index]
             let terrainType = state.terrain(at: organism.position)
 
-            var rng = state.rng
-            MovementSystem.wander(
-                organism: &organism,
-                terrain: terrainType,
-                bounds: state.config.bounds,
-                rng: &rng
-            )
-            state.rng = rng
+            if let direction = descendantMovementDirection(for: organism), direction != .zero {
+                MovementSystem.applyMovement(
+                    organism: &organism,
+                    direction: direction,
+                    terrain: terrainType,
+                    bounds: state.config.bounds
+                )
+            } else {
+                var rng = state.rng
+                MovementSystem.wander(
+                    organism: &organism,
+                    terrain: terrainType,
+                    bounds: state.config.bounds,
+                    rng: &rng
+                )
+                state.rng = rng
+            }
 
             var food = state.food
             _ = FoodSystem.tryConsume(organism: &organism, food: &food)
@@ -473,8 +521,17 @@ public final class SimulationController: @unchecked Sendable {
             if let (_, dist) = PredatorSystem.nearestPredator(to: organism.position, predators: state.predators),
                dist <= organism.radius + SimulationTuning.predatorRadius {
                 let aggression = currentPredatorAggression()
+                let damageMultiplier = SocialDefenseSystem.predatorDamageMultiplier(
+                    for: organism,
+                    nearbyOrganisms: state.organisms
+                )
                 for pIndex in state.predators.indices where state.predators[pIndex].isAlive {
-                    if PredatorSystem.attack(organism: &organism, predator: state.predators[pIndex], aggression: aggression) {
+                    if PredatorSystem.attack(
+                        organism: &organism,
+                        predator: state.predators[pIndex],
+                        aggression: aggression,
+                        damageMultiplier: damageMultiplier
+                    ) {
                         break
                     }
                 }

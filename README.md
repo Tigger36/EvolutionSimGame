@@ -49,14 +49,17 @@ xcodegen generate
 - **EvolutionSimCore** — UI-free simulation with seeded RNG, fixed time steps, continuous 2D world, terrain, organisms, food, predators, traits, reproduction, contextual mutations, lineage handoff, fitness metrics, era progression, and victory goals.
 - **EvolutionSimGame** — SwiftUI app rendering `SimulationSnapshot` via Canvas. iPad-first adaptive layout with side inspector; iPhone uses compact layout; macOS adds menus and keyboard shortcuts.
 
-See [docs/game-design.md](docs/game-design.md) for product direction and [docs/rendering-decision.md](docs/rendering-decision.md) for rendering technology choice.
+See [docs/game-design.md](docs/game-design.md) for product direction,
+[docs/player-guide.md](docs/player-guide.md) for implemented gameplay rules, and
+[docs/rendering-decision.md](docs/rendering-decision.md) for rendering technology
+choice.
 
 ## Gameplay (MVP)
 
 1. Move your organism (touch joystick / D-pad / arrow keys).
 2. Eat food particles to gain energy.
 3. Avoid predators; terrain affects speed, energy, and damage.
-4. Reproduce when energy is sufficient and the site is safe.
+4. Reproduce automatically when energy is sufficient and the site is safe.
 5. Choose a guided mutation for your offspring.
 6. If you die, control passes to a descendant.
 

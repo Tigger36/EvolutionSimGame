@@ -137,18 +137,18 @@ public enum MutationOption: String, Codable, CaseIterable, Sendable {
     public var description: String {
         switch self {
         case .strongerFins: return "Better swimming, worse land agility."
-        case .moistureResistantSkin: return "Better land survival, higher energy cost."
-        case .gills: return "Better underwater endurance, worse dry survival."
+        case .moistureResistantSkin: return "Slight toxin resistance, higher energy cost."
+        case .gills: return "Better swimming, higher energy cost."
         case .stayGeneralized: return "No major bonus, no major penalty."
         case .hardenedShell: return "More armor, slower movement."
-        case .toxinFilter: return "Better toxin resistance, slower metabolism."
+        case .toxinFilter: return "Better toxin resistance, higher energy cost."
         case .enhancedSenses: return "Larger sense radius, higher energy drain."
         case .fastMetabolism: return "Faster movement, hungrier."
         case .efficientMetabolism: return "Lower energy drain, slower speed."
-        case .largerSize: return "More health buffer, slower and hungrier."
-        case .smallerSize: return "Faster and stealthier, less health."
-        case .parentalCareBoost: return "Offspring start with more energy."
-        case .herdInstinct: return "Better predator avoidance in groups."
+        case .largerSize: return "Larger body, slower movement."
+        case .smallerSize: return "Smaller body, faster movement."
+        case .parentalCareBoost: return "Offspring start with more energy, but reproduction takes slightly more energy."
+        case .herdInstinct: return "Nearby allies reduce predator damage."
         case .nightVisionBoost: return "See further in low light, slight energy cost."
         }
     }

@@ -7,72 +7,91 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A1B2C3D4E5F6789012345A003 /* ContextualTipsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6789012345A002 /* ContextualTipsTests.swift */; };
-		A1B2C3D4E5F6789012345A010 /* EvolutionSimCore in Frameworks */ = {isa = PBXBuildFile; productRef = A1B2C3D4E5F6789012345A011 /* EvolutionSimCore */; };
+		0C365010B7C33EECFC6B333E /* ViewTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = D881A897399FD347EC7F024B /* ViewTransform.swift */; };
+		0FF7A8182352F0A82CFEDF44 /* VisualEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB1C1531913D2E13CC0F524 /* VisualEffect.swift */; };
 		17E7487EE3051802D255F04D /* AppRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1001E7E909FCBFA56AEDD200 /* AppRootView.swift */; };
 		1BFCCEA9E7AE482A5873A25E /* ContextualTipsViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C8AB6C88BBE8ACBAB2A8E63 /* ContextualTipsViews.swift */; };
+		2E7486889031DA422A1BC59E /* ViewTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = D881A897399FD347EC7F024B /* ViewTransform.swift */; };
 		32DECB259BC1C23A1B52ABAF /* StartScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42BF3EA4C62A51519F4170E7 /* StartScreenView.swift */; };
 		353054441460B14925F6B320 /* EvolutionSimGameApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9894A7BEA2C966D343C4EB51 /* EvolutionSimGameApp.swift */; };
 		37BBCE463E86B68A1C66BD42 /* GameViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A65C144843BF4CADB4B9B767 /* GameViewModel.swift */; };
+		3B791C06D26C1966C9F6F473 /* OrganismThumbnail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AF3C9FD7AA454B77EE55A1C /* OrganismThumbnail.swift */; };
+		3DB29714F86D62000C3E7C6B /* VisualTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7726489CF7E86D24A9B88BE2 /* VisualTokens.swift */; };
+		402484DE46782024D6E08B01 /* EntityRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA3582DE87F10E650924B64A /* EntityRenderer.swift */; };
 		4136A15D583CAC30A4FC3A3A /* PredatorThreatPresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76400F4F9BB80D2967E2A14 /* PredatorThreatPresentation.swift */; };
 		44495EFF848582C949843D27 /* GameControlsViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D4942224C267B0EFEE603AC /* GameControlsViews.swift */; };
 		4CEC3F83A53ADAD8537F3E55 /* PredatorThreatPresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76400F4F9BB80D2967E2A14 /* PredatorThreatPresentation.swift */; };
+		53844DEACCB8D5C62FDF5B4F /* EntityInterpolation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7366E11B022253F0848AAC80 /* EntityInterpolation.swift */; };
 		58BD81976229A40EEDCDF375 /* TutorialViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 483D682AF469048A38602B72 /* TutorialViews.swift */; };
 		5D227C33CB7D6612F4B87D64 /* EvolutionSimCore in Frameworks */ = {isa = PBXBuildFile; productRef = AE8774746056CBDBB8B33339 /* EvolutionSimCore */; };
+		607DA04AB8EFB33454DD809C /* EntityInterpolation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7366E11B022253F0848AAC80 /* EntityInterpolation.swift */; };
 		61F741D872117067FDD25D3E /* GameCopy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8077F46D59712864C6510A18 /* GameCopy.swift */; };
 		6530FD737BF0EF0ABB3E3F2A /* AppRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1001E7E909FCBFA56AEDD200 /* AppRootView.swift */; };
 		6742EFA61277F108243EED7A /* HowToPlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C071157F4157B057B95AD580 /* HowToPlayView.swift */; };
+		6923BC3DD62DF663FAB1D79B /* SimulationRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7994570C88F3D044A1060B4A /* SimulationRenderer.swift */; };
 		6D85B1903450DDEA7C7DD772 /* NewGameSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52D20D51A210DE3E3ED34C93 /* NewGameSetupView.swift */; };
 		76A1A388196B5226303C244B /* ContextualTipsViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C8AB6C88BBE8ACBAB2A8E63 /* ContextualTipsViews.swift */; };
 		7D12F209C403E64A73D47C55 /* TutorialViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 483D682AF469048A38602B72 /* TutorialViews.swift */; };
 		8795D4F13B1364E1BB4F8BAC /* SimulationCanvasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9B87063741F83904CA7759E /* SimulationCanvasView.swift */; };
 		8BC02D62398FBD538864E0BE /* HowToPlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C071157F4157B057B95AD580 /* HowToPlayView.swift */; };
 		8FD0FFE37C18E38142BD683C /* EvolutionSimGameApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9894A7BEA2C966D343C4EB51 /* EvolutionSimGameApp.swift */; };
+		913C148FD3D2A6176D52F80B /* RenderQuality.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD0012B36977DE58A3B4CDDE /* RenderQuality.swift */; };
+		9F6AC696B36DC230E12D322C /* RenderQuality.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD0012B36977DE58A3B4CDDE /* RenderQuality.swift */; };
 		A4BBB8B50CBB92B3AF8CAE10 /* SimulationCanvasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9B87063741F83904CA7759E /* SimulationCanvasView.swift */; };
 		A51F6AC09C2071FB8DD02218 /* InspectorPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F20398414EA58C6C7303BFD9 /* InspectorPanelView.swift */; };
 		AB6AEBF231524F7ABFE6D7B8 /* PredatorThreatViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 816A36E0CD921D25B1E7394C /* PredatorThreatViews.swift */; };
 		AF4E4FE83454878298DCE085 /* PredatorThreatViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 816A36E0CD921D25B1E7394C /* PredatorThreatViews.swift */; };
+		AF68E0F6D09D729CB40C1D33 /* EntityRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA3582DE87F10E650924B64A /* EntityRenderer.swift */; };
 		B31ADAF999C390DC5DC44906 /* EvolutionSimCore in Frameworks */ = {isa = PBXBuildFile; productRef = AA35B9D586C0A8888EB3A448 /* EvolutionSimCore */; };
 		B36C31C286FB19A457DC896B /* GameControlsViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D4942224C267B0EFEE603AC /* GameControlsViews.swift */; };
 		B414CB97CE0D03A1510F9744 /* InspectorPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F20398414EA58C6C7303BFD9 /* InspectorPanelView.swift */; };
 		B7E295501F3ED593978747E9 /* NewGameSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52D20D51A210DE3E3ED34C93 /* NewGameSetupView.swift */; };
 		B9B682518B24AE1FE1923884 /* StartScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42BF3EA4C62A51519F4170E7 /* StartScreenView.swift */; };
 		BE3334ED4E2C619672D4F63B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08053F5088C71A4A633A5F66 /* ContentView.swift */; };
+		C3706A1A24BDB8078F6ED505 /* OrganismRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C1EDF40DD514BB77DDC0E9 /* OrganismRenderer.swift */; };
+		C8A96321FE8A9B14D2CC1A96 /* OverlayRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3041921145A1B792771AA6C7 /* OverlayRenderer.swift */; };
 		C9AEC57574E020D26A898771 /* GameCopy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8077F46D59712864C6510A18 /* GameCopy.swift */; };
+		CE50D706CBD9112C6F8E662D /* VisualEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB1C1531913D2E13CC0F524 /* VisualEffect.swift */; };
+		CFD4C738C02C2B9BBCDC64EF /* TerrainRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42AE5DBBCAA4777DABE85C71 /* TerrainRenderer.swift */; };
+		D51F75EA145122F86D84ED9D /* SimulationRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7994570C88F3D044A1060B4A /* SimulationRenderer.swift */; };
+		D7BC625B93C6700727DCAEDA /* TerrainRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42AE5DBBCAA4777DABE85C71 /* TerrainRenderer.swift */; };
+		DF0161861C883E7C4A644EEF /* VisualTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7726489CF7E86D24A9B88BE2 /* VisualTokens.swift */; };
 		EABEA0F7AEDAD3D1FCF38DEA /* GameViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A65C144843BF4CADB4B9B767 /* GameViewModel.swift */; };
+		EE332B6C2FAD7ED4D6670B20 /* OrganismThumbnail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AF3C9FD7AA454B77EE55A1C /* OrganismThumbnail.swift */; };
+		F8FAC45160068C6C976480B2 /* OverlayRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3041921145A1B792771AA6C7 /* OverlayRenderer.swift */; };
 		FAC84F4BB341CA4A09D11B0C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08053F5088C71A4A633A5F66 /* ContentView.swift */; };
+		FC4A2B16DD83120D004EB7E5 /* OrganismRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C1EDF40DD514BB77DDC0E9 /* OrganismRenderer.swift */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		A1B2C3D4E5F6789012345A00A /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 2BA5B3830FC6715846601AF7 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 69013A725B79AA7846A27FDF;
-			remoteInfo = EvolutionSimGame_macOS;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
-		A1B2C3D4E5F6789012345A001 /* EvolutionSimGameTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EvolutionSimGameTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		A1B2C3D4E5F6789012345A002 /* ContextualTipsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextualTipsTests.swift; sourceTree = "<group>"; };
 		08053F5088C71A4A633A5F66 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		1001E7E909FCBFA56AEDD200 /* AppRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRootView.swift; sourceTree = "<group>"; };
 		11BD1EB4EAE91825C5F05AAD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		2F5A990509877DEC26C21C10 /* EvolutionSimGame.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = EvolutionSimGame.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		3041921145A1B792771AA6C7 /* OverlayRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayRenderer.swift; sourceTree = "<group>"; };
+		42AE5DBBCAA4777DABE85C71 /* TerrainRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TerrainRenderer.swift; sourceTree = "<group>"; };
 		42BF3EA4C62A51519F4170E7 /* StartScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartScreenView.swift; sourceTree = "<group>"; };
 		483D682AF469048A38602B72 /* TutorialViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialViews.swift; sourceTree = "<group>"; };
 		52D20D51A210DE3E3ED34C93 /* NewGameSetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGameSetupView.swift; sourceTree = "<group>"; };
 		5D4942224C267B0EFEE603AC /* GameControlsViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameControlsViews.swift; sourceTree = "<group>"; };
+		5DB1C1531913D2E13CC0F524 /* VisualEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualEffect.swift; sourceTree = "<group>"; };
+		7366E11B022253F0848AAC80 /* EntityInterpolation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntityInterpolation.swift; sourceTree = "<group>"; };
+		7726489CF7E86D24A9B88BE2 /* VisualTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualTokens.swift; sourceTree = "<group>"; };
+		7994570C88F3D044A1060B4A /* SimulationRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimulationRenderer.swift; sourceTree = "<group>"; };
 		8077F46D59712864C6510A18 /* GameCopy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameCopy.swift; sourceTree = "<group>"; };
 		816A36E0CD921D25B1E7394C /* PredatorThreatViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PredatorThreatViews.swift; sourceTree = "<group>"; };
 		8C8AB6C88BBE8ACBAB2A8E63 /* ContextualTipsViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextualTipsViews.swift; sourceTree = "<group>"; };
+		92C1EDF40DD514BB77DDC0E9 /* OrganismRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganismRenderer.swift; sourceTree = "<group>"; };
 		9894A7BEA2C966D343C4EB51 /* EvolutionSimGameApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EvolutionSimGameApp.swift; sourceTree = "<group>"; };
+		9AF3C9FD7AA454B77EE55A1C /* OrganismThumbnail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganismThumbnail.swift; sourceTree = "<group>"; };
 		A65C144843BF4CADB4B9B767 /* GameViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewModel.swift; sourceTree = "<group>"; };
 		A6DA1DDB63920221BAD59D41 /* EvolutionSimCore */ = {isa = PBXFileReference; lastKnownFileType = folder; name = EvolutionSimCore; path = EvolutionSimCore; sourceTree = SOURCE_ROOT; };
 		B9B87063741F83904CA7759E /* SimulationCanvasView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimulationCanvasView.swift; sourceTree = "<group>"; };
+		BD0012B36977DE58A3B4CDDE /* RenderQuality.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderQuality.swift; sourceTree = "<group>"; };
 		BDAAAA2131B6E97688C9FEB1 /* EvolutionSimGame.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EvolutionSimGame.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C071157F4157B057B95AD580 /* HowToPlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HowToPlayView.swift; sourceTree = "<group>"; };
+		D881A897399FD347EC7F024B /* ViewTransform.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewTransform.swift; sourceTree = "<group>"; };
+		EA3582DE87F10E650924B64A /* EntityRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntityRenderer.swift; sourceTree = "<group>"; };
 		F20398414EA58C6C7303BFD9 /* InspectorPanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InspectorPanelView.swift; sourceTree = "<group>"; };
 		F76400F4F9BB80D2967E2A14 /* PredatorThreatPresentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PredatorThreatPresentation.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -94,33 +113,34 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A1B2C3D4E5F6789012345A006 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A1B2C3D4E5F6789012345A010 /* EvolutionSimCore in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		28E32EE4DBFF997238EB7656 /* Rendering */ = {
+			isa = PBXGroup;
+			children = (
+				7366E11B022253F0848AAC80 /* EntityInterpolation.swift */,
+				EA3582DE87F10E650924B64A /* EntityRenderer.swift */,
+				92C1EDF40DD514BB77DDC0E9 /* OrganismRenderer.swift */,
+				9AF3C9FD7AA454B77EE55A1C /* OrganismThumbnail.swift */,
+				3041921145A1B792771AA6C7 /* OverlayRenderer.swift */,
+				BD0012B36977DE58A3B4CDDE /* RenderQuality.swift */,
+				7994570C88F3D044A1060B4A /* SimulationRenderer.swift */,
+				42AE5DBBCAA4777DABE85C71 /* TerrainRenderer.swift */,
+				D881A897399FD347EC7F024B /* ViewTransform.swift */,
+				5DB1C1531913D2E13CC0F524 /* VisualEffect.swift */,
+				7726489CF7E86D24A9B88BE2 /* VisualTokens.swift */,
+			);
+			path = Rendering;
+			sourceTree = "<group>";
+		};
 		43258C8A7B22169E0CC333C8 /* Products */ = {
 			isa = PBXGroup;
 			children = (
 				2F5A990509877DEC26C21C10 /* EvolutionSimGame.app */,
 				BDAAAA2131B6E97688C9FEB1 /* EvolutionSimGame.app */,
-				A1B2C3D4E5F6789012345A001 /* EvolutionSimGameTests.xctest */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		A1B2C3D4E5F6789012345A00C /* EvolutionSimGameTests */ = {
-			isa = PBXGroup;
-			children = (
-				A1B2C3D4E5F6789012345A002 /* ContextualTipsTests.swift */,
-			);
-			path = EvolutionSimGameTests;
 			sourceTree = "<group>";
 		};
 		AF96A91820191159D802BBF6 /* EvolutionSimGame */ = {
@@ -130,6 +150,7 @@
 				8077F46D59712864C6510A18 /* GameCopy.swift */,
 				11BD1EB4EAE91825C5F05AAD /* Info.plist */,
 				F76400F4F9BB80D2967E2A14 /* PredatorThreatPresentation.swift */,
+				28E32EE4DBFF997238EB7656 /* Rendering */,
 				FB1D7DEA49B7AB5A361F044C /* ViewModels */,
 				CC830A9246CFED3FFCA4DD31 /* Views */,
 			);
@@ -158,7 +179,6 @@
 			isa = PBXGroup;
 			children = (
 				AF96A91820191159D802BBF6 /* EvolutionSimGame */,
-				A1B2C3D4E5F6789012345A00C /* EvolutionSimGameTests */,
 				FFBB8C5D6974B77C8C60C634 /* Packages */,
 				43258C8A7B22169E0CC333C8 /* Products */,
 			);
@@ -221,35 +241,7 @@
 			productReference = 2F5A990509877DEC26C21C10 /* EvolutionSimGame.app */;
 			productType = "com.apple.product-type.application";
 		};
-		A1B2C3D4E5F6789012345A004 /* EvolutionSimGameTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = A1B2C3D4E5F6789012345A007 /* Build configuration list for PBXNativeTarget "EvolutionSimGameTests" */;
-			buildPhases = (
-				A1B2C3D4E5F6789012345A005 /* Sources */,
-				A1B2C3D4E5F6789012345A006 /* Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				A1B2C3D4E5F6789012345A00B /* PBXTargetDependency */,
-			);
-			name = EvolutionSimGameTests;
-			packageProductDependencies = (
-				A1B2C3D4E5F6789012345A011 /* EvolutionSimCore */,
-			);
-			productName = EvolutionSimGameTests;
-			productReference = A1B2C3D4E5F6789012345A001 /* EvolutionSimGameTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
-
-/* Begin PBXTargetDependency section */
-		A1B2C3D4E5F6789012345A00B /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 69013A725B79AA7846A27FDF /* EvolutionSimGame_macOS */;
-			targetProxy = A1B2C3D4E5F6789012345A00A /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXProject section */
 		2BA5B3830FC6715846601AF7 /* Project object */ = {
@@ -279,7 +271,6 @@
 			targets = (
 				AAD657F168B133B5D786102E /* EvolutionSimGame_iOS */,
 				69013A725B79AA7846A27FDF /* EvolutionSimGame_macOS */,
-				A1B2C3D4E5F6789012345A004 /* EvolutionSimGameTests */,
 			);
 		};
 /* End PBXProject section */
@@ -292,6 +283,8 @@
 				6530FD737BF0EF0ABB3E3F2A /* AppRootView.swift in Sources */,
 				BE3334ED4E2C619672D4F63B /* ContentView.swift in Sources */,
 				76A1A388196B5226303C244B /* ContextualTipsViews.swift in Sources */,
+				53844DEACCB8D5C62FDF5B4F /* EntityInterpolation.swift in Sources */,
+				AF68E0F6D09D729CB40C1D33 /* EntityRenderer.swift in Sources */,
 				353054441460B14925F6B320 /* EvolutionSimGameApp.swift in Sources */,
 				B36C31C286FB19A457DC896B /* GameControlsViews.swift in Sources */,
 				C9AEC57574E020D26A898771 /* GameCopy.swift in Sources */,
@@ -299,11 +292,20 @@
 				8BC02D62398FBD538864E0BE /* HowToPlayView.swift in Sources */,
 				B414CB97CE0D03A1510F9744 /* InspectorPanelView.swift in Sources */,
 				6D85B1903450DDEA7C7DD772 /* NewGameSetupView.swift in Sources */,
+				C3706A1A24BDB8078F6ED505 /* OrganismRenderer.swift in Sources */,
+				EE332B6C2FAD7ED4D6670B20 /* OrganismThumbnail.swift in Sources */,
+				F8FAC45160068C6C976480B2 /* OverlayRenderer.swift in Sources */,
 				4136A15D583CAC30A4FC3A3A /* PredatorThreatPresentation.swift in Sources */,
 				AF4E4FE83454878298DCE085 /* PredatorThreatViews.swift in Sources */,
+				913C148FD3D2A6176D52F80B /* RenderQuality.swift in Sources */,
 				8795D4F13B1364E1BB4F8BAC /* SimulationCanvasView.swift in Sources */,
+				6923BC3DD62DF663FAB1D79B /* SimulationRenderer.swift in Sources */,
 				B9B682518B24AE1FE1923884 /* StartScreenView.swift in Sources */,
+				CFD4C738C02C2B9BBCDC64EF /* TerrainRenderer.swift in Sources */,
 				58BD81976229A40EEDCDF375 /* TutorialViews.swift in Sources */,
+				2E7486889031DA422A1BC59E /* ViewTransform.swift in Sources */,
+				0FF7A8182352F0A82CFEDF44 /* VisualEffect.swift in Sources */,
+				3DB29714F86D62000C3E7C6B /* VisualTokens.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -314,6 +316,8 @@
 				17E7487EE3051802D255F04D /* AppRootView.swift in Sources */,
 				FAC84F4BB341CA4A09D11B0C /* ContentView.swift in Sources */,
 				1BFCCEA9E7AE482A5873A25E /* ContextualTipsViews.swift in Sources */,
+				607DA04AB8EFB33454DD809C /* EntityInterpolation.swift in Sources */,
+				402484DE46782024D6E08B01 /* EntityRenderer.swift in Sources */,
 				8FD0FFE37C18E38142BD683C /* EvolutionSimGameApp.swift in Sources */,
 				44495EFF848582C949843D27 /* GameControlsViews.swift in Sources */,
 				61F741D872117067FDD25D3E /* GameCopy.swift in Sources */,
@@ -321,19 +325,20 @@
 				6742EFA61277F108243EED7A /* HowToPlayView.swift in Sources */,
 				A51F6AC09C2071FB8DD02218 /* InspectorPanelView.swift in Sources */,
 				B7E295501F3ED593978747E9 /* NewGameSetupView.swift in Sources */,
+				FC4A2B16DD83120D004EB7E5 /* OrganismRenderer.swift in Sources */,
+				3B791C06D26C1966C9F6F473 /* OrganismThumbnail.swift in Sources */,
+				C8A96321FE8A9B14D2CC1A96 /* OverlayRenderer.swift in Sources */,
 				4CEC3F83A53ADAD8537F3E55 /* PredatorThreatPresentation.swift in Sources */,
 				AB6AEBF231524F7ABFE6D7B8 /* PredatorThreatViews.swift in Sources */,
+				9F6AC696B36DC230E12D322C /* RenderQuality.swift in Sources */,
 				A4BBB8B50CBB92B3AF8CAE10 /* SimulationCanvasView.swift in Sources */,
+				D51F75EA145122F86D84ED9D /* SimulationRenderer.swift in Sources */,
 				32DECB259BC1C23A1B52ABAF /* StartScreenView.swift in Sources */,
+				D7BC625B93C6700727DCAEDA /* TerrainRenderer.swift in Sources */,
 				7D12F209C403E64A73D47C55 /* TutorialViews.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A1B2C3D4E5F6789012345A005 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A1B2C3D4E5F6789012345A003 /* ContextualTipsTests.swift in Sources */,
+				0C365010B7C33EECFC6B333E /* ViewTransform.swift in Sources */,
+				CE50D706CBD9112C6F8E662D /* VisualEffect.swift in Sources */,
+				DF0161861C883E7C4A644EEF /* VisualTokens.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -543,50 +548,6 @@
 			};
 			name = Debug;
 		};
-		A1B2C3D4E5F6789012345A008 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				GENERATE_INFOPLIST_FILE = YES;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-					"@loader_path/../Frameworks",
-				);
-				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 0.1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.evolutionsimgame.app.tests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
-				SWIFT_VERSION = 5.9;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/EvolutionSimGame.app/Contents/MacOS/EvolutionSimGame";
-			};
-			name = Debug;
-		};
-		A1B2C3D4E5F6789012345A009 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				GENERATE_INFOPLIST_FILE = YES;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-					"@loader_path/../Frameworks",
-				);
-				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 0.1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.evolutionsimgame.app.tests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
-				SWIFT_VERSION = 5.9;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/EvolutionSimGame.app/Contents/MacOS/EvolutionSimGame";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -617,15 +578,6 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		A1B2C3D4E5F6789012345A007 /* Build configuration list for PBXNativeTarget "EvolutionSimGameTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				A1B2C3D4E5F6789012345A008 /* Debug */,
-				A1B2C3D4E5F6789012345A009 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
-		};
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
@@ -641,10 +593,6 @@
 			productName = EvolutionSimCore;
 		};
 		AE8774746056CBDBB8B33339 /* EvolutionSimCore */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = EvolutionSimCore;
-		};
-		A1B2C3D4E5F6789012345A011 /* EvolutionSimCore */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = EvolutionSimCore;
 		};

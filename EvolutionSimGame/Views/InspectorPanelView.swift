@@ -9,11 +9,32 @@ struct InspectorPanelView: View {
         List {
             Section("Organism") {
                 if let player = playerOrganism {
+                    HStack(spacing: 12) {
+                        OrganismThumbnail(traits: player.traits, isPlayer: true)
+                        Text("Traits shape your organism's appearance.")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
                     LabeledContent("Generation", value: "\(player.generation)")
                     LabeledContent("Age", value: "\(player.age)")
                     LabeledContent("Energy", value: String(format: "%.0f", player.energy))
                     LabeledContent("Health", value: String(format: "%.0f", player.health))
                     LabeledContent("Offspring", value: "\(player.offspringCount)")
+                } else {
+                    Text("No active organism")
+                        .foregroundStyle(.secondary)
+                }
+            }
+
+            Section("Reproduction") {
+                if let player = playerOrganism {
+                    LabeledContent("Status", value: reproductionStatus(for: player))
+                    LabeledContent("Energy Needed", value: String(format: "%.0f", player.traits.reproductionThreshold))
+                    LabeledContent("Energy Cost", value: String(format: "%.0f", SimulationTuning.reproductionEnergyCost))
+                    LabeledContent("Safe Radius", value: "\(Int(SimulationTuning.safeSiteMinDistanceFromPredator))")
+                    Text("Reproduction is automatic once energy is high enough, predators are outside the safe radius, and the terrain is not damaging. Mutations apply to the offspring.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
                 } else {
                     Text("No active organism")
                         .foregroundStyle(.secondary)
@@ -33,9 +54,8 @@ struct InspectorPanelView: View {
                     if player.traits.nightVision > 0 {
                         TraitRow(name: "Night Vision", value: player.traits.nightVision, description: "See in low light.")
                     }
-                    if player.traits.socialBehavior > 0 {
-                        TraitRow(name: "Social Behavior", value: player.traits.socialBehavior, description: "Group predator avoidance.")
-                    }
+                    TraitRow(name: "Social Behavior", value: player.traits.socialBehavior, description: "Nearby allies reduce predator damage.")
+                    TraitRow(name: "Parental Care", value: player.traits.parentalCare, description: "Offspring start with more energy.")
                 }
             }
 
@@ -61,6 +81,7 @@ struct InspectorPanelView: View {
 
             Section("Lineage") {
                 LabeledContent("Living", value: "\(snapshot.lineage.livingCount)")
+                LabeledContent("Living Descendants", value: "\(max(0, snapshot.lineage.livingCount - 1))")
                 LabeledContent("Total Born", value: "\(snapshot.lineage.totalBorn)")
                 LabeledContent("Fitness Score", value: String(format: "%.0f", snapshot.fitness.compositeScore))
                 LabeledContent("Biomes Explored", value: "\(snapshot.fitness.biomesExplored.count)")
@@ -115,6 +136,16 @@ struct InspectorPanelView: View {
 
     private func isDominant(_ label: String) -> Bool {
         snapshot.pressure.dominantPressureLabel == label
+    }
+
+    private func reproductionStatus(for player: Organism) -> String {
+        if snapshot.playerCanReproduceSafely {
+            return "Automatic when play resumes"
+        }
+        if player.canReproduce {
+            return "Unsafe site"
+        }
+        return "Needs energy"
     }
 }
 

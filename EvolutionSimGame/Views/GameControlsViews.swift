@@ -61,20 +61,31 @@ struct HUDView: View {
     private var reproductionBadge: some View {
         Group {
             if snapshot.playerCanReproduceSafely {
-                Label("Ready to Reproduce", systemImage: "heart.fill")
+                Label("Auto-Reproduce Ready", systemImage: "heart.fill")
                     .font(.caption.bold())
                     .foregroundStyle(.pink)
             } else if player?.canReproduce == true {
-                Label("Move Away to Reproduce", systemImage: "heart.slash")
+                Label("Safe Site Needed", systemImage: "heart.slash")
                     .font(.caption.bold())
                     .foregroundStyle(.orange)
             } else {
-                Label("Gather Energy", systemImage: "bolt.fill")
+                Label("Gather Energy to Reproduce", systemImage: "bolt.fill")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
         }
         .accessibilityIdentifier("reproductionStatus")
+        .accessibilityLabel(reproductionAccessibilityLabel)
+    }
+
+    private var reproductionAccessibilityLabel: String {
+        if snapshot.playerCanReproduceSafely {
+            return "Reproduction ready. It will happen automatically while the site remains safe."
+        }
+        if player?.canReproduce == true {
+            return "Energy is high enough, but this site is unsafe for automatic reproduction."
+        }
+        return "Gather more energy before automatic reproduction can happen."
     }
 
     private func statBar(label: String, value: Double, max: Double, color: Color) -> some View {
@@ -277,11 +288,22 @@ struct MutationChoiceView: View {
         let baseTraits = offspringTraits ?? TraitSet.default
         let statChanges = MutationPreview.formattedTraitDeltas(option: option, base: baseTraits)
         let biomeImpact = MutationPreview.formattedBiomeImpact(option: option, base: baseTraits)
+        var afterTraits = baseTraits
+        let _ = option.apply(to: &afterTraits)
 
         Button {
             onSelect(option)
         } label: {
             VStack(alignment: .leading, spacing: 6) {
+                HStack(spacing: 8) {
+                    OrganismThumbnail(traits: baseTraits, isPlayer: true, size: 44)
+                    Image(systemName: "arrow.right")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    OrganismThumbnail(traits: afterTraits, isPlayer: true, size: 44)
+                    Spacer()
+                }
+                .accessibilityHidden(true)
                 Text(option.displayName).font(.headline)
                 Text(option.description).font(.caption).foregroundStyle(.secondary)
                 if !statChanges.isEmpty {

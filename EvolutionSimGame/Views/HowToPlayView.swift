@@ -15,13 +15,13 @@ struct HowToPlayView: View {
                     Label("Move with the D-pad, touch pad, or arrow keys.", systemImage: "arrow.up.and.down.and.arrow.left.and.right")
                     Label("Eat green food particles to gain energy.", systemImage: "leaf.fill")
                     Label("Avoid red predators — they damage your health.", systemImage: "exclamationmark.triangle.fill")
-                    Label("Reproduce when energy is high and no predators are nearby.", systemImage: "heart.fill")
-                    Label("Choose a guided mutation for your offspring after reproduction.", systemImage: "sparkles")
+                    Label("Reproduction happens automatically when energy is high and the site is safe.", systemImage: "heart.fill")
+                    Label("Choose a guided mutation for the offspring, then keep playing as the parent.", systemImage: "sparkles")
                 }
 
                 Section("Biomes & Terrain") {
                     Text("Colored regions on the map are different terrains. Each affects movement speed, energy drain, and damage. Check the biome chip in the HUD and Biome Compatibility in the inspector.")
-                    Label("Water favors swim adaptations.", systemImage: "drop.fill")
+                    Label("Water costs less energy to cross, but swim traits are needed for speed.", systemImage: "drop.fill")
                     Label("Toxic pools deal damage unless you resist toxins.", systemImage: "aqi.high")
                     Label("Mud slows movement and drains energy.", systemImage: "circle.grid.cross.fill")
                 }
@@ -33,6 +33,7 @@ struct HowToPlayView: View {
 
                 Section("Lineage") {
                     Text("Mutations apply to offspring, not you. Keep playing as the parent until death, then control transfers to a living descendant.")
+                    Text("Offspring seek visible food, flee visible predators, and survive longer when born near food, away from hazards, or boosted by Parental Care.")
                 }
             }
             .navigationTitle("How to Play")

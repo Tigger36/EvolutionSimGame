@@ -4,22 +4,22 @@ overview: A six-milestone plan for `/evolution-graphics-specialist` to upgrade E
 todos:
   - id: m1-foundation
     content: "M1: Art direction docs, VisualTokens, renderer module split, rendering-decision addendum"
-    status: pending
+    status: completed
   - id: m2-environment
     content: "M2: Terrain readability — layered fills, biome identity, legend alignment, backdrop"
-    status: pending
+    status: completed
   - id: m3-organisms
     content: "M3: Trait-driven organism visual language — role silhouettes, trait mapping, colorblind QA"
-    status: pending
+    status: completed
   - id: m4-motion-camera
     content: "M4: UI-side interpolation, velocity facing, soft-follow camera, reduce-motion support"
-    status: pending
+    status: completed
   - id: m5-events-vfx
     content: "M5: Reproduction/mutation/damage/extinction VFX + mutation preview visuals"
-    status: pending
+    status: completed
   - id: m6-perf-qa
     content: "M6: Performance budgets, path caching, density/a11y QA checklist, verifier handoff"
-    status: pending
+    status: completed
 isProject: false
 ---
 

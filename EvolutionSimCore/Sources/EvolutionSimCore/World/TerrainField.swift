@@ -177,7 +177,7 @@ public enum TerrainSystem {
         case .land:
             return "Baseline terrain; high swim efficiency slows land movement."
         case .water:
-            return "Favors swim adaptations; slows land-focused builds."
+            return "Lower energy drain but slower unless you evolve swim traits."
         case .mud:
             return "Slows movement and drains energy; smaller size helps."
         case .toxicPool:
@@ -187,7 +187,7 @@ public enum TerrainSystem {
         case .swamp:
             return "Slow and draining; swim efficiency helps."
         case .desert:
-            return "Hot and draining; efficient metabolism helps."
+            return "Hot and draining; high metabolism keeps speed up."
         case .tundra:
             return "Cold terrain; lower metabolism adapts better."
         case .mountain:
@@ -202,7 +202,7 @@ public enum TerrainSystem {
         case .land:
             return "On Land — standard movement and energy use."
         case .water:
-            return "Entered Water — movement slows unless adapted."
+            return "Entered Water — lower energy drain, but swim traits are needed for speed."
         case .mud:
             return "Entered Mud — slower movement and higher energy drain."
         case .toxicPool:

@@ -42,9 +42,9 @@ enum ContextualTip: String, Identifiable {
         case .firstMud:
             return TerrainSystem.playerFacingSummary(for: .mud)
         case .firstReproductionReady:
-            return "Your energy is high enough to reproduce. Move away from predators for a safe site."
+            return "Your organism will reproduce automatically at a safe site. Keep predators away and avoid damaging terrain so offspring can find food."
         case .firstMutation:
-            return "Recent survival pressure shapes which adaptations appear. Compare stat and biome changes before choosing."
+            return "Recent survival pressure shapes which adaptations appear. The mutation applies to the offspring, not the parent."
         case .firstLineageHandoff:
             return "Control transferred to a descendant. Your lineage continues even when individuals die."
         default: return ""
