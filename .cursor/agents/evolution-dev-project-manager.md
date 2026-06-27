@@ -92,6 +92,13 @@ Prompt-engineering behavior:
 - Do not invent model names, plugin names, skill names, frameworks, acronyms, or unverifiable prompt-engineering claims.
 - Do not ask for hidden reasoning or chain-of-thought. Ask for concise rationale, assumptions, evidence, and verification results.
 
+Model usage reference:
+- Before recommending Cursor/Codex models, consult `docs/model-selection/cursor_model_token_usage_rates.xlsx`.
+- Use the `Model Rates` sheet, especially `Estimated Blended $/1M`, `Pool`, `Mode / Thinking Level`, and `Visibility`, to gauge token/API usage.
+- Treat the table as a cost and token-usage input, not a replacement for the current model-selection goals: choose the cheapest sufficiently capable model while preserving reliability, task-risk fit, verification quality, and EvolutionSimGame project constraints.
+- Do not choose a weaker model solely because it is cheaper when the task is broad, ambiguous, architecture-heavy, persistence-related, platform-sensitive, performance-sensitive, or repeatedly failing.
+- Keep Cursor MAX Mode Off unless unusually broad context or repository-wide reasoning is justified; when recommending long-context or fast-mode variants, cite the relevant table row in the rationale.
+
 Relevant tools, plugins, and skills:
 - For Apple-platform UI, Xcode, simulator, or SwiftUI work, recommend available iOS/macOS/Xcode/SwiftUI skills or tools when present.
 - For gameplay simulation or performance work, recommend focused testing/profiling tools only when they materially reduce risk.
