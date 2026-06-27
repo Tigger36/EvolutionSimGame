@@ -22,7 +22,7 @@ todos:
     status: completed
   - id: phase-6-reconcile-beta-scope
     content: "Phase 6: Reconcile current state, define public beta scope, and align docs/checklists"
-    status: pending
+    status: completed
   - id: phase-7-gameplay-hardening
     content: "Phase 7: Harden beta gameplay balance, tuning, progression, and failure/recovery loops"
     status: pending
@@ -105,20 +105,22 @@ From [AGENTS.md](AGENTS.md), enforced from Phase 0 onward:
 
 ## Original MVP Scope Boundary
 
-Smallest playable version that proved "evolution through survival choices" ([docs/game-design.md](docs/game-design.md) Recommended MVP). Several items listed as post-MVP are now represented in the alpha; beta readiness for those systems is tracked in Phases 6–12.
+Smallest playable version that proved "evolution through survival choices" ([docs/game-design.md](docs/game-design.md) Recommended MVP). Several items originally listed as post-MVP are **implemented in alpha**; **beta-ready** status for those systems is tracked in [docs/beta/beta-readiness-matrix.md](docs/beta/beta-readiness-matrix.md) and Phases 7–12.
 
-| Original MVP in scope | Original MVP out of scope |
-|-----------------------|---------------------------|
-| 2D top-down continuous world | Full era progression (Primordial → Ecosystem Dominance) |
-| One controllable single-cell organism | All 8 trait categories and body plans |
-| Food particles + simple predators | Rival species, climate shifts, extinction events |
-| Energy, health, reproduction | Cloud, multiplayer, accounts, analytics |
-| 3 terrain types: water, mud, toxic pool | Full biome set (forest, desert, tundra, etc.) |
-| 6–10 traits with tradeoffs | Scientific-grade biological modeling |
-| Reproduction → descendants → mutation choice | Population autonomy at scale |
-| Basic fitness + lineage summary | Save/load UI |
+| Original MVP in scope | Originally post-MVP — now in alpha (beta-ready varies) |
+|-----------------------|--------------------------------------------------------|
+| 2D top-down continuous world | Full era progression (Primordial → Ecosystem Dominance) — **implemented** |
+| One controllable single-cell organism | All 8 trait categories and body plans — **aspirational** |
+| Food particles + simple predators | Rival species, climate shifts — **aspirational** |
+| Energy, health, reproduction | Cloud, multiplayer, accounts, analytics — **deferred** |
+| 3 terrain types: water, mud, toxic pool | Full biome set — **implemented** at Biomes era+ |
+| 6–10 traits with tradeoffs | Scientific-grade biological modeling — **deferred** |
+| Reproduction → descendants → mutation choice | Population autonomy at scale — **partial** (descendants, capped) |
+| Basic fitness + lineage summary | Player-facing save/load UI — **model only**; UX Phase 9 |
+| — | Victory goals, mass extinction, tutorial — **implemented** |
+| — | Codable `SavedSimulation` — **implemented**; durable UX Phase 9 |
 
-**Initial trait set (MVP):** speed, size, armor, toxin resistance, swim efficiency, reproduction rate, sense radius, metabolism.
+Beta planning artifacts (Phase 6): [docs/beta/feature-inventory.md](docs/beta/feature-inventory.md), [docs/beta/public-beta-scope.md](docs/beta/public-beta-scope.md), [docs/beta/risk-register.md](docs/beta/risk-register.md).
 
 ## Phase Overview
 
@@ -318,21 +320,19 @@ Public beta means an external Apple-platform player can install a TestFlight bui
 
 ## Phase 6 — Current-State Reconciliation and Beta Scope
 
+**Status:** Completed (2026-06-27).
+
 **Goal:** Make planning, docs, and verification agree before more feature work.
 
 **Deliverables:**
 
-- Feature inventory mapping implemented systems to README, player guide, game design, graphics docs, and tests
-- Public beta non-goals and scope boundary, including no backend, accounts, analytics, or multiplayer
+- Feature inventory — [docs/beta/feature-inventory.md](docs/beta/feature-inventory.md)
+- Public beta scope and non-goals — [docs/beta/public-beta-scope.md](docs/beta/public-beta-scope.md)
+- Beta readiness matrix — [docs/beta/beta-readiness-matrix.md](docs/beta/beta-readiness-matrix.md)
+- Beta risk register — [docs/beta/risk-register.md](docs/beta/risk-register.md)
 - Updated graphics QA checklist with owners for remaining iPad/iPhone, accessibility, VFX, and performance checks
-- Beta risk register and release-blocker definition
-- Short “implemented vs beta-ready” table for persistence, onboarding, progression, platform support, and performance
 
-**Acceptance criteria:**
-
-- README, player guide, project plan, and graphics QA docs no longer contradict current implementation
-- Every public beta requirement maps to a phase, owner agent, and verification gate
-- `/evolution-code-reviewer` confirms the beta scope avoids broad engine or backend expansion
+**Acceptance criteria:** Met — docs reconciled; every public beta requirement maps to phase, owner, and gate; scope review pass in public-beta-scope.md.
 
 **Primary agent:** `/evolution-dev-project-manager`
 **Support:** `/evolution-verifier`, `/evolution-code-reviewer`
@@ -534,16 +534,16 @@ Use focused branches for each implementation task, following the active agent en
 
 ---
 
-## Immediate Next Step (Phase 6, Task 1)
+## Immediate Next Step (Phase 7)
 
-Create a current-state inventory that maps implemented features to the README, player guide, docs, source modules, and tests:
+Harden beta gameplay balance with a representative seed suite and tuning pass:
 
-- Core simulation mechanics and deterministic test coverage
-- UI/onboarding/rendering features and remaining manual QA gaps
-- Persistence/replay model versus missing durable save/load UX
-- Platform readiness evidence and missing iPhone/iPad/accessibility/performance checks
-- Public beta requirements, non-goals, and release blockers
+- Representative seeds for early, mid, and late-run balance
+- Tuning for food density, predator pressure, reproduction thresholds, era thresholds, victory goals
+- Regression tests for common-start viability and deterministic progression outcomes
 
-**Success:** project docs agree on the implemented alpha state, every beta requirement has a phase and verification gate, and the next implementation task can start without re-litigating scope.
+**Success:** `swift test` passes with seeded balance coverage; no common tutorial/default seed produces unavoidable early extinction; victory and extinction paths reproducible from seed + input log.
 
-**Recommended prompt target:** `/evolution-dev-project-manager` with `/evolution-verifier` for evidence gathering and `/evolution-code-reviewer` for scope-risk review.
+**Recommended prompt target:** `/evolution-simulation-gameplay-specialist` with `/evolution-verifier` for seeded balance tests and replay checks.
+
+**Planning reference:** [docs/beta/public-beta-scope.md](docs/beta/public-beta-scope.md), [docs/beta/risk-register.md](docs/beta/risk-register.md).

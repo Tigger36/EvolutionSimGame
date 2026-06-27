@@ -1,64 +1,72 @@
 # Graphics QA Checklist
 
-Manual visual QA for each graphics milestone. Capture screenshots for the listed
-scenarios and record pass/fail. This is the v0 checklist established in M1; M6
-completes it with measured results.
+Living manual visual QA document through public beta. Phase 6 reconciliation: owners
+and target phases added for incomplete rows; macOS M6 results preserved.
+
+Capture screenshots for listed scenarios and record pass/fail. See
+[docs/beta/feature-inventory.md](beta/feature-inventory.md) for inventory alignment.
 
 ## Build and Test Gates
 
-Run before any visual sign-off (see [README.md](../README.md)). Verified at the end
-of the M1–M6 graphics work:
+Run before any visual sign-off (see [README.md](../README.md)). Verified 2026-06-27:
 
-- [x] `cd EvolutionSimCore && swift test` passes — 37 tests, 0 failures (determinism unchanged).
+- [x] `cd EvolutionSimCore && swift test` passes — **46 tests**, 0 failures (determinism unchanged).
 - [x] `xcodebuild -scheme EvolutionSimGame_macOS -destination 'platform=macOS' build` — BUILD SUCCEEDED.
 - [x] `xcodebuild -scheme EvolutionSimGame_iOS -destination 'platform=iOS Simulator,name=iPad (A16)' build` — BUILD SUCCEEDED.
 
 ## Layout and Readability Scenarios
 
-| Scenario | What to verify | Pass/Fail |
-|----------|----------------|-----------|
-| iPad landscape, default zoom | Terrain, food, predators, player, descendants all visible and distinguishable | |
-| iPhone compact width | Player and predators readable; HUD/controls do not hide the world | |
-| macOS window, resized small and large | Scene scales correctly, no clipping of entities | Pass (macOS) |
-| Worst-case population (40 food, 5 predators, 20 descendants) | Player still findable; no unreadable clutter | |
+| Scenario | What to verify | Pass/Fail | Owner | Phase | Gate |
+|----------|----------------|-----------|-------|-------|------|
+| iPad landscape, default zoom | Terrain, food, predators, player, descendants all visible and distinguishable | | `/evolution-verifier` | 10 | iPad simulator smoke — Phase 10 |
+| iPhone compact width | Player and predators readable; HUD/controls do not hide the world | | `/evolution-apple-platform-ui-specialist` | 10 | iPhone simulator smoke — Phase 10 |
+| macOS window, resized small and large | Scene scales correctly, no clipping of entities | Pass (macOS) | — | — | M6 complete |
+| Worst-case population (40 food, 5 predators, 20 descendants) | Player still findable; no unreadable clutter | | `/evolution-verifier` | 10 | Worst-case layout smoke — Phase 10 |
 
 ## Overlay Scenarios
 
-| Scenario | What to verify | Pass/Fail |
-|----------|----------------|-----------|
-| Debug overlays OFF | Clean scene, no diagnostic artifacts | Pass (macOS) |
-| Food density overlay | Heat blobs readable, do not obscure entities | |
-| Danger zones overlay | Predator rings visible, capped opacity | |
-| Terrain cost overlay | Grid renders without obscuring player; coarsens acceptably on iPhone | |
-| Lineage overlay | Player sense radius ring visible | |
-| Biome fit overlay | Legend and grid agree; player still on top | Pass (macOS) |
+| Scenario | What to verify | Pass/Fail | Owner | Phase | Gate |
+|----------|----------------|-----------|-------|-------|------|
+| Debug overlays OFF | Clean scene, no diagnostic artifacts | Pass (macOS) | — | — | M6 complete |
+| Food density overlay | Heat blobs readable, do not obscure entities | | `/evolution-verifier` | 10 | Overlay toggle smoke — Phase 10 |
+| Danger zones overlay | Predator rings visible, capped opacity | | `/evolution-verifier` | 10 | Overlay toggle smoke — Phase 10 |
+| Terrain cost overlay | Grid renders without obscuring player; coarsens acceptably on iPhone | | `/evolution-apple-platform-ui-specialist` | 10 | iPhone overlay smoke — Phase 10 |
+| Lineage overlay | Player sense radius ring visible | | `/evolution-verifier` | 10 | Overlay toggle smoke — Phase 10 |
+| Biome fit overlay | Legend and grid agree; player still on top | Pass (macOS) | — | — | M6 complete |
 
 ## Accessibility Scenarios
 
-| Scenario | What to verify | Pass/Fail |
-|----------|----------------|-----------|
-| Grayscale / desaturated | Player, descendant, predator, food, and terrain biomes remain distinguishable without color | |
-| Color filters (deuteranopia/protanopia) | Roles and key terrain still separable | |
-| Reduce Motion ON | No interpolation artifacts; positions stable (M4+) | |
-| Contrast | Entities meet contrast against their terrain backgrounds | |
+| Scenario | What to verify | Pass/Fail | Owner | Phase | Gate |
+|----------|----------------|-----------|-------|-------|------|
+| Grayscale / desaturated | Player, descendant, predator, food, and terrain biomes remain distinguishable without color | | `/evolution-apple-platform-ui-specialist` | 10 | Accessibility color-filter pass — Phase 10 |
+| Color filters (deuteranopia/protanopia) | Roles and key terrain still separable | | `/evolution-apple-platform-ui-specialist` | 10 | Accessibility color-filter pass — Phase 10 |
+| Reduce Motion ON | No interpolation artifacts; positions stable; transient effects suppressed | | `/evolution-apple-platform-ui-specialist` | 10 | Reduce Motion smoke — Phase 10 |
+| Contrast | Entities meet contrast against their terrain backgrounds | | `/evolution-graphics-specialist` | 10 | Contrast spot-check — Phase 10 |
 
 ## Gameplay Smoke
 
-| Step | Pass/Fail |
-|------|-----------|
-| Move the player organism | |
-| Eat food (energy increases) | |
-| Flee a predator | |
-| Reproduce at threshold | |
-| Choose a mutation and see it reflected on the organism (M3+) | Pass (macOS) |
-| Die and continue as a descendant | Pass (macOS, extinction path) |
+| Step | Pass/Fail | Owner | Phase | Gate |
+|------|-----------|-------|-------|------|
+| Move the player organism | | `/evolution-verifier` | 10 | iPad/iPhone gameplay smoke — Phase 10 |
+| Eat food (energy increases) | | `/evolution-verifier` | 10 | iPad/iPhone gameplay smoke — Phase 10 |
+| Flee a predator | | `/evolution-verifier` | 10 | iPad/iPhone gameplay smoke — Phase 10 |
+| Reproduce at threshold | | `/evolution-verifier` | 10 | iPad/iPhone gameplay smoke — Phase 10 |
+| Choose a mutation and see it reflected on the organism (M3+) | Pass (macOS) | — | — | M6 complete |
+| Die and continue as a descendant | Pass (macOS, extinction path) | — | — | M6 complete |
+
+## VFX and Performance (long-lived lineage)
+
+| Scenario | What to verify | Pass/Fail | Owner | Phase | Gate |
+|----------|----------------|-----------|-------|-------|------|
+| Full VFX sequence (repro, mutation, damage, death, handoff, extinction tint) | Cues visible without obscuring state | | `/evolution-graphics-specialist` | 10 | VFX sequence smoke — Phase 10 |
+| Instruments frame-time at worst-case population + high speed | Meets budget or documented fallback | | `/evolution-verifier` | 11 | Instruments per graphics-asset-spec — Phase 11 |
 
 ## Notes
 
 Record device/simulator, OS version, and milestone for each run. Attach screenshots
 to the milestone PR description.
 
-## Verifier Handoff (M6)
+## Verifier Handoff (M6 + Phase 6)
 
 Automated gates (builds + `swift test`) pass and are safe to rely on in CI. The
 remaining scenarios in this checklist are runtime/visual and should be captured by
@@ -111,7 +119,7 @@ Confirmed:
   "Extinction" overlay.
 - **Window scaling:** Resizing the window kept the scene correct with no entity clipping.
 
-Not yet exercised here (left for `/evolution-verifier`): iPad/iPhone simulator layouts
-and compact-width texture coarsening, accessibility color filters and Reduce Motion, the
+Not yet exercised here (assigned owners above): iPad/iPhone simulator layouts and
+compact-width texture coarsening, accessibility color filters and Reduce Motion, the
 full reproduction/damage/handoff VFX sequence on a long-lived lineage, and Instruments
 frame-time measurement at worst-case population.

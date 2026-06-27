@@ -1,6 +1,6 @@
 # EvolutionSimGame Player Guide
 
-This guide describes the mechanics currently implemented in the playable MVP. The
+This guide describes mechanics implemented in the **post-MVP alpha** build. The
 broader design in `docs/game-design.md` includes future ideas; the rules below are
 the source of truth for what players can rely on now.
 
@@ -83,6 +83,61 @@ terrain-specific food types or food-spawn bonuses yet.
 | Mountain | 96% speed, 150% energy drain, no damage | Smaller Size | Energy-expensive traversal; smaller bodies climb with less penalty. |
 | Ice | 75% speed, 120% energy drain, 0.015 damage/tick | Armor | Slippery, damaging terrain where armor helps grip and survival. |
 
+## Eras and Progression
+
+Fitness (survival time, offspring, food, biomes explored, predator near-misses,
+generations) drives **era progression**:
+
+| Era | Display name |
+| --- | --- |
+| 1 | Primordial Pool |
+| 2 | Reef / Shallows |
+| 3 | Landfall |
+| 4 | Biomes |
+| 5 | Ecosystem Dominance |
+
+Higher eras increase predator count, speed, damage, and sense radius. Contextual
+tips appear when you advance to a new era. The **Biomes** era unlocks the full
+terrain set (forest, swamp, desert, tundra, mountain, ice) on the world map.
+
+## Victory Goals
+
+When starting a new game you choose one goal:
+
+| Goal | Summary |
+| --- | --- |
+| Survive Mass Extinction | Survive the mass extinction event that begins around tick 2000. |
+| Spread to All Biomes | Explore and adapt to at least 6 different biome types. |
+| Reach Target Population | Grow your lineage to 15 living organisms. |
+| Evolve Intelligence | Reach generation 10 with a fitness score of 500+. |
+
+## Mass Extinction
+
+When mass extinction events are enabled (default for standard new games), a
+global extinction phase begins around tick 2000. During this event predators move
+faster and chase more aggressively. The world tint shifts to signal heightened
+danger. Surviving through the event satisfies the **Survive Mass Extinction**
+victory goal.
+
+## Tutorial and First Run
+
+From the start screen you can:
+
+- **Tutorial** — guided steps for move, eat, avoid predators, terrain, reproduce,
+  choose mutation, and lineage handoff (tutorial preset with reduced pressure).
+- **How to Play** — reference copy for the core loop.
+- **New Game** — pick victory goal and mass-extinction setting.
+
+Tutorial steps auto-advance when you complete each action (some steps use a
+manual Continue button).
+
+## Save and Continue
+
+The simulation core supports Codable save state (`SavedSimulation`) for tests and
+future persistence. **Durable save/continue after app relaunch is not yet in the
+player-facing app** (planned Phase 9). Closing the app mid-run does not restore
+progress today.
+
 ## Implemented vs Future
 
 Implemented now:
@@ -91,8 +146,11 @@ Implemented now:
 - Inherited traits with mutation choices for offspring.
 - Lineage handoff to descendants.
 - Descendant food-seeking and predator-fleeing behavior.
-- Terrain speed, energy, and damage effects.
+- Terrain speed, energy, and damage effects (full biome set at Biomes era+).
 - Social group defense from `Herd Instinct`.
+- Era progression and era-scaled predator difficulty.
+- Four victory goals and mass extinction events.
+- Tutorial flow, contextual tips, and how-to-play screens.
 
 Future design ideas not implemented yet:
 
@@ -101,3 +159,4 @@ Future design ideas not implemented yet:
 - Terrain-specific food sources.
 - Descendants reproducing independently.
 - Detailed death notifications explaining exactly why each offspring died.
+- Player-facing save/continue and seed sharing UI.

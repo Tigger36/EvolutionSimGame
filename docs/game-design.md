@@ -2,9 +2,12 @@
 
 ## Repository Context
 
-EvolutionSimGame is currently at seed stage. Treat `README.md`, repository code,
-tests, and current project files as the source of truth. Planning documents may
-describe intended behavior that has not yet been implemented.
+EvolutionSimGame is at **post-MVP alpha**. Treat `README.md`, repository code,
+tests, and [docs/player-guide.md](player-guide.md) as the source of truth for
+**implemented** behavior. This design guide mixes implemented mechanics with
+aspirational content (body plans, trait categories, future reproduction models).
+Sections below that describe systems not in the player guide are **planned**, not
+shipped. Public beta scope and gaps: [docs/beta/public-beta-scope.md](beta/public-beta-scope.md).
 
 The current product direction is an interactive native Apple-platform evolution
 simulator game for macOS, iPadOS, and iOS. The player should guide a fictitious

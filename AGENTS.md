@@ -6,9 +6,9 @@ Canonical current-state reference: `README.md`. Treat repository code, tests, an
 
 ## Current Project Status
 
-The project is currently at seed stage. Do not assume an Xcode project, Swift package, renderer, persistence layer, or app architecture exists until it is present in the repo.
+The project is at **post-MVP alpha**: `EvolutionSimCore` (Swift package), `EvolutionSimGame` (SwiftUI multiplatform app), XcodeGen project, tests, and graphics docs are implemented. Core loop includes movement, food, predators, terrain, traits, reproduction, mutation choice, lineage handoff, eras, victory goals, mass extinction, tutorial scaffolding, contextual tips, Canvas rendering, and a Codable `SavedSimulation` model. **Public beta** (TestFlight, save/continue UX, platform QA, performance evidence, release ops) is tracked in Phases 7–12; see `docs/beta/`.
 
-When scaffolding begins, prefer a native Apple stack unless the user explicitly chooses another engine or framework. Keep simulation logic independent from UI/rendering so it can be tested deterministically.
+Prefer a native Apple stack unless the user explicitly chooses another engine or framework. Keep simulation logic independent from UI/rendering so it can be tested deterministically.
 
 ## Product Direction
 
@@ -111,17 +111,15 @@ When a task should be handled by a specific subagent, invoke it directly by name
 
 ## Development And Validation
 
-The repo does not yet define canonical build/test commands. Add exact commands here once the project is scaffolded.
+Canonical commands are in [README.md](README.md):
 
-Until then, choose validation based on the project shape:
+- `cd EvolutionSimCore && swift test` — deterministic simulation tests (46 tests as of Phase 6).
+- `xcodebuild -scheme EvolutionSimGame_macOS -destination 'platform=macOS' build`
+- `xcodebuild -scheme EvolutionSimGame_iOS -destination 'platform=iOS Simulator,name=iPad (A16)' build`
 
-- Swift Package simulation core: run `swift test` for deterministic logic.
-- Xcode project/workspace: resolve schemes and destinations before running builds/tests.
-- iOS/iPadOS UI changes: verify relevant simulator destinations when available.
-- macOS UI changes: verify the macOS app target separately from iPhone/iPad behavior.
-- Documentation-only changes: run `git diff --check` and perform targeted content review.
+For iOS/iPadOS UI changes, verify relevant simulator destinations when available. For macOS UI changes, verify the macOS app target separately from iPhone/iPad behavior. Documentation-only changes: run `git diff --check` and targeted content review.
 
-For simulation work, prefer deterministic unit tests with seeded randomness. For UI/gameplay work, use builds, previews, simulator checks, screenshots, or runtime inspection when the scaffold supports them.
+For simulation work, prefer deterministic unit tests with seeded randomness. For UI/gameplay work, use builds, previews, simulator checks, screenshots, or runtime inspection. Graphics manual QA: [docs/graphics-qa-checklist.md](docs/graphics-qa-checklist.md). Beta scope and readiness: [docs/beta/](docs/beta/).
 
 ## Code Requirements
 
