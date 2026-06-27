@@ -48,7 +48,7 @@ Project constraints:
 Prompt-generation scaffold:
 When generating an implementation, investigation, review, deployment, or handoff prompt, keep model, IDE, plugin, skill, and rationale recommendations outside the copy-paste prompt. Put those recommendations before `COPY-PASTE PROMPT:` as normal response text. Then put only the actual prompt intended for the receiving agent inside one fenced Markdown code block so the response UI shows a copy button.
 
-The fenced `COPY-PASTE PROMPT` section is the primary copyable deliverable. It must contain the complete prompt the user can copy and send to another agent, including its own success criteria and verification steps. Do not include recommended Cursor/Codex models, recommended IDE, recommended plugins, recommended skills, or model/tool rationale inside the fenced copy-paste prompt unless the receiving agent specifically needs to use a named plugin or skill to complete the task.
+The fenced `COPY-PASTE PROMPT` section is the primary copyable deliverable. It must contain the complete prompt the user can copy and send to another agent, including its own success criteria and verification steps. Do not include recommended Cursor/Codex models, recommended IDE, recommended plugins, or model/tool rationale inside the fenced copy-paste prompt. When `RECOMMENDED CODEX SKILLS` is not `None`, include a short actionable instruction near the top of the fenced prompt naming the recommended skills to load or follow so the receiving agent knows which skills to use.
 
 Mandatory response-format rule:
 - The recommendations and rationale sections must be normal response text before `COPY-PASTE PROMPT:`.
@@ -72,7 +72,8 @@ COPY-PASTE PROMPT:
 ```text
 [Only the prompt to the receiving agent goes here.
 Include objective, project context and source-of-truth files, constraints, non-goals, implementation or investigation instructions, success criteria, verification steps, reporting requirements, and stop conditions inside this fenced prompt.
-Do not include model, IDE, plugin, skill, or rationale recommendation sections here.]
+If RECOMMENDED CODEX SKILLS is not None, include a short "Recommended skills to use" instruction near the top of this prompt with the exact skill names. If RECOMMENDED CODEX SKILLS is None, omit the skill instruction.
+Do not include model, IDE, plugin, or rationale recommendation sections here.]
 ```
 RISK NOTES:
 NEXT TASK OPTIONS:
@@ -83,7 +84,8 @@ Prompt-engineering behavior:
 - Never output the `COPY-PASTE PROMPT` body as ordinary paragraphs, bullets, or headings outside a fenced code block.
 - Keep `TASK TITLE`, `TASK OBJECTIVE`, recommended Cursor/Codex models, recommended IDE, recommended plugins, recommended skills, and model/tool rationale before the fenced copy-paste prompt.
 - Include objective, project context, source-of-truth files, constraints, non-goals, likely files, verification, risks, and stop conditions.
-- Keep model, IDE, plugin, and skill recommendations outside the fenced copy-paste prompt body unless the receiving agent specifically needs them.
+- Keep model, IDE, plugin, and rationale recommendations outside the fenced copy-paste prompt body.
+- Repeat any non-`None` `RECOMMENDED CODEX SKILLS` inside the fenced `COPY-PASTE PROMPT` body as a brief instruction such as `Recommended skills to use: <skill names>. Load/follow these skills if available before task work.`
 - Include success criteria and verification steps inside the `COPY-PASTE PROMPT` body. Do not rely on separate outer `SUCCESS CRITERIA` or `VERIFICATION STEPS` sections as the only place those instructions appear.
 - Use clear sections, concrete instructions, observable success criteria, and verification steps.
 - Include examples only when they reduce ambiguity or prevent a known failure mode.
