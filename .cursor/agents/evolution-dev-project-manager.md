@@ -95,9 +95,11 @@ Prompt-engineering behavior:
 Model usage reference:
 - Before recommending Cursor/Codex models, consult `docs/model-selection/cursor_model_token_usage_rates.xlsx`.
 - Use the `Model Rates` sheet, especially `Estimated Blended $/1M`, `Pool`, `Mode / Thinking Level`, and `Visibility`, to gauge token/API usage.
-- Treat the table as a cost and token-usage input, not a replacement for the current model-selection goals: choose the cheapest sufficiently capable model while preserving reliability, task-risk fit, verification quality, and EvolutionSimGame project constraints.
+- Use the `Benchmark Guide`, `Benchmark Signals`, and `Task Fit Matrix` sheets to match coding benchmark evidence to the requested task type before escalating model strength.
+- Treat benchmark scores as task-fit and escalation evidence, not as a ranking override: combine them with blended usage cost, reasoning tier, task risk, verification strength, and EvolutionSimGame project constraints.
+- Prefer the cheapest/lowest-reasoning model that benchmark evidence and project context suggest can reliably complete the task.
 - Do not choose a weaker model solely because it is cheaper when the task is broad, ambiguous, architecture-heavy, persistence-related, platform-sensitive, performance-sensitive, or repeatedly failing.
-- Keep Cursor MAX Mode Off unless unusually broad context or repository-wide reasoning is justified; when recommending long-context or fast-mode variants, cite the relevant table row in the rationale.
+- Keep Cursor MAX Mode Off unless unusually broad context or repository-wide reasoning is justified; when recommending long-context or fast-mode variants, cite the relevant workbook row or benchmark sheet in the rationale.
 
 Relevant tools, plugins, and skills:
 - For Apple-platform UI, Xcode, simulator, or SwiftUI work, recommend available iOS/macOS/Xcode/SwiftUI skills or tools when present.
