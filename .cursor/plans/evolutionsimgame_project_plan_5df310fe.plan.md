@@ -28,7 +28,7 @@ todos:
     status: completed
   - id: phase-8-onboarding-clarity
     content: "Phase 8: Polish tutorial, contextual explanations, mutation clarity, and player-facing feedback"
-    status: pending
+    status: completed
   - id: phase-9-persistence-run-management
     content: "Phase 9: Add durable local save/load UX, run management, seed sharing, and schema policy"
     status: pending
@@ -531,17 +531,18 @@ Use focused branches for each implementation task, following the active agent en
 
 ---
 
-## Immediate Next Step (Phase 8)
+## Immediate Next Step (Phase 9)
 
-Polish onboarding and player-facing clarity so a first-time player understands cause, effect, and adaptation without external instructions:
+Make local runs safe to pause, leave, resume, restart, and share by seed:
 
-- Tutorial pass for move, eat, avoid predator, terrain, reproduce, mutation, lineage handoff, and victory
-- Contextual explanations for death, offspring loss, unsafe reproduction, damaging terrain, and mass extinction
-- Mutation cards with clear tradeoffs; start/new-game copy for seed, era, victory goal, and tutorial preset
-- Player guide update matching the app’s current rules
+- Durable local save/load using versioned Codable simulation state
+- Continue, new run, reset, and delete-run flows with confirmation where data loss is possible
+- Save schema version and migration policy
+- Seed display/copy/share entry point for reproducible bug reports and balancing
+- Corrupt/incompatible save handling that returns the player to a safe new-run path
 
-**Success:** Manual first-run smoke (tutorial → move → eat → reproduce → mutation → handoff); key UI has accessibility labels/identifiers; player guide and in-app copy agree on core rules.
+**Success:** Save/restore test covers active play, awaiting mutation, victory, and extinction states; manual relaunch smoke confirms continue resumes the same tick, phase, player organism, and pending mutation state.
 
-**Recommended prompt target:** `/evolution-apple-platform-ui-specialist` with `/evolution-simulation-gameplay-specialist` for explanation data and `/evolution-verifier` for first-run smoke and docs consistency.
+**Recommended prompt target:** `/evolution-apple-platform-ui-specialist` with `/evolution-simulation-gameplay-specialist` for state/version boundaries and `/evolution-verifier` for restore tests and relaunch smoke.
 
-**Planning reference:** [docs/beta/public-beta-scope.md](docs/beta/public-beta-scope.md), [docs/beta/risk-register.md](docs/beta/risk-register.md), [docs/beta/pacing-targets.md](docs/beta/pacing-targets.md).
+**Planning reference:** [docs/beta/public-beta-scope.md](docs/beta/public-beta-scope.md), [docs/beta/feature-inventory.md](docs/beta/feature-inventory.md).
