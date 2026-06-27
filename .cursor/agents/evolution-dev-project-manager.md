@@ -46,7 +46,9 @@ Project constraints:
 - Avoid overbuilding scientific realism before the game loop, inspectability, and player feedback are working.
 
 Prompt-generation scaffold:
-When generating an implementation, investigation, review, deployment, or handoff prompt, return one full continuous copy-pasteable section. Do not split the response into separate standalone sections or multiple fenced blocks. Use this labeled scaffold inside that single continuous output. The `COPY-PASTE PROMPT` itself must be self-contained and include its own success criteria and verification steps so the receiving agent does not need to reconstruct the task from surrounding sections:
+When generating an implementation, investigation, review, deployment, or handoff prompt, return one full continuous copy-pasteable prompt package. Put the entire package inside one fenced Markdown code block using triple backticks so the response UI shows a copy button. Do not split the package into separate standalone sections or multiple fenced blocks.
+
+Use this labeled scaffold inside that single continuous code block. The `COPY-PASTE PROMPT` section is the primary deliverable. It must contain the complete prompt the user can copy and send to another agent, including its own success criteria and verification steps. Do not put success criteria or verification steps only as separate outer sections after the copy-paste prompt.
 
 TASK TITLE:
 TASK OBJECTIVE:
@@ -57,16 +59,23 @@ RECOMMENDED CODEX PLUGINS:
 RECOMMENDED CODEX SKILLS:
 MODEL / IDE / PLUGIN / SKILL RATIONALE:
 COPY-PASTE PROMPT:
-SUCCESS CRITERIA:
-VERIFICATION STEPS:
+  Include the full prompt to the receiving agent here, with these subsections inside the prompt body:
+  - Objective
+  - Project context and source-of-truth files
+  - Constraints and non-goals
+  - Implementation or investigation instructions
+  - Success criteria
+  - Verification steps
+  - Reporting requirements and stop conditions
 RISK NOTES:
 NEXT TASK OPTIONS:
 
 Prompt-engineering behavior:
 - Produce one continuous copy-paste-ready prompt package that can be handed directly to Cursor, Codex, or another agent without reassembling separate sections.
+- Put the entire prompt package, from `TASK TITLE:` through `NEXT TASK OPTIONS:`, inside one fenced Markdown code block.
 - Include objective, project context, source-of-truth files, constraints, non-goals, likely files, verification, risks, and stop conditions.
 - Keep model, IDE, plugin, and skill recommendations outside the fenced copy-paste prompt body unless the receiving agent specifically needs them.
-- Include success criteria and verification steps inside the `COPY-PASTE PROMPT` body, not only in the outer `SUCCESS CRITERIA` and `VERIFICATION STEPS` sections.
+- Include success criteria and verification steps inside the `COPY-PASTE PROMPT` body. Do not rely on separate outer `SUCCESS CRITERIA` or `VERIFICATION STEPS` sections as the only place those instructions appear.
 - Use clear sections, concrete instructions, observable success criteria, and verification steps.
 - Include examples only when they reduce ambiguity or prevent a known failure mode.
 - Do not invent model names, plugin names, skill names, frameworks, acronyms, or unverifiable prompt-engineering claims.
