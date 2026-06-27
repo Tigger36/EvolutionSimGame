@@ -46,9 +46,11 @@ Project constraints:
 - Avoid overbuilding scientific realism before the game loop, inspectability, and player feedback are working.
 
 Prompt-generation scaffold:
-When generating an implementation, investigation, review, deployment, or handoff prompt, return one full continuous copy-pasteable prompt package. Put the entire package inside one fenced Markdown code block using triple backticks so the response UI shows a copy button. Do not split the package into separate standalone sections or multiple fenced blocks.
+When generating an implementation, investigation, review, deployment, or handoff prompt, keep model, IDE, plugin, skill, and rationale recommendations outside the copy-paste prompt. Put those recommendations before `COPY-PASTE PROMPT:` as normal response text. Then put only the actual prompt intended for the receiving agent inside one fenced Markdown code block so the response UI shows a copy button.
 
-Use this labeled scaffold inside that single continuous code block. The `COPY-PASTE PROMPT` section is the primary deliverable. It must contain the complete prompt the user can copy and send to another agent, including its own success criteria and verification steps. Do not put success criteria or verification steps only as separate outer sections after the copy-paste prompt.
+The fenced `COPY-PASTE PROMPT` section is the primary copyable deliverable. It must contain the complete prompt the user can copy and send to another agent, including its own success criteria and verification steps. Do not include recommended Cursor/Codex models, recommended IDE, recommended plugins, recommended skills, or model/tool rationale inside the fenced copy-paste prompt unless the receiving agent specifically needs to use a named plugin or skill to complete the task.
+
+Use this labeled scaffold:
 
 TASK TITLE:
 TASK OBJECTIVE:
@@ -59,20 +61,18 @@ RECOMMENDED CODEX PLUGINS:
 RECOMMENDED CODEX SKILLS:
 MODEL / IDE / PLUGIN / SKILL RATIONALE:
 COPY-PASTE PROMPT:
-  Include the full prompt to the receiving agent here, with these subsections inside the prompt body:
-  - Objective
-  - Project context and source-of-truth files
-  - Constraints and non-goals
-  - Implementation or investigation instructions
-  - Success criteria
-  - Verification steps
-  - Reporting requirements and stop conditions
+```text
+[Only the prompt to the receiving agent goes here.
+Include objective, project context and source-of-truth files, constraints, non-goals, implementation or investigation instructions, success criteria, verification steps, reporting requirements, and stop conditions inside this fenced prompt.
+Do not include model, IDE, plugin, skill, or rationale recommendation sections here.]
+```
 RISK NOTES:
 NEXT TASK OPTIONS:
 
 Prompt-engineering behavior:
-- Produce one continuous copy-paste-ready prompt package that can be handed directly to Cursor, Codex, or another agent without reassembling separate sections.
-- Put the entire prompt package, from `TASK TITLE:` through `NEXT TASK OPTIONS:`, inside one fenced Markdown code block.
+- Produce a copy-paste-ready fenced prompt that can be handed directly to Cursor, Codex, or another agent without reassembling separate sections.
+- Put only the `COPY-PASTE PROMPT` body inside one fenced Markdown code block using triple backticks. The code block is required because it gives the user a copy button in the response UI.
+- Keep `TASK TITLE`, `TASK OBJECTIVE`, recommended Cursor/Codex models, recommended IDE, recommended plugins, recommended skills, and model/tool rationale before the fenced copy-paste prompt.
 - Include objective, project context, source-of-truth files, constraints, non-goals, likely files, verification, risks, and stop conditions.
 - Keep model, IDE, plugin, and skill recommendations outside the fenced copy-paste prompt body unless the receiving agent specifically needs them.
 - Include success criteria and verification steps inside the `COPY-PASTE PROMPT` body. Do not rely on separate outer `SUCCESS CRITERIA` or `VERIFICATION STEPS` sections as the only place those instructions appear.
