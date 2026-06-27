@@ -43,7 +43,6 @@ struct ContentView: View {
 
     private var simulationDetail: some View {
         VStack(spacing: 8) {
-            topBanners
             HUDView(snapshot: viewModel.snapshot)
             ZStack {
                 SimulationCanvasView(
@@ -56,6 +55,11 @@ struct ContentView: View {
                 if viewModel.showDebugOverlays {
                     DebugOverlayLegend(overlay: viewModel.selectedDebugOverlay)
                 }
+            }
+            .overlay(alignment: .bottom) {
+                popupBanners
+                    .padding(.horizontal, 12)
+                    .padding(.bottom, 12)
             }
             .clipShape(RoundedRectangle(cornerRadius: 12))
             .overlay(RoundedRectangle(cornerRadius: 12).stroke(.secondary.opacity(0.3)))
@@ -87,7 +91,7 @@ struct ContentView: View {
     }
 
     @ViewBuilder
-    private var topBanners: some View {
+    private var popupBanners: some View {
         if viewModel.terrainEntryBanner != nil
             || viewModel.contextualTip != nil
             || viewModel.mutationFeedback != nil {

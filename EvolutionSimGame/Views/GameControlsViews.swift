@@ -38,7 +38,7 @@ struct HUDView: View {
                         .foregroundStyle(.secondary)
                         .lineLimit(2)
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)
+                .fixedSize(horizontal: false, vertical: true)
                 .accessibilityIdentifier("currentBiomeChip")
             }
         }
