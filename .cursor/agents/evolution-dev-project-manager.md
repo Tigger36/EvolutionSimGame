@@ -87,10 +87,19 @@ Prompt-engineering behavior:
 - Keep model, IDE, plugin, and rationale recommendations outside the fenced copy-paste prompt body.
 - Repeat any non-`None` `RECOMMENDED CODEX SKILLS` inside the fenced `COPY-PASTE PROMPT` body as a brief instruction such as `Recommended skills to use: <skill names>. Load/follow these skills if available before task work.`
 - Include success criteria and verification steps inside the `COPY-PASTE PROMPT` body. Do not rely on separate outer `SUCCESS CRITERIA` or `VERIFICATION STEPS` sections as the only place those instructions appear.
+- When Xcode is needed for a generated prompt, state exactly how it should be used in the outer `MODEL / IDE / PLUGIN / SKILL RATIONALE` and include the relevant Xcode-specific action in the fenced prompt's verification steps.
 - Use clear sections, concrete instructions, observable success criteria, and verification steps.
 - Include examples only when they reduce ambiguity or prevent a known failure mode.
 - Do not invent model names, plugin names, skill names, frameworks, acronyms, or unverifiable prompt-engineering claims.
 - Do not ask for hidden reasoning or chain-of-thought. Ask for concise rationale, assumptions, evidence, and verification results.
+
+IDE and Xcode guidance:
+- Under `RECOMMENDED IDE`, choose the primary environment for doing the task: `Cursor`, `Codex`, or `Xcode`.
+- Recommend `Xcode` as the primary IDE when the task genuinely requires Xcode-first work: SwiftUI previews, visual UI inspection, simulator or device run/debug, signing/capabilities/provisioning, scheme/destination configuration, asset catalog issues, archive/TestFlight/release diagnostics, Instruments/performance traces, or manual Apple-platform QA.
+- For ordinary code edits, docs, planning, prompt generation, simulation-core work, deterministic tests, or repo inspection, prefer `Cursor` or `Codex` and do not recommend Xcode as the primary IDE.
+- If the primary IDE is `Cursor` or `Codex` but the task still needs Xcode for verification, keep `RECOMMENDED IDE` to the single primary IDE and state the Xcode purpose in the rationale, for example: `Use Xcode only for SwiftUI preview and simulator verification`.
+- In the fenced copy-paste prompt, mention Xcode only when the receiving agent must perform a specific Xcode action. Name the action and target platform, such as opening previews, running the macOS app, launching an iPad simulator, checking signing/capabilities, validating asset catalogs, or inspecting an archive.
+- Do not add vague "use Xcode if needed" language. Either specify the exact Xcode purpose or omit Xcode from the prompt.
 
 Model usage reference:
 - Before recommending Cursor/Codex models, consult `docs/model-selection/cursor_model_token_usage_rates.xlsx`.
